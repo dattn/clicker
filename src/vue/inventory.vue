@@ -8,12 +8,10 @@
 </template>
 
 <script>
-    import Inventory from '../js/inventory.js';
-
     export default {
-        data() {
-            return {
-                inventory: Inventory
+        computed: {
+            inventory() {
+                return this.$store.state.inventory;
             }
         }
     }

@@ -3,7 +3,7 @@
         <div class="battery">
             <div :class="classes" :style="style"></div>
         </div>
-        <span>{{ charged }} / {{ Battery.capacity }}</span>
+        <span>{{ energy }} / {{ capacity }}</span>
     </div>
 </template>
 
@@ -15,7 +15,7 @@
         position: relative;
     }
 
-    .battery .charged {
+    .battery .energy {
         position: absolute;
         width: 100%;
         bottom: 0px;
@@ -23,40 +23,42 @@
         background-color: green;
     }
 
-    .battery .charged.medium {
+    .battery .energy.medium {
         background-color: yellow;
     }
 
-    .battery .charged.low {
+    .battery .energy.low {
         background-color: red;
     }
 </style>
 
 <script>
-    import Battery from '../js/battery.js';
-
     export default {
-
-        data() {
-            return { Battery };
-        },
 
         computed: {
 
-            charged() {
-                return Math.round((this.Battery.charged / this.Battery.capacity) * 100);
+            energy() {
+                return this.$store.state.battery.energy;
+            },
+
+            capacity() {
+                return this.$store.state.battery.capacity;
+            },
+
+            percentage() {
+                return Math.round((this.energy / this.capacity) * 100);
             },
 
             classes() {
                 return {
-                    charged: true,
-                    low: this.charged <= 20,
-                    medium: this.charged > 20 && this.charged <= 50
+                    energy: true,
+                    low: this.percentage <= 20,
+                    medium: this.percentage > 20 && this.percentage <= 50
                 }
             },
 
             style() {
-                return 'height: ' + this.charged + '%';
+                return 'height: ' + this.percentage + '%';
             }
         }
     }

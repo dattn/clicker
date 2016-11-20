@@ -6076,39 +6076,637 @@ exports.insert = function (css) {
 }
 
 },{}],5:[function(require,module,exports){
+/**
+ * vuex v2.0.0
+ * (c) 2016 Evan You
+ * @license MIT
+ */
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
+  typeof define === 'function' && define.amd ? define(factory) :
+  (global.Vuex = factory());
+}(this, (function () { 'use strict';
+
+var devtoolHook =
+  typeof window !== 'undefined' &&
+  window.__VUE_DEVTOOLS_GLOBAL_HOOK__
+
+function devtoolPlugin (store) {
+  if (!devtoolHook) { return }
+
+  store._devtoolHook = devtoolHook
+
+  devtoolHook.emit('vuex:init', store)
+
+  devtoolHook.on('vuex:travel-to-state', function (targetState) {
+    store.replaceState(targetState)
+  })
+
+  store.subscribe(function (mutation, state) {
+    devtoolHook.emit('vuex:mutation', mutation, state)
+  })
+}
+
+function applyMixin (Vue) {
+  var version = Number(Vue.version.split('.')[0])
+
+  if (version >= 2) {
+    var usesInit = Vue.config._lifecycleHooks.indexOf('init') > -1
+    Vue.mixin(usesInit ? { init: vuexInit } : { beforeCreate: vuexInit })
+  } else {
+    // override init and inject vuex init procedure
+    // for 1.x backwards compatibility.
+    var _init = Vue.prototype._init
+    Vue.prototype._init = function (options) {
+      if ( options === void 0 ) options = {};
+
+      options.init = options.init
+        ? [vuexInit].concat(options.init)
+        : vuexInit
+      _init.call(this, options)
+    }
+  }
+
+  /**
+   * Vuex init hook, injected into each instances init hooks list.
+   */
+
+  function vuexInit () {
+    var options = this.$options
+    // store injection
+    if (options.store) {
+      this.$store = options.store
+    } else if (options.parent && options.parent.$store) {
+      this.$store = options.parent.$store
+    }
+  }
+}
+
+function mapState (states) {
+  var res = {}
+  normalizeMap(states).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedState () {
+      return typeof val === 'function'
+        ? val.call(this, this.$store.state, this.$store.getters)
+        : this.$store.state[val]
+    }
+  })
+  return res
+}
+
+function mapMutations (mutations) {
+  var res = {}
+  normalizeMap(mutations).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedMutation () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      return this.$store.commit.apply(this.$store, [val].concat(args))
+    }
+  })
+  return res
+}
+
+function mapGetters (getters) {
+  var res = {}
+  normalizeMap(getters).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedGetter () {
+      if (!(val in this.$store.getters)) {
+        console.error(("[vuex] unknown getter: " + val))
+      }
+      return this.$store.getters[val]
+    }
+  })
+  return res
+}
+
+function mapActions (actions) {
+  var res = {}
+  normalizeMap(actions).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedAction () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      return this.$store.dispatch.apply(this.$store, [val].concat(args))
+    }
+  })
+  return res
+}
+
+function normalizeMap (map) {
+  return Array.isArray(map)
+    ? map.map(function (key) { return ({ key: key, val: key }); })
+    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
+}
+
+function isObject (obj) {
+  return obj !== null && typeof obj === 'object'
+}
+
+function isPromise (val) {
+  return val && typeof val.then === 'function'
+}
+
+function assert (condition, msg) {
+  if (!condition) { throw new Error(("[vuex] " + msg)) }
+}
+
+var Vue // bind on install
+
+var Store = function Store (options) {
+  var this$1 = this;
+  if ( options === void 0 ) options = {};
+
+  assert(Vue, "must call Vue.use(Vuex) before creating a store instance.")
+  assert(typeof Promise !== 'undefined', "vuex requires a Promise polyfill in this browser.")
+
+  var state = options.state; if ( state === void 0 ) state = {};
+  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
+  var strict = options.strict; if ( strict === void 0 ) strict = false;
+
+  // store internal state
+  this._options = options
+  this._committing = false
+  this._actions = Object.create(null)
+  this._mutations = Object.create(null)
+  this._wrappedGetters = Object.create(null)
+  this._runtimeModules = Object.create(null)
+  this._subscribers = []
+  this._watcherVM = new Vue()
+
+    // bind commit and dispatch to self
+  var store = this
+  var ref = this;
+  var dispatch = ref.dispatch;
+  var commit = ref.commit;
+  this.dispatch = function boundDispatch (type, payload) {
+    return dispatch.call(store, type, payload)
+    }
+    this.commit = function boundCommit (type, payload, options) {
+    return commit.call(store, type, payload, options)
+  }
+
+  // strict mode
+  this.strict = strict
+
+  // init root module.
+  // this also recursively registers all sub-modules
+  // and collects all module getters inside this._wrappedGetters
+  installModule(this, state, [], options)
+
+  // initialize the store vm, which is responsible for the reactivity
+  // (also registers _wrappedGetters as computed properties)
+  resetStoreVM(this, state)
+
+  // apply plugins
+  plugins.concat(devtoolPlugin).forEach(function (plugin) { return plugin(this$1); })
+};
+
+var prototypeAccessors = { state: {} };
+
+prototypeAccessors.state.get = function () {
+  return this._vm.state
+};
+
+prototypeAccessors.state.set = function (v) {
+  assert(false, "Use store.replaceState() to explicit replace store state.")
+};
+
+Store.prototype.commit = function commit (type, payload, options) {
+    var this$1 = this;
+
+  // check object-style commit
+  if (isObject(type) && type.type) {
+    options = payload
+    payload = type
+    type = type.type
+  }
+  var mutation = { type: type, payload: payload }
+  var entry = this._mutations[type]
+  if (!entry) {
+    console.error(("[vuex] unknown mutation type: " + type))
+    return
+  }
+  this._withCommit(function () {
+    entry.forEach(function commitIterator (handler) {
+      handler(payload)
+    })
+  })
+  if (!options || !options.silent) {
+    this._subscribers.forEach(function (sub) { return sub(mutation, this$1.state); })
+  }
+};
+
+Store.prototype.dispatch = function dispatch (type, payload) {
+  // check object-style dispatch
+  if (isObject(type) && type.type) {
+    payload = type
+    type = type.type
+  }
+  var entry = this._actions[type]
+  if (!entry) {
+    console.error(("[vuex] unknown action type: " + type))
+    return
+  }
+  return entry.length > 1
+    ? Promise.all(entry.map(function (handler) { return handler(payload); }))
+    : entry[0](payload)
+};
+
+Store.prototype.subscribe = function subscribe (fn) {
+  var subs = this._subscribers
+  if (subs.indexOf(fn) < 0) {
+    subs.push(fn)
+  }
+  return function () {
+    var i = subs.indexOf(fn)
+    if (i > -1) {
+      subs.splice(i, 1)
+    }
+  }
+};
+
+Store.prototype.watch = function watch (getter, cb, options) {
+    var this$1 = this;
+
+  assert(typeof getter === 'function', "store.watch only accepts a function.")
+  return this._watcherVM.$watch(function () { return getter(this$1.state); }, cb, options)
+};
+
+Store.prototype.replaceState = function replaceState (state) {
+    var this$1 = this;
+
+  this._withCommit(function () {
+    this$1._vm.state = state
+  })
+};
+
+Store.prototype.registerModule = function registerModule (path, module) {
+  if (typeof path === 'string') { path = [path] }
+  assert(Array.isArray(path), "module path must be a string or an Array.")
+  this._runtimeModules[path.join('.')] = module
+  installModule(this, this.state, path, module)
+  // reset store to update getters...
+  resetStoreVM(this, this.state)
+};
+
+Store.prototype.unregisterModule = function unregisterModule (path) {
+    var this$1 = this;
+
+  if (typeof path === 'string') { path = [path] }
+  assert(Array.isArray(path), "module path must be a string or an Array.")
+    delete this._runtimeModules[path.join('.')]
+  this._withCommit(function () {
+    var parentState = getNestedState(this$1.state, path.slice(0, -1))
+    Vue.delete(parentState, path[path.length - 1])
+  })
+  resetStore(this)
+};
+
+Store.prototype.hotUpdate = function hotUpdate (newOptions) {
+  updateModule(this._options, newOptions)
+  resetStore(this)
+};
+
+Store.prototype._withCommit = function _withCommit (fn) {
+  var committing = this._committing
+  this._committing = true
+  fn()
+  this._committing = committing
+};
+
+Object.defineProperties( Store.prototype, prototypeAccessors );
+
+function updateModule (targetModule, newModule) {
+  if (newModule.actions) {
+    targetModule.actions = newModule.actions
+  }
+  if (newModule.mutations) {
+    targetModule.mutations = newModule.mutations
+  }
+  if (newModule.getters) {
+    targetModule.getters = newModule.getters
+  }
+  if (newModule.modules) {
+    for (var key in newModule.modules) {
+      if (!(targetModule.modules && targetModule.modules[key])) {
+        console.warn(
+          "[vuex] trying to add a new module '" + key + "' on hot reloading, " +
+          'manual reload is needed'
+        )
+        return
+      }
+      updateModule(targetModule.modules[key], newModule.modules[key])
+    }
+  }
+}
+
+function resetStore (store) {
+  store._actions = Object.create(null)
+  store._mutations = Object.create(null)
+  store._wrappedGetters = Object.create(null)
+  var state = store.state
+  // init root module
+  installModule(store, state, [], store._options, true)
+  // init all runtime modules
+  Object.keys(store._runtimeModules).forEach(function (key) {
+    installModule(store, state, key.split('.'), store._runtimeModules[key], true)
+  })
+  // reset vm
+  resetStoreVM(store, state)
+}
+
+function resetStoreVM (store, state) {
+  var oldVm = store._vm
+
+  // bind store public getters
+  store.getters = {}
+  var wrappedGetters = store._wrappedGetters
+  var computed = {}
+  Object.keys(wrappedGetters).forEach(function (key) {
+    var fn = wrappedGetters[key]
+    // use computed to leverage its lazy-caching mechanism
+    computed[key] = function () { return fn(store); }
+    Object.defineProperty(store.getters, key, {
+      get: function () { return store._vm[key]; }
+    })
+  })
+
+  // use a Vue instance to store the state tree
+  // suppress warnings just in case the user has added
+  // some funky global mixins
+  var silent = Vue.config.silent
+  Vue.config.silent = true
+  store._vm = new Vue({
+    data: { state: state },
+    computed: computed
+  })
+  Vue.config.silent = silent
+
+  // enable strict mode for new vm
+  if (store.strict) {
+    enableStrictMode(store)
+  }
+
+  if (oldVm) {
+    // dispatch changes in all subscribed watchers
+    // to force getter re-evaluation.
+    store._withCommit(function () {
+      oldVm.state = null
+    })
+    Vue.nextTick(function () { return oldVm.$destroy(); })
+  }
+}
+
+function installModule (store, rootState, path, module, hot) {
+  var isRoot = !path.length
+  var state = module.state;
+  var actions = module.actions;
+  var mutations = module.mutations;
+  var getters = module.getters;
+  var modules = module.modules;
+
+  // set state
+  if (!isRoot && !hot) {
+    var parentState = getNestedState(rootState, path.slice(0, -1))
+    var moduleName = path[path.length - 1]
+    store._withCommit(function () {
+      Vue.set(parentState, moduleName, state || {})
+    })
+  }
+
+  if (mutations) {
+    Object.keys(mutations).forEach(function (key) {
+      registerMutation(store, key, mutations[key], path)
+    })
+  }
+
+  if (actions) {
+    Object.keys(actions).forEach(function (key) {
+      registerAction(store, key, actions[key], path)
+    })
+  }
+
+  if (getters) {
+    wrapGetters(store, getters, path)
+  }
+
+  if (modules) {
+    Object.keys(modules).forEach(function (key) {
+      installModule(store, rootState, path.concat(key), modules[key], hot)
+    })
+  }
+}
+
+function registerMutation (store, type, handler, path) {
+  if ( path === void 0 ) path = [];
+
+  var entry = store._mutations[type] || (store._mutations[type] = [])
+  entry.push(function wrappedMutationHandler (payload) {
+    handler(getNestedState(store.state, path), payload)
+  })
+}
+
+function registerAction (store, type, handler, path) {
+  if ( path === void 0 ) path = [];
+
+  var entry = store._actions[type] || (store._actions[type] = [])
+  var dispatch = store.dispatch;
+  var commit = store.commit;
+  entry.push(function wrappedActionHandler (payload, cb) {
+    var res = handler({
+      dispatch: dispatch,
+      commit: commit,
+      getters: store.getters,
+      state: getNestedState(store.state, path),
+      rootState: store.state
+    }, payload, cb)
+    if (!isPromise(res)) {
+      res = Promise.resolve(res)
+    }
+    if (store._devtoolHook) {
+      return res.catch(function (err) {
+        store._devtoolHook.emit('vuex:error', err)
+        throw err
+      })
+    } else {
+      return res
+    }
+  })
+}
+
+function wrapGetters (store, moduleGetters, modulePath) {
+  Object.keys(moduleGetters).forEach(function (getterKey) {
+    var rawGetter = moduleGetters[getterKey]
+    if (store._wrappedGetters[getterKey]) {
+      console.error(("[vuex] duplicate getter key: " + getterKey))
+      return
+    }
+    store._wrappedGetters[getterKey] = function wrappedGetter (store) {
+      return rawGetter(
+        getNestedState(store.state, modulePath), // local state
+        store.getters, // getters
+        store.state // root state
+      )
+    }
+  })
+}
+
+function enableStrictMode (store) {
+  store._vm.$watch('state', function () {
+    assert(store._committing, "Do not mutate vuex store state outside mutation handlers.")
+  }, { deep: true, sync: true })
+}
+
+function getNestedState (state, path) {
+  return path.length
+    ? path.reduce(function (state, key) { return state[key]; }, state)
+    : state
+}
+
+function install (_Vue) {
+  if (Vue) {
+    console.error(
+      '[vuex] already installed. Vue.use(Vuex) should be called only once.'
+    )
+    return
+  }
+  Vue = _Vue
+  applyMixin(Vue)
+}
+
+// auto install in dist mode
+if (typeof window !== 'undefined' && window.Vue) {
+  install(window.Vue)
+}
+
+var index = {
+  Store: Store,
+  install: install,
+  mapState: mapState,
+  mapMutations: mapMutations,
+  mapGetters: mapGetters,
+  mapActions: mapActions
+}
+
+return index;
+
+})));
+},{}],6:[function(require,module,exports){
+'use strict';
+
+var _vue = require('vue');
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _vuex = require('vuex');
+
+var _vuex2 = _interopRequireDefault(_vuex);
+
+var _store = require('./store/store');
+
+var _store2 = _interopRequireDefault(_store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Main = require('../vue/main.vue');
+
+new _vue2.default({
+    el: '#Main',
+
+    store: _store2.default,
+
+    render: function render(createElement) {
+        return createElement(Main);
+    }
+});
+
+// discharge batteries
+setInterval(function () {
+    return _store2.default.commit('BATTERY_DISCHARGE', { amount: 1 });
+}, 1000);
+
+},{"../vue/main.vue":16,"./store/store":12,"vue":3,"vuex":5}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var craft = exports.craft = function craft(_ref, resource) {
+    var commit = _ref.commit,
+        state = _ref.state;
+
+    for (var i = 0; i < resource.requires.length; i++) {
+        if (resource.requires[i].type === 'energy') {
+            if (state.battery.energy < resource.requires[i].amount) {
+                return;
+            }
+            commit('BATTERY_DISCHARGE', {
+                amount: resource.requires[i].amount
+            });
+        }
+    }
+
+    commit('INVENTORY_ADD', {
+        type: resource.type,
+        amount: 1
+    });
+};
+
+},{}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var Battery = {
 
-    capacity: 100,
-    charged: 0,
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-    charge: function charge(energy) {
-        energy = energy || 1;
-        this.charged = Math.min(this.capacity, this.charged + energy);
-    },
-    disCharge: function disCharge(energy) {
-        energy = energy || 1;
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-        if (this.charged - energy >= 0) {
-            this.charged = this.charged - energy;
-            return true;
-        }
-
-        return false;
+var INVENTORY_ADD = exports.INVENTORY_ADD = function INVENTORY_ADD(state, data) {
+    var amount = data.amount || 1;
+    if (state.inventory[data.type]) {
+        state.inventory[data.type] += amount;
+    } else {
+        state.inventory = _extends({}, state.inventory, _defineProperty({}, data.type, amount));
     }
 };
 
-setInterval(function () {
-    return Battery.disCharge();
-}, 1000);
+var BATTERY_CHARGE = exports.BATTERY_CHARGE = function BATTERY_CHARGE(state, data) {
+    var amount = data.amount || 1;
+    state.battery.energy = Math.min(state.battery.capacity, state.battery.energy + amount);
+};
 
-exports.default = Battery;
+var BATTERY_DISCHARGE = exports.BATTERY_DISCHARGE = function BATTERY_DISCHARGE(state, data) {
+    var amount = data.amount || 1;
+    state.battery.energy = Math.max(0, state.battery.energy - amount);
+};
 
-},{}],6:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    energy: 0,
+    capacity: 100
+};
+
+},{}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6116,59 +6714,120 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = {};
 
-},{}],7:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 'use strict';
 
-var _vue = require('vue');
-
-var _vue2 = _interopRequireDefault(_vue);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var MainVue = require('../vue/main.vue');
-
-new _vue2.default({
-    el: '#Main',
-
-    render: function render(createElement) {
-        return createElement(MainVue);
-    }
+Object.defineProperty(exports, "__esModule", {
+    value: true
 });
+exports.default = [{
+    type: 'wood',
+    label: 'Wood',
+    requires: [{ type: 'energy', amount: 10 }]
+}, {
+    type: 'stone',
+    label: 'Stone',
+    requires: [{ type: 'energy', amount: 20 }]
+}, {
+    type: 'iron',
+    label: 'Iron',
+    requires: [{ type: 'energy', amount: 30 }]
+}];
 
-},{"../vue/main.vue":11,"vue":3}],8:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".battery {\n    border: 1px solid #000;\n    height: 200px;\n    width: 100px;\n    position: relative;\n}\n\n.battery .charged {\n    position: absolute;\n    width: 100%;\n    bottom: 0px;\n    left: 0px;\n    background-color: green;\n}\n\n.battery .charged.medium {\n    background-color: yellow;\n}\n\n.battery .charged.low {\n    background-color: red;\n}")
-;(function(){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _battery = require('../js/battery.js');
+var _vue = require('vue');
+
+var _vue2 = _interopRequireDefault(_vue);
+
+var _vuex = require('vuex');
+
+var _vuex2 = _interopRequireDefault(_vuex);
+
+var _resources = require('./state/resources');
+
+var _resources2 = _interopRequireDefault(_resources);
+
+var _inventory = require('./state/inventory');
+
+var _inventory2 = _interopRequireDefault(_inventory);
+
+var _battery = require('./state/battery');
 
 var _battery2 = _interopRequireDefault(_battery);
 
+var _mutations = require('./mutations');
+
+var mutations = _interopRequireWildcard(_mutations);
+
+var _actions = require('./actions');
+
+var actions = _interopRequireWildcard(_actions);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = {
-    data: function data() {
-        return { Battery: _battery2.default };
-    },
+_vue2.default.use(_vuex2.default);
 
+var savedData = localStorage.getItem('CLICKER');
+var state = savedData ? JSON.parse(savedData) : {
+    inventory: _inventory2.default,
+    resources: _resources2.default,
+    battery: _battery2.default
+};
+
+var store = new _vuex2.default.Store({
+    state: state,
+    mutations: mutations,
+    actions: actions
+});
+
+exports.default = store;
+
+
+var save = function save() {
+    return localStorage.setItem('CLICKER', JSON.stringify(store.state));
+};
+// save every minute
+setInterval(save, 60000);
+// add on unload
+window.onunload = save;
+
+},{"./actions":7,"./mutations":8,"./state/battery":9,"./state/inventory":10,"./state/resources":11,"vue":3,"vuex":5}],13:[function(require,module,exports){
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".battery {\n    border: 1px solid #000;\n    height: 200px;\n    width: 100px;\n    position: relative;\n}\n\n.battery .energy {\n    position: absolute;\n    width: 100%;\n    bottom: 0px;\n    left: 0px;\n    background-color: green;\n}\n\n.battery .energy.medium {\n    background-color: yellow;\n}\n\n.battery .energy.low {\n    background-color: red;\n}")
+;(function(){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
 
     computed: {
-        charged: function charged() {
-            return Math.round(this.Battery.charged / this.Battery.capacity * 100);
+        energy: function energy() {
+            return this.$store.state.battery.energy;
+        },
+        capacity: function capacity() {
+            return this.$store.state.battery.capacity;
+        },
+        percentage: function percentage() {
+            return Math.round(this.energy / this.capacity * 100);
         },
         classes: function classes() {
             return {
-                charged: true,
-                low: this.charged <= 20,
-                medium: this.charged > 20 && this.charged <= 50
+                energy: true,
+                low: this.percentage <= 20,
+                medium: this.percentage > 20 && this.percentage <= 50
             };
         },
         style: function style() {
-            return 'height: ' + this.charged + '%';
+            return 'height: ' + this.percentage + '%';
         }
     }
 };
@@ -6176,7 +6835,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._h('div',{staticClass:"battery"},[_vm._h('div',{class:_vm.classes,style:(_vm.style)})])," ",_vm._h('span',[_vm._s(_vm.charged)+" / "+_vm._s(_vm.Battery.capacity)])])}
+__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._h('div',{staticClass:"battery"},[_vm._h('div',{class:_vm.classes,style:(_vm.style)})])," ",_vm._h('span',[_vm._s(_vm.energy)+" / "+_vm._s(_vm.capacity)])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -6190,7 +6849,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   }
 })()}
 
-},{"../js/battery.js":5,"vue":3,"vue-hot-reload-api":2,"vueify/lib/insert-css":4}],9:[function(require,module,exports){
+},{"vue":3,"vue-hot-reload-api":2,"vueify/lib/insert-css":4}],14:[function(require,module,exports){
 var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".resource {\n    border: 1px solid #999;\n    padding: 10px;\n    cursor: pointer;\n    background-color: #CCC;\n}\n\n.resource:not(:last-child) {\n    margin-bottom: 10px;\n}")
 ;(function(){
 'use strict';
@@ -6199,59 +6858,26 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _inventory = require('../js/inventory.js');
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _inventory2 = _interopRequireDefault(_inventory);
-
-var _battery = require('../js/battery.js');
-
-var _battery2 = _interopRequireDefault(_battery);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _vuex = require('vuex');
 
 exports.default = {
-    data: function data() {
-        return {
-            resources: [{
-                type: 'wood',
-                label: 'Wood',
-                requires: [{ type: 'energy', count: 10 }]
-            }, {
-                type: 'stone',
-                label: 'Stone',
-                requires: [{ type: 'energy', count: 20 }]
-            }, {
-                type: 'iron',
-                label: 'Iron',
-                requires: [{ type: 'energy', count: 30 }]
-            }]
-        };
+
+    computed: {
+        resources: function resources() {
+            return this.$store.state.resources;
+        }
     },
 
-
-    methods: {
-        craft: function craft(resource) {
-            for (var i = 0; i < resource.requires.length; i++) {
-                if (resource.requires[i].type === 'energy') {
-                    if (!_battery2.default.disCharge(resource.requires[i].count)) {
-                        return;
-                    }
-                }
-            }
-
-            if (!_inventory2.default[resource.type]) {
-                this.$set(_inventory2.default, resource.type, 0);
-            }
-            _inventory2.default[resource.type]++;
-        }
-    }
+    methods: _extends({}, (0, _vuex.mapActions)(['craft']))
 
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._l((_vm.resources),function(resource){return _vm._h('div',{staticClass:"resource",on:{"click":function($event){_vm.craft(resource)}}},["\n        "+_vm._s(resource.label)+" ( ",_vm._l((resource.requires),function(require){return _vm._h('span',[_vm._s(require.type)+": "+_vm._s(require.count)])})," )\n    "])})])}
+__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._l((_vm.resources),function(resource){return _vm._h('div',{staticClass:"resource",on:{"click":function($event){_vm.craft(resource)}}},["\n        "+_vm._s(resource.label)+" ( ",_vm._l((resource.requires),function(require){return _vm._h('span',[_vm._s(require.type)+": "+_vm._s(require.amount)])})," )\n    "])})])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -6265,25 +6891,18 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   }
 })()}
 
-},{"../js/battery.js":5,"../js/inventory.js":6,"vue":3,"vue-hot-reload-api":2,"vueify/lib/insert-css":4}],10:[function(require,module,exports){
+},{"vue":3,"vue-hot-reload-api":2,"vueify/lib/insert-css":4,"vuex":5}],15:[function(require,module,exports){
 ;(function(){
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _inventory = require('../js/inventory.js');
-
-var _inventory2 = _interopRequireDefault(_inventory);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 exports.default = {
-    data: function data() {
-        return {
-            inventory: _inventory2.default
-        };
+    computed: {
+        inventory: function inventory() {
+            return this.$store.state.inventory;
+        }
     }
 };
 })()
@@ -6303,7 +6922,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   }
 })()}
 
-},{"../js/inventory.js":6,"vue":3,"vue-hot-reload-api":2}],11:[function(require,module,exports){
+},{"vue":3,"vue-hot-reload-api":2}],16:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -6311,21 +6930,17 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _inventory = require('../js/inventory.js');
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _vuex = require('vuex');
+
+var _inventory = require('./inventory.vue');
 
 var _inventory2 = _interopRequireDefault(_inventory);
 
-var _battery = require('../js/battery.js');
+var _battery = require('./battery.vue');
 
 var _battery2 = _interopRequireDefault(_battery);
-
-var _inventory3 = require('./inventory.vue');
-
-var _inventory4 = _interopRequireDefault(_inventory3);
-
-var _battery3 = require('./battery.vue');
-
-var _battery4 = _interopRequireDefault(_battery3);
 
 var _crafting = require('./crafting.vue');
 
@@ -6336,22 +6951,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
 
     components: {
-        Inventory: _inventory4.default,
-        Battery: _battery4.default,
+        Inventory: _inventory2.default,
+        Battery: _battery2.default,
         Crafting: _crafting2.default
     },
 
-    methods: {
-        charge: function charge() {
-            _battery2.default.charge();
-        }
-    }
+    methods: _extends({}, (0, _vuex.mapMutations)(['BATTERY_CHARGE']))
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._h('fieldset',{staticStyle:{"float":"left"}},[_vm._m(0)," ",_vm._h('button',{on:{"click":_vm.charge}},["Charge"])])," ",_vm._h('fieldset',{staticStyle:{"float":"left"}},[_vm._m(1)," ",_vm._h('crafting')])," ",_vm._h('div',{staticStyle:{"float":"right"}},[_vm._h('inventory')," ",_vm._h('battery')])])}
+__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._h('fieldset',{staticStyle:{"float":"left"}},[_vm._m(0)," ",_vm._h('button',{on:{"click":_vm.BATTERY_CHARGE}},["Charge"])])," ",_vm._h('fieldset',{staticStyle:{"float":"left"}},[_vm._m(1)," ",_vm._h('crafting')])," ",_vm._h('div',{staticStyle:{"float":"right"}},[_vm._h('inventory')," ",_vm._h('battery')])])}
 __vue__options__.staticRenderFns = [function render () {var _vm=this;return _vm._h('legend',["Energy"])},function render () {var _vm=this;return _vm._h('legend',["Resources"])}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -6364,7 +6975,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   }
 })()}
 
-},{"../js/battery.js":5,"../js/inventory.js":6,"./battery.vue":8,"./crafting.vue":9,"./inventory.vue":10,"vue":3,"vue-hot-reload-api":2}]},{},[7])
+},{"./battery.vue":13,"./crafting.vue":14,"./inventory.vue":15,"vue":3,"vue-hot-reload-api":2,"vuex":5}]},{},[6])
 
 
 //# sourceMappingURL=main.js.map

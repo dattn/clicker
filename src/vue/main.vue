@@ -2,7 +2,7 @@
     <div>
         <fieldset style="float: left">
             <legend>Energy</legend>
-            <button @click="charge">Charge</button>
+            <button @click="BATTERY_CHARGE">Charge</button>
         </fieldset>
         <fieldset style="float: left">
             <legend>Resources</legend>
@@ -17,24 +17,23 @@
 </template>
 
 <script>
-    import Inventory from '../js/inventory.js';
-    import Battery from '../js/battery.js';
-    import InventoryVue from './inventory.vue';
-    import BatteryVue from './battery.vue';
-    import CraftingVue from './crafting.vue';
+    import { mapMutations } from 'vuex';
+    import Inventory from './inventory.vue';
+    import Battery from './battery.vue';
+    import Crafting from './crafting.vue';
 
     export default {
 
         components: {
-            Inventory: InventoryVue,
-            Battery: BatteryVue,
-            Crafting: CraftingVue
+            Inventory,
+            Battery,
+            Crafting
         },
 
         methods: {
-            charge() {
-                Battery.charge();
-            }
+            ...mapMutations([
+                'BATTERY_CHARGE'
+            ])
         }
     }
 </script>
