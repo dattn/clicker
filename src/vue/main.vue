@@ -10,6 +10,7 @@
         </fieldset>
 
         <div style="float: right">
+            <watch></watch>
             <inventory></inventory>
             <battery></battery>
         </div>
@@ -21,13 +22,15 @@
     import Inventory from './inventory.vue';
     import Battery from './battery.vue';
     import Crafting from './crafting.vue';
+    import Watch from './watch.vue';
 
     export default {
 
         components: {
             Inventory,
             Battery,
-            Crafting
+            Crafting,
+            Watch
         },
 
         methods: {
