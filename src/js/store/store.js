@@ -9,11 +9,15 @@ import * as actions from './actions';
 Vue.use(Vuex);
 
 const savedData = localStorage.getItem('CLICKER');
-const state = savedData? JSON.parse(savedData) : {
+var state = savedData? JSON.parse(savedData) : {
     inventory,
-    resources,
     battery
 };
+
+var state = {
+    ...state,
+    resources
+}
 
 const store = new Vuex.Store({
     state,

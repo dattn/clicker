@@ -1,23 +1,35 @@
 export default [
     {
-        type: 'wood',
-        label: 'Wood',
-        requires: [
-            { type: 'energy', amount: 10 }
-        ]
-    },
-    {
-        type: 'stone',
-        label: 'Stone',
-        requires: [
-            { type: 'energy', amount: 20 }
-        ]
-    },
-    {
         type: 'iron',
         label: 'Iron',
-        requires: [
-            { type: 'energy', amount: 30 }
-        ]
+        requires: {
+            energy: 10
+        }
+    },
+    {
+        type: 'copper',
+        label: 'Copper',
+        requires: {
+            energy: 20
+        }
+    },
+    {
+        type: 'silicon',
+        label: 'Silicon',
+        requires: {
+            energy: 25
+        }
+    },
+    {
+        type: 'solar-cell',
+        label: 'Solar Cell',
+        requires: {
+            energy: 60,
+            resources: {
+                iron: 5,
+                copper: 5,
+                silicon: 5
+            }
+        }
     }
 ];

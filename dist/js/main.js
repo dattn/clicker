@@ -11021,17 +11021,34 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = [{
-    type: 'wood',
-    label: 'Wood',
-    requires: [{ type: 'energy', amount: 10 }]
-}, {
-    type: 'stone',
-    label: 'Stone',
-    requires: [{ type: 'energy', amount: 20 }]
-}, {
     type: 'iron',
     label: 'Iron',
-    requires: [{ type: 'energy', amount: 30 }]
+    requires: {
+        energy: 10
+    }
+}, {
+    type: 'copper',
+    label: 'Copper',
+    requires: {
+        energy: 20
+    }
+}, {
+    type: 'silicon',
+    label: 'Silicon',
+    requires: {
+        energy: 25
+    }
+}, {
+    type: 'solar-cell',
+    label: 'Solar Cell',
+    requires: {
+        energy: 60,
+        resources: {
+            iron: 5,
+            copper: 5,
+            silicon: 5
+        }
+    }
 }];
 
 },{}],13:[function(require,module,exports){
@@ -11040,6 +11057,8 @@ exports.default = [{
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _vue = require('vue');
 
@@ -11078,9 +11097,12 @@ _vue2.default.use(_vuex2.default);
 var savedData = localStorage.getItem('CLICKER');
 var state = savedData ? JSON.parse(savedData) : {
     inventory: _inventory2.default,
-    resources: _resources2.default,
     battery: _battery2.default
 };
+
+var state = _extends({}, state, {
+    resources: _resources2.default
+});
 
 var store = new _vuex2.default.Store({
     state: state,
@@ -11165,13 +11187,15 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
 })()}
 
 },{"vue":4,"vue-hot-reload-api":3,"vueify/lib/insert-css":5}],16:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".resource {\n    border: 1px solid #999;\n    padding: 10px;\n    cursor: pointer;\n    background-color: #CCC;\n}\n\n.resource:not(:last-child) {\n    margin-bottom: 10px;\n}")
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".resource {\n    border: 1px solid #999;\n    padding: 10px;\n    cursor: pointer;\n    background-color: #CCC;\n}\n\n.resource:not(:last-child) {\n    margin-bottom: 10px;\n}\n\n.resource .category {\n    font-weight: bold;\n}")
 ;(function(){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -11185,15 +11209,25 @@ exports.default = {
         }
     },
 
-    methods: _extends({}, (0, _vuex.mapActions)(['craft']))
+    methods: _extends({}, (0, _vuex.mapActions)(['craft']), {
+        resourceLabel: function resourceLabel(type) {
+            var _resources$filter = this.resources.filter(function (r) {
+                return r.type === type;
+            }),
+                _resources$filter2 = _slicedToArray(_resources$filter, 1),
+                resource = _resources$filter2[0];
+
+            return resource ? resource.label : type;
+        }
+    })
 
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._l((_vm.resources),function(resource){return _vm._h('div',{staticClass:"resource noselect",on:{"click":function($event){_vm.craft(resource)}}},["\n        "+_vm._s(resource.label)+" ( ",_vm._l((resource.requires),function(require){return _vm._h('span',[_vm._s(require.type)+": "+_vm._s(require.amount)])})," )\n    "])})])}
-__vue__options__.staticRenderFns = []
+__vue__options__.render = function render () {var _vm=this;return _vm._h('div',{staticClass:"container-fluid"},[_vm._l((_vm.resources),function(resource){return _vm._h('div',{staticClass:"resource noselect row",on:{"click":function($event){_vm.craft(resource)}}},[_vm._h('div',{staticClass:"col-sm-6"},[_vm._h('h4',[_vm._s(resource.label)])])," ",_vm._h('div',{staticClass:"col-sm-6"},[(resource.requires.energy)?_vm._h('div',[_vm._m(0,true)," "+_vm._s(resource.requires.energy)+"\n            "]):_vm._e()," ",(resource.requires.resources)?_vm._h('div',[_vm._m(1,true),_vm._m(2,true)," ",_vm._h('ul',[_vm._l((resource.requires.resources),function(amount,index){return _vm._h('li',[_vm._s(_vm.resourceLabel(index))+": "+_vm._s(amount)])})])]):_vm._e()])])})])}
+__vue__options__.staticRenderFns = [function render () {var _vm=this;return _vm._h('span',{staticClass:"category"},["Energy:"])},function render () {var _vm=this;return _vm._h('span',{staticClass:"category"},["Resources:"])},function render () {var _vm=this;return _vm._h('br')}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
