@@ -17,6 +17,10 @@
     </div>
 </template>
 
+<style lang="sass">
+    @import "../../node_modules/bootstrap/scss/bootstrap.scss"
+</style>
+
 <script>
     import { mapMutations } from 'vuex';
     import Inventory from './inventory.vue';
