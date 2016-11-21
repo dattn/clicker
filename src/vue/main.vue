@@ -1,23 +1,36 @@
 <template>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="energyPlate noselect" @click.stop="BATTERY_CHARGE">Charge</div>
+    <div>
+        <nav class="navbar navbar-dark bg-primary navbar-fixed-top">
+            <div class="navbar-text float-xs-right">
+                <watch></watch>
             </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        Resources
-                    </div>
-                    <div class="card-block">
-                        <crafting></crafting>
+        </nav>
+        <div class="container-fluid mainContent">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="energyPlate noselect" @click.stop="BATTERY_CHARGE">Charge</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            Resources
+                        </div>
+                        <div class="card-block">
+                            <crafting></crafting>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <watch></watch>
-                <inventory></inventory>
-                <battery></battery>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                            Inventory
+                        </div>
+                        <div class="card-block">
+                            <inventory></inventory>
+                        </div>
+                    </div>
+                    <battery></battery>
+                </div>
             </div>
         </div>
     </div>
@@ -25,6 +38,10 @@
 
 <style lang="sass">
     @import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+    .mainContent {
+        margin-top: 65px;
+    }
 
     .energyPlate {
         width: 200px;
