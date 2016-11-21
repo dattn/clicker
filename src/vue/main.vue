@@ -1,24 +1,50 @@
 <template>
-    <div>
-        <fieldset style="float: left">
-            <legend>Energy</legend>
-            <button @click="BATTERY_CHARGE">Charge</button>
-        </fieldset>
-        <fieldset style="float: left">
-            <legend>Resources</legend>
-            <crafting></crafting>
-        </fieldset>
-
-        <div style="float: right">
-            <watch></watch>
-            <inventory></inventory>
-            <battery></battery>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="energyPlate noselect" @click.stop="BATTERY_CHARGE">Charge</div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Resources
+                    </div>
+                    <div class="card-block">
+                        <crafting></crafting>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <watch></watch>
+                <inventory></inventory>
+                <battery></battery>
+            </div>
         </div>
     </div>
 </template>
 
 <style lang="sass">
-    @import "../../node_modules/bootstrap/scss/bootstrap.scss"
+    @import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+    .energyPlate {
+        width: 200px;
+        height: 200px;
+        line-height: 200px;
+        text-align: center;
+
+        border: 1px solid #999;
+        cursor: pointer;
+        background-color: #CCC;
+    }
+
+    .noselect {
+        -webkit-touch-callout: none;
+          -webkit-user-select: none;
+           -khtml-user-select: none;
+             -moz-user-select: none;
+              -ms-user-select: none;
+                  user-select: none;
+    }
 </style>
 
 <script>

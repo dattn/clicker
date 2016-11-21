@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-for="resource in resources" class="resource" @click="craft(resource)">
+        <div v-for="resource in resources" class="resource noselect" @click="craft(resource)">
             {{ resource.label }} ( <span v-for="require in resource.requires">{{ require.type }}: {{ require.amount }}</span> )
         </div>
     </div>
