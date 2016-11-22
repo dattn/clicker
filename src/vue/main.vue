@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav class="navbar navbar-dark bg-faded navbar-fixed-top">
+        <nav :class="navClasses">
             <div class="navbar-text float-xs-right">
                 <watch></watch>
             </div>
@@ -43,6 +43,14 @@
         margin-top: 65px;
     }
 
+    .navbar {
+        transition: background-color 2s linear;
+    }
+
+    .navbar.navbar-dark .navbar-text {
+        color: #eceeef;
+    }
+
     .energyPlate {
         width: 200px;
         max-width: 100%;
@@ -72,14 +80,42 @@
     import Battery from './battery.vue';
     import Crafting from './crafting.vue';
     import Watch from './watch.vue';
+    import { time } from '../js/utils';
+
+    const data = {
+        time: time()
+    }
+
+    setInterval(() => data.time = time(), 1000);
 
     export default {
+
+        data() {
+            return data;
+        },
 
         components: {
             Inventory,
             Battery,
             Crafting,
             Watch
+        },
+
+        computed: {
+            night() {
+                return this.time < 60 * 60 * 8
+                    || this.time >= 60 * 60 * 20;
+            },
+
+            navClasses() {
+                return {
+                    navbar: true,
+                    'navbar-fixed-top': true,
+                    'navbar-dark': this.night,
+                    'bg-inverse': this.night,
+                    'bg-faded': !this.night,
+                }
+            }
         },
 
         methods: {
