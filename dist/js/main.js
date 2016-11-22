@@ -11168,7 +11168,7 @@ var time = exports.time = function time() {
 };
 
 },{}],15:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".battery {\n    border: 1px solid #000;\n    height: 200px;\n    width: 100px;\n    position: relative;\n}\n\n.battery .energy {\n    position: absolute;\n    width: 100%;\n    bottom: 0px;\n    left: 0px;\n    background-color: green;\n    transition: background-color 1s, height 1s;\n}\n\n.battery .energy.medium {\n    background-color: yellow;\n}\n\n.battery .energy.low {\n    background-color: red;\n}")
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".battery {\n    border: 1px solid #000;\n    height: 200px;\n    width: 100px;\n    position: relative;\n}\n\n.battery .energy {\n    position: absolute;\n    width: 100%;\n    bottom: 0px;\n    left: 0px;\n    background-color: green;\n    transition: background-color 1s linear, height 1s linear;\n}\n\n.battery .energy.medium {\n    background-color: yellow;\n}\n\n.battery .energy.low {\n    background-color: red;\n}")
 ;(function(){
 'use strict';
 
