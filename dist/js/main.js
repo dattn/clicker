@@ -10972,17 +10972,41 @@ setInterval(function () {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+var validateRequirements = function validateRequirements(state, requirements) {
+    if (requirements.energy && requirements.energy > state.battery.energy) {
+        return false;
+    }
+
+    if (requirements.resources) {
+        for (var type in requirements.resources) {
+            if (requirements.resources[type] > state.inventory[type]) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+};
+
 var craft = exports.craft = function craft(_ref, resource) {
     var commit = _ref.commit,
         state = _ref.state;
 
-    for (var i = 0; i < resource.requires.length; i++) {
-        if (resource.requires[i].type === 'energy') {
-            if (state.battery.energy < resource.requires[i].amount) {
-                return;
-            }
-            commit('BATTERY_DISCHARGE', {
-                amount: resource.requires[i].amount
+    if (!validateRequirements(state, resource.requires)) {
+        return false;
+    }
+
+    if (resource.requires.energy) {
+        commit('BATTERY_DISCHARGE', {
+            amount: resource.requires.energy
+        });
+    }
+
+    if (resource.requires.resources) {
+        for (var type in resource.requires.resources) {
+            commit('INVENTORY_REMOVE', {
+                type: type,
+                amount: resource.requires.resources[type]
             });
         }
     }
@@ -11010,6 +11034,13 @@ var INVENTORY_ADD = exports.INVENTORY_ADD = function INVENTORY_ADD(state, data) 
         state.inventory[data.type] += amount;
     } else {
         state.inventory = _extends({}, state.inventory, _defineProperty({}, data.type, amount));
+    }
+};
+
+var INVENTORY_REMOVE = exports.INVENTORY_REMOVE = function INVENTORY_REMOVE(state, data) {
+    var amount = data.amount || 1;
+    if (state.inventory[data.type]) {
+        state.inventory[data.type] = Math.max(0, state.inventory[data.type] -= amount);
     }
 };
 

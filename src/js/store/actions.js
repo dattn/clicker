@@ -1,11 +1,35 @@
-export const craft = ({ commit, state }, resource) => {
-    for (var i = 0; i < resource.requires.length; i++) {
-        if (resource.requires[i].type === 'energy') {
-            if (state.battery.energy < resource.requires[i].amount) {
-                return;
+const validateRequirements = function(state, requirements) {
+    if (requirements.energy && requirements.energy > state.battery.energy) {
+        return false;
+    }
+
+    if (requirements.resources) {
+        for (var type in requirements.resources) {
+            if (requirements.resources[type] > state.inventory[type]) {
+                return false;
             }
-            commit('BATTERY_DISCHARGE', {
-                amount: resource.requires[i].amount
+        }
+    }
+
+    return true;
+}
+
+export const craft = ({ commit, state }, resource) => {
+    if (!validateRequirements(state, resource.requires)) {
+        return false;
+    }
+
+    if (resource.requires.energy) {
+        commit('BATTERY_DISCHARGE', {
+            amount: resource.requires.energy
+        });
+    }
+
+    if (resource.requires.resources) {
+        for (var type in resource.requires.resources) {
+            commit('INVENTORY_REMOVE', {
+                type,
+                amount: resource.requires.resources[type]
             });
         }
     }
