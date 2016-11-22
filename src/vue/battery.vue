@@ -2,26 +2,29 @@
     <div>
         <div class="battery">
             <div :class="classes" :style="style"></div>
+            <span>{{ energy }} / {{ capacity }}</span>
         </div>
-        <span>{{ energy }} / {{ capacity }}</span>
     </div>
 </template>
 
 <style>
     .battery {
         border: 1px solid #000;
-        height: 200px;
-        width: 100px;
+        height: 50px;
+        width: 100%;
         position: relative;
+        line-height: 50px;
+        text-align: center;
     }
 
     .battery .energy {
         position: absolute;
-        width: 100%;
-        bottom: 0px;
+        height: 100%;
+        top: 0px;
         left: 0px;
         background-color: green;
-        transition: background-color 1s linear, height 1s linear;
+        transition: background-color 1s linear, width 1s linear;
+        z-index: -1;
     }
 
     .battery .energy.medium {
@@ -59,7 +62,7 @@
             },
 
             style() {
-                return 'height: ' + this.percentage + '%';
+                return 'width: ' + this.percentage + '%';
             }
         }
     }

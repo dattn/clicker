@@ -21,6 +21,7 @@
                     </div>
                 </div>
                 <div class="col-md-3">
+                    <battery style="margin-bottom: 1em"></battery>
                     <div class="card">
                         <div class="card-header">
                             Inventory
@@ -29,7 +30,6 @@
                             <inventory></inventory>
                         </div>
                     </div>
-                    <battery></battery>
                 </div>
             </div>
         </div>

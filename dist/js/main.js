@@ -11168,7 +11168,7 @@ var time = exports.time = function time() {
 };
 
 },{}],15:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".battery {\n    border: 1px solid #000;\n    height: 200px;\n    width: 100px;\n    position: relative;\n}\n\n.battery .energy {\n    position: absolute;\n    width: 100%;\n    bottom: 0px;\n    left: 0px;\n    background-color: green;\n    transition: background-color 1s linear, height 1s linear;\n}\n\n.battery .energy.medium {\n    background-color: yellow;\n}\n\n.battery .energy.low {\n    background-color: red;\n}")
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".battery {\n    border: 1px solid #000;\n    height: 50px;\n    width: 100%;\n    position: relative;\n    line-height: 50px;\n    text-align: center;\n}\n\n.battery .energy {\n    position: absolute;\n    height: 100%;\n    top: 0px;\n    left: 0px;\n    background-color: green;\n    transition: background-color 1s linear, width 1s linear;\n    z-index: -1;\n}\n\n.battery .energy.medium {\n    background-color: yellow;\n}\n\n.battery .energy.low {\n    background-color: red;\n}")
 ;(function(){
 'use strict';
 
@@ -11195,7 +11195,7 @@ exports.default = {
             };
         },
         style: function style() {
-            return 'height: ' + this.percentage + '%';
+            return 'width: ' + this.percentage + '%';
         }
     }
 };
@@ -11203,7 +11203,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._h('div',{staticClass:"battery"},[_vm._h('div',{class:_vm.classes,style:(_vm.style)})])," ",_vm._h('span',[_vm._s(_vm.energy)+" / "+_vm._s(_vm.capacity)])])}
+__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._h('div',{staticClass:"battery"},[_vm._h('div',{class:_vm.classes,style:(_vm.style)})," ",_vm._h('span',[_vm._s(_vm.energy)+" / "+_vm._s(_vm.capacity)])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -11348,7 +11348,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._h('nav',{staticClass:"navbar navbar-dark bg-faded navbar-fixed-top"},[_vm._h('div',{staticClass:"navbar-text float-xs-right"},[_vm._h('watch')])])," ",_vm._h('div',{staticClass:"container-fluid mainContent"},[_vm._h('div',{staticClass:"row"},[_vm._h('div',{staticClass:"col-md-3"},[_vm._h('div',{staticClass:"energyPlate noselect",on:{"click":function($event){$event.stopPropagation();_vm.BATTERY_CHARGE($event)}}},["Charge"])])," ",_vm._h('div',{staticClass:"col-md-6"},[_vm._h('div',{staticClass:"card"},[_vm._m(0)," ",_vm._h('div',{staticClass:"card-block"},[_vm._h('crafting')])])])," ",_vm._h('div',{staticClass:"col-md-3"},[_vm._h('div',{staticClass:"card"},[_vm._m(1)," ",_vm._h('div',{staticClass:"card-block"},[_vm._h('inventory')])])," ",_vm._h('battery')])])])])}
+__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._h('nav',{staticClass:"navbar navbar-dark bg-faded navbar-fixed-top"},[_vm._h('div',{staticClass:"navbar-text float-xs-right"},[_vm._h('watch')])])," ",_vm._h('div',{staticClass:"container-fluid mainContent"},[_vm._h('div',{staticClass:"row"},[_vm._h('div',{staticClass:"col-md-3"},[_vm._h('div',{staticClass:"energyPlate noselect",on:{"click":function($event){$event.stopPropagation();_vm.BATTERY_CHARGE($event)}}},["Charge"])])," ",_vm._h('div',{staticClass:"col-md-6"},[_vm._h('div',{staticClass:"card"},[_vm._m(0)," ",_vm._h('div',{staticClass:"card-block"},[_vm._h('crafting')])])])," ",_vm._h('div',{staticClass:"col-md-3"},[_vm._h('battery',{staticStyle:{"margin-bottom":"1em"}})," ",_vm._h('div',{staticClass:"card"},[_vm._m(1)," ",_vm._h('div',{staticClass:"card-block"},[_vm._h('inventory')])])])])])])}
 __vue__options__.staticRenderFns = [function render () {var _vm=this;return _vm._h('div',{staticClass:"card-header"},["\n                        Resources\n                    "])},function render () {var _vm=this;return _vm._h('div',{staticClass:"card-header"},["\n                        Inventory\n                    "])}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
