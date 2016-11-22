@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav class="navbar navbar-dark bg-primary navbar-fixed-top">
+        <nav class="navbar navbar-dark bg-faded navbar-fixed-top">
             <div class="navbar-text float-xs-right">
                 <watch></watch>
             </div>
