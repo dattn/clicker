@@ -45,9 +45,11 @@
 
     .energyPlate {
         width: 200px;
+        max-width: 100%;
         height: 200px;
         line-height: 200px;
         text-align: center;
+        margin: 0 auto 1em auto;
 
         border: 1px solid #999;
         cursor: pointer;
