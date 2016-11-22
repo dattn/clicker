@@ -21,6 +21,7 @@
         bottom: 0px;
         left: 0px;
         background-color: green;
+        transition: background-color 1s, height 1s;
     }
 
     .battery .energy.medium {

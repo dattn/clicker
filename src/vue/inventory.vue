@@ -1,7 +1,7 @@
 <template>
-    <table>
+    <table class="table table-sm">
         <tr v-for="(count, type) in inventory">
-            <td>{{ type }}</td>
+            <th scope="row">{{ type }}</th>
             <td>{{ count }}</td>
         </tr>
     </table>
