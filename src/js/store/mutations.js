@@ -26,3 +26,7 @@ export const BATTERY_DISCHARGE = (state, data) => {
     const amount = data.amount || 1;
     state.battery.energy = Math.max(0, state.battery.energy - amount);
 }
+
+export const SET_TIME = (state, data) => {
+    state.time = data.time;
+}

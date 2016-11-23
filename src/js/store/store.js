@@ -5,6 +5,7 @@ import inventory from './state/inventory';
 import battery from './state/battery';
 import * as mutations from './mutations';
 import * as actions from './actions';
+import { gameTime } from '../utils';
 
 Vue.use(Vuex);
 
@@ -16,7 +17,8 @@ var state = savedData? JSON.parse(savedData) : {
 
 var state = {
     ...state,
-    resources
+    resources,
+    time: gameTime(55)
 }
 
 const store = new Vuex.Store({

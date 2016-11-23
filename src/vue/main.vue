@@ -80,19 +80,8 @@
     import Battery from './battery.vue';
     import Crafting from './crafting.vue';
     import Watch from './watch.vue';
-    import { time } from '../js/utils';
-
-    const data = {
-        time: time()
-    }
-
-    setInterval(() => data.time = time(), 1000);
 
     export default {
-
-        data() {
-            return data;
-        },
 
         components: {
             Inventory,
@@ -103,8 +92,8 @@
 
         computed: {
             night() {
-                return this.time < 60 * 60 * 8
-                    || this.time >= 60 * 60 * 20;
+                return this.$store.state.time < 60 * 8
+                    || this.$store.state.time >= 60 * 20;
             },
 
             navClasses() {

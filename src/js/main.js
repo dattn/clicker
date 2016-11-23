@@ -14,5 +14,8 @@ new Vue({
     }
 });
 
+// update virtual time
+setInterval(() => store.dispatch('updateTime'), 100);
+
 // discharge batteries
 setInterval(() => store.commit('BATTERY_DISCHARGE', { amount: 1 }), 1000);

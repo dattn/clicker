@@ -1,3 +1,5 @@
+import { gameTime } from '../utils';
+
 const validateRequirements = function(state, requirements) {
     if (requirements.energy && requirements.energy > state.battery.energy) {
         return false;
@@ -38,4 +40,11 @@ export const craft = ({ commit, state }, resource) => {
         type: resource.type,
         amount: 1
     });
+}
+
+export const updateTime = ({ commit, state }) => {
+    const time = gameTime(55);
+    if (time !== state.time) {
+        commit('SET_TIME', { time });
+    }
 }

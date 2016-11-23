@@ -4609,7 +4609,7 @@ exports.reload = tryWrap(function (id, options) {
 },{}],4:[function(require,module,exports){
 (function (process){
 /*!
- * Vue.js v2.0.7
+ * Vue.js v2.0.8
  * (c) 2014-2016 Evan You
  * Released under the MIT License.
  */
@@ -5718,9 +5718,11 @@ function defineReactive$$1 (
     },
     set: function reactiveSetter (newVal) {
       var value = getter ? getter.call(obj) : val;
-      if (newVal === value) {
+      /* eslint-disable no-self-compare */
+      if (newVal === value || (newVal !== newVal && value !== value)) {
         return
       }
+      /* eslint-enable no-self-compare */
       if (process.env.NODE_ENV !== 'production' && customSetter) {
         customSetter();
       }
@@ -5814,6 +5816,8 @@ function initState (vm) {
   initWatch(vm);
 }
 
+var isReservedProp = makeMap('key,ref,slot');
+
 function initProps (vm) {
   var props = vm.$options.props;
   if (props) {
@@ -5826,6 +5830,12 @@ function initProps (vm) {
       var key = keys[i];
       /* istanbul ignore else */
       if (process.env.NODE_ENV !== 'production') {
+        if (isReservedProp(key)) {
+          warn(
+            ("\"" + key + "\" is a reserved attribute and cannot be used as component prop."),
+            vm
+          );
+        }
         defineReactive$$1(vm, key, validateProp(key, props, propsData, vm), function () {
           if (vm.$parent && !observerState.isSettingProps) {
             warn(
@@ -6594,6 +6604,10 @@ function init (vnode, hydrating) {
   if (!vnode.child || vnode.child._isDestroyed) {
     var child = vnode.child = createComponentInstanceForVnode(vnode, activeInstance);
     child.$mount(hydrating ? vnode.elm : undefined, hydrating);
+  } else if (vnode.data.keepAlive) {
+    // kept-alive components, treat as a patch
+    var mountedNode = vnode; // work around flow
+    prepatch(mountedNode, mountedNode);
   }
 }
 
@@ -7005,6 +7019,7 @@ function renderMixin (Vue) {
   // apply v-bind object
   Vue.prototype._b = function bindProps (
     data,
+    tag,
     value,
     asProp
   ) {
@@ -7022,7 +7037,7 @@ function renderMixin (Vue) {
           if (key === 'class' || key === 'style') {
             data[key] = value[key];
           } else {
-            var hash = asProp || config.mustUseProp(key)
+            var hash = asProp || config.mustUseProp(tag, key)
               ? data.domProps || (data.domProps = {})
               : data.attrs || (data.attrs = {});
             hash[key] = value[key];
@@ -8028,12 +8043,19 @@ Object.defineProperty(Vue$2.prototype, '$isServer', {
   get: function () { return config._isServer; }
 });
 
-Vue$2.version = '2.0.7';
+Vue$2.version = '2.0.8';
 
 /*  */
 
 // attributes that should be using props for binding
-var mustUseProp = makeMap('value,selected,checked,muted');
+var mustUseProp = function (tag, attr) {
+  return (
+    (attr === 'value' && (tag === 'input' || tag === 'textarea' || tag === 'option')) ||
+    (attr === 'selected' && tag === 'option') ||
+    (attr === 'checked' && tag === 'input') ||
+    (attr === 'muted' && tag === 'video')
+  )
+};
 
 var isEnumeratedAttr = makeMap('contenteditable,draggable,spellcheck');
 
@@ -8377,7 +8399,7 @@ function registerRef (vnode, isRemoval) {
     }
   } else {
     if (vnode.data.refInFor) {
-      if (Array.isArray(refs[key])) {
+      if (Array.isArray(refs[key]) && refs[key].indexOf(ref) < 0) {
         refs[key].push(ref);
       } else {
         refs[key] = [ref];
@@ -9167,13 +9189,14 @@ function updateDOMProps (oldVnode, vnode) {
     }
   }
   for (key in props) {
+    cur = props[key];
     // ignore children if the node has textContent or innerHTML,
     // as these will throw away existing DOM nodes and cause removal errors
     // on subsequent patches (#3360)
-    if ((key === 'textContent' || key === 'innerHTML') && vnode.children) {
-      vnode.children.length = 0;
+    if (key === 'textContent' || key === 'innerHTML') {
+      if (vnode.children) { vnode.children.length = 0; }
+      if (cur === oldProps[key]) { continue }
     }
-    cur = props[key];
     if (key === 'value') {
       // store value as _value as well since
       // non-string values will be stringified
@@ -9304,7 +9327,12 @@ function updateStyle (oldVnode, vnode) {
 
   var cur, name;
   var el = vnode.elm;
-  var oldStyle = oldVnode.data.style || {};
+  var oldStaticStyle = oldVnode.data.staticStyle;
+  var oldStyleBinding = oldVnode.data.style || {};
+
+  // if static style exists, stylebinding already merged into it when doing normalizeStyleData
+  var oldStyle = oldStaticStyle || oldStyleBinding;
+
   var style = normalizeStyleBinding(vnode.data.style) || {};
 
   vnode.data.style = style.__ob__ ? extend({}, style) : style;
@@ -10223,7 +10251,7 @@ var TransitionGroup = {
 
   updated: function updated () {
     var children = this.prevChildren;
-    var moveClass = this.moveClass || (this.name + '-move');
+    var moveClass = this.moveClass || ((this.name || 'v') + '-move');
     if (!children.length || !this.hasMove(children[0].elm, moveClass)) {
       return
     }
@@ -10933,6 +10961,11 @@ new _vue2.default({
     }
 });
 
+// update virtual time
+setInterval(function () {
+    return _store2.default.dispatch('updateTime');
+}, 100);
+
 // discharge batteries
 setInterval(function () {
     return _store2.default.commit('BATTERY_DISCHARGE', { amount: 1 });
@@ -10944,6 +10977,10 @@ setInterval(function () {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.updateTime = exports.craft = undefined;
+
+var _utils = require('../utils');
+
 var validateRequirements = function validateRequirements(state, requirements) {
     if (requirements.energy && requirements.energy > state.battery.energy) {
         return false;
@@ -10989,7 +11026,17 @@ var craft = exports.craft = function craft(_ref, resource) {
     });
 };
 
-},{}],9:[function(require,module,exports){
+var updateTime = exports.updateTime = function updateTime(_ref2) {
+    var commit = _ref2.commit,
+        state = _ref2.state;
+
+    var time = (0, _utils.gameTime)(55);
+    if (time !== state.time) {
+        commit('SET_TIME', { time: time });
+    }
+};
+
+},{"../utils":14}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11024,6 +11071,10 @@ var BATTERY_CHARGE = exports.BATTERY_CHARGE = function BATTERY_CHARGE(state, dat
 var BATTERY_DISCHARGE = exports.BATTERY_DISCHARGE = function BATTERY_DISCHARGE(state, data) {
     var amount = data.amount || 1;
     state.battery.energy = Math.max(0, state.battery.energy - amount);
+};
+
+var SET_TIME = exports.SET_TIME = function SET_TIME(state, data) {
+    state.time = data.time;
 };
 
 },{}],10:[function(require,module,exports){
@@ -11119,6 +11170,8 @@ var _actions = require('./actions');
 
 var actions = _interopRequireWildcard(_actions);
 
+var _utils = require('../utils');
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -11132,7 +11185,8 @@ var state = savedData ? JSON.parse(savedData) : {
 };
 
 var state = _extends({}, state, {
-    resources: _resources2.default
+    resources: _resources2.default,
+    time: (0, _utils.gameTime)(55)
 });
 
 var store = new _vuex2.default.Store({
@@ -11152,19 +11206,18 @@ setInterval(save, 60000);
 // add on unload
 window.onunload = save;
 
-},{"./actions":8,"./mutations":9,"./state/battery":10,"./state/inventory":11,"./state/resources":12,"vue":4,"vuex":6}],14:[function(require,module,exports){
+},{"../utils":14,"./actions":8,"./mutations":9,"./state/battery":10,"./state/inventory":11,"./state/resources":12,"vue":4,"vuex":6}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-// 24 hours => 55 minutes
-var gameMs = 55 * 60 * 1000;
-var realMs = 24 * 60 * 60 * 1000;
+var realDurationInMs = 24 * 60 * 60 * 1000;
 
-var time = exports.time = function time() {
-    var currentMs = Date.now() % gameMs / gameMs * realMs;
-    return Math.round(currentMs / 1000);
+var gameTime = exports.gameTime = function gameTime(durationInMinutes) {
+    var gameDurationInMs = durationInMinutes * 60 * 1000;
+    var currentTimeInMs = Date.now() % gameDurationInMs / gameDurationInMs * realDurationInMs;
+    return Math.round(currentTimeInMs / (1000 * 60));
 };
 
 },{}],15:[function(require,module,exports){
@@ -11211,9 +11264,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-4", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-3", __vue__options__)
+    hotAPI.rerender("data-v-4", __vue__options__)
   }
 })()}
 
@@ -11257,17 +11310,17 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;return _vm._h('div',{staticClass:"container-fluid"},[_vm._l((_vm.resources),function(resource){return _vm._h('div',{staticClass:"resource noselect row",on:{"click":function($event){_vm.craft(resource)}}},[_vm._h('div',{staticClass:"col-sm-6"},[_vm._h('h4',[_vm._s(resource.label)])])," ",_vm._h('div',{staticClass:"col-sm-6"},[(resource.requires.energy)?_vm._h('div',[_vm._m(0,true)," "+_vm._s(resource.requires.energy)+"\n            "]):_vm._e()," ",(resource.requires.resources)?_vm._h('div',[_vm._m(1,true),_vm._m(2,true)," ",_vm._h('ul',[_vm._l((resource.requires.resources),function(amount,index){return _vm._h('li',[_vm._s(_vm.resourceLabel(index))+": "+_vm._s(amount)])})])]):_vm._e()])])})])}
-__vue__options__.staticRenderFns = [function render () {var _vm=this;return _vm._h('span',{staticClass:"category"},["Energy:"])},function render () {var _vm=this;return _vm._h('span',{staticClass:"category"},["Resources:"])},function render () {var _vm=this;return _vm._h('br')}]
+__vue__options__.render = function render () {var _vm=this;return _vm._h('div',{staticClass:"container-fluid"},[_vm._l((_vm.resources),function(resource){return _vm._h('div',{staticClass:"resource noselect row",on:{"click":function($event){_vm.craft(resource)}}},[_vm._h('div',{staticClass:"col-sm-6"},[_vm._h('h4',[_vm._s(resource.label)])])," ",_vm._h('div',{staticClass:"col-sm-6"},[(resource.requires.energy)?_vm._h('div',[_vm._h('span',{staticClass:"category"},["Energy:"])," "+_vm._s(resource.requires.energy)+"\n            "]):_vm._e()," ",(resource.requires.resources)?_vm._h('div',[_vm._h('span',{staticClass:"category"},["Resources:"]),_vm._h('br')," ",_vm._h('ul',[_vm._l((resource.requires.resources),function(amount,index){return _vm._h('li',[_vm._s(_vm.resourceLabel(index))+": "+_vm._s(amount)])})])]):_vm._e()])])})])}
+__vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4", __vue__options__)
+    hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-4", __vue__options__)
+    hotAPI.rerender("data-v-2", __vue__options__)
   }
 })()}
 
@@ -11296,9 +11349,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-2", __vue__options__)
+    hotAPI.rerender("data-v-3", __vue__options__)
   }
 })()}
 
@@ -11331,23 +11384,9 @@ var _watch = require('./watch.vue');
 
 var _watch2 = _interopRequireDefault(_watch);
 
-var _utils = require('../js/utils');
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _data = {
-    time: (0, _utils.time)()
-};
-
-setInterval(function () {
-    return _data.time = (0, _utils.time)();
-}, 1000);
-
 exports.default = {
-    data: function data() {
-        return _data;
-    },
-
 
     components: {
         Inventory: _inventory2.default,
@@ -11358,7 +11397,7 @@ exports.default = {
 
     computed: {
         night: function night() {
-            return this.time < 60 * 60 * 8 || this.time >= 60 * 60 * 20;
+            return this.$store.state.time < 60 * 8 || this.$store.state.time >= 60 * 20;
         },
         navClasses: function navClasses() {
             return {
@@ -11377,8 +11416,8 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._h('nav',{class:_vm.navClasses},[_vm._h('div',{staticClass:"navbar-text float-xs-right"},[_vm._h('watch')])])," ",_vm._h('div',{staticClass:"container-fluid mainContent"},[_vm._h('div',{staticClass:"row"},[_vm._h('div',{staticClass:"col-md-3"},[_vm._h('div',{staticClass:"energyPlate noselect",on:{"click":function($event){$event.stopPropagation();_vm.BATTERY_CHARGE($event)}}},["Charge"])])," ",_vm._h('div',{staticClass:"col-md-6"},[_vm._h('div',{staticClass:"card"},[_vm._m(0)," ",_vm._h('div',{staticClass:"card-block"},[_vm._h('crafting')])])])," ",_vm._h('div',{staticClass:"col-md-3"},[_vm._h('battery',{staticStyle:{"margin-bottom":"1em"}})," ",_vm._h('div',{staticClass:"card"},[_vm._m(1)," ",_vm._h('div',{staticClass:"card-block"},[_vm._h('inventory')])])])])])])}
-__vue__options__.staticRenderFns = [function render () {var _vm=this;return _vm._h('div',{staticClass:"card-header"},["\n                        Resources\n                    "])},function render () {var _vm=this;return _vm._h('div',{staticClass:"card-header"},["\n                        Inventory\n                    "])}]
+__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._h('nav',{class:_vm.navClasses},[_vm._h('div',{staticClass:"navbar-text float-xs-right"},[_vm._h('watch')])])," ",_vm._h('div',{staticClass:"container-fluid mainContent"},[_vm._h('div',{staticClass:"row"},[_vm._h('div',{staticClass:"col-md-3"},[_vm._h('div',{staticClass:"energyPlate noselect",on:{"click":function($event){$event.stopPropagation();_vm.BATTERY_CHARGE($event)}}},["Charge"])])," ",_vm._h('div',{staticClass:"col-md-6"},[_vm._h('div',{staticClass:"card"},[_vm._h('div',{staticClass:"card-header"},["\n                        Resources\n                    "])," ",_vm._h('div',{staticClass:"card-block"},[_vm._h('crafting')])])])," ",_vm._h('div',{staticClass:"col-md-3"},[_vm._h('battery',{staticStyle:{"margin-bottom":"1em"}})," ",_vm._h('div',{staticClass:"card"},[_vm._h('div',{staticClass:"card-header"},["\n                        Inventory\n                    "])," ",_vm._h('div',{staticClass:"card-block"},[_vm._h('inventory')])])])])])])}
+__vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
   if (!hotAPI.compatible) return
@@ -11391,7 +11430,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   }
 })()}
 
-},{"../js/utils":14,"./battery.vue":15,"./crafting.vue":16,"./inventory.vue":17,"./watch.vue":19,"vue":4,"vue-hot-reload-api":3,"vueify/lib/insert-css":5,"vuex":6}],19:[function(require,module,exports){
+},{"./battery.vue":15,"./crafting.vue":16,"./inventory.vue":17,"./watch.vue":19,"vue":4,"vue-hot-reload-api":3,"vueify/lib/insert-css":5,"vuex":6}],19:[function(require,module,exports){
 ;(function(){
 'use strict';
 
@@ -11399,31 +11438,16 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _utils = require('../js/utils');
-
 var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _data = {
-    time: (0, _utils.time)()
-};
-
-setInterval(function () {
-    return _data.time = (0, _utils.time)();
-}, 1000);
-
 exports.default = {
-    data: function data() {
-        return _data;
-    },
-
-
     computed: {
         formattedTime: function formattedTime() {
-            return (0, _moment2.default)('2016-01-01').startOf('day').seconds(this.time).format('HH:mm:ss');
+            return (0, _moment2.default)('2016-01-01').startOf('day').minutes(this.$store.state.time).format('HH:mm');
         }
     }
 };
@@ -11444,7 +11468,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   }
 })()}
 
-},{"../js/utils":14,"moment":1,"vue":4,"vue-hot-reload-api":3}]},{},[7])
+},{"moment":1,"vue":4,"vue-hot-reload-api":3}]},{},[7])
 
 
 //# sourceMappingURL=main.js.map
