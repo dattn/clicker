@@ -8,7 +8,7 @@
         <div class="container-fluid mainContent">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="energyPlate noselect" @click.stop="BATTERY_CHARGE">Charge</div>
+                    <img class="energyPlate" src="src/icons/energy-plate.svg" @click.stop="generateEnergy" :style="rotate" />
                 </div>
                 <div class="col-md-6">
                     <crafting></crafting>
@@ -38,16 +38,12 @@
     }
 
     .energyPlate {
+        display: block;
         width: 200px;
         max-width: 100%;
-        height: 200px;
-        line-height: 200px;
-        text-align: center;
         margin: 0 auto 1em auto;
-
-        border: 1px solid #999;
         cursor: pointer;
-        background-color: #CCC;
+        transition: transform 1s ease-out;
     }
 
     .noselect {
@@ -68,6 +64,12 @@
     import Watch from './watch.vue';
 
     export default {
+
+        data() {
+            return {
+                angle: 0
+            }
+        },
 
         components: {
             Inventory,
@@ -90,13 +92,18 @@
                     'bg-inverse': this.night,
                     'bg-faded': !this.night,
                 }
+            },
+
+            rotate() {
+                return 'transform: rotate(' + this.angle + 'deg)';
             }
         },
 
         methods: {
-            ...mapMutations([
-                'BATTERY_CHARGE'
-            ])
+            generateEnergy: function() {
+                this.angle += 360;
+                this.$store.commit('BATTERY_CHARGE', {});
+            }
         }
     }
 </script>
