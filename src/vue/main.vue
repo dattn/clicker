@@ -15,14 +15,7 @@
                 </div>
                 <div class="col-md-3">
                     <battery style="margin-bottom: 1em"></battery>
-                    <div class="card">
-                        <div class="card-header">
-                            Inventory
-                        </div>
-                        <div class="card-block">
-                            <inventory></inventory>
-                        </div>
-                    </div>
+                    <inventory></inventory>
                 </div>
             </div>
         </div>
