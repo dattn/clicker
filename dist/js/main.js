@@ -11077,6 +11077,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = [{
     type: 'iron',
     label: 'Iron',
+    category: 'resource',
     icon: 'src/icons/iron.svg',
     requires: {
         energy: 10
@@ -11084,6 +11085,7 @@ exports.default = [{
 }, {
     type: 'copper',
     label: 'Copper',
+    category: 'resource',
     icon: 'src/icons/copper.svg',
     requires: {
         energy: 20
@@ -11091,6 +11093,7 @@ exports.default = [{
 }, {
     type: 'silicon',
     label: 'Silicon',
+    category: 'resource',
     icon: 'src/icons/silicon.svg',
     requires: {
         energy: 25
@@ -11098,6 +11101,7 @@ exports.default = [{
 }, {
     type: 'solar-panel',
     label: 'Solar Panel',
+    category: 'energy',
     icon: 'src/icons/solar-panel.svg',
     requires: {
         energy: 60,
@@ -11247,7 +11251,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
 })()}
 
 },{"vue":4,"vue-hot-reload-api":3,"vueify/lib/insert-css":5}],16:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".craft-box .icon {\n    height: 2em;\n}\n\n.craft-box .requirements {\n    float: right;\n}\n\n.craft-box .requirement {\n    display: inline-block;\n}\n\n.craft-box .requirement:not(:first-child) {\n    margin-left: 1em;\n}")
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".crafting .icon {\n    height: 2em;\n}\n\n.crafting .requirements {\n    float: right;\n}\n\n.crafting .requirement {\n    display: inline-block;\n}\n\n.crafting .requirement:not(:first-child) {\n    margin-left: 1em;\n}\n\n.crafting .card-block:not(:first-child) {\n    border-top: 1px solid #ddd;\n}")
 ;(function(){
 'use strict';
 
@@ -11260,6 +11264,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 var _vuex = require('vuex');
 
 exports.default = {
+    data: function data() {
+        return {
+            category: 'resource',
+            categories: ['resource', 'energy']
+        };
+    },
+
 
     computed: {
         resources: function resources() {
@@ -11273,6 +11284,26 @@ exports.default = {
             return this.$store.state.resources.find(function (resource) {
                 return resource.type === type;
             }).icon;
+        },
+
+        navClasses: function navClasses(category) {
+            return {
+                'nav-link': true,
+                active: category === this.category
+            };
+        },
+
+        switchCategory: function switchCategory(category) {
+            this.category = category;
+        },
+
+        inCategory: function inCategory(resources, category) {
+            return resources.filter(function (item) {
+                return item.category === category;
+            });
+        },
+        capitalize: function capitalize(value) {
+            return value[0].toUpperCase() + value.slice(1);
         }
     })
 
@@ -11281,7 +11312,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;return _vm._h('div',{staticClass:"container-fluid"},[_vm._l((_vm.resources),function(resource){return _vm._h('div',{staticClass:"card card-block craft-box"},[_vm._h('span',{staticClass:"requirements"},[(resource.requires.energy)?_vm._h('span',{staticClass:"requirement"},[_vm._m(0,true)," x "+_vm._s(resource.requires.energy)+"\n            "]):_vm._e()," ",_vm._l((resource.requires.resources),function(amount,type){return _vm._h('span',{staticClass:"requirement"},[_vm._h('img',{staticClass:"icon",attrs:{"src":_vm.icon(type)}})," x "+_vm._s(amount)+"\n            "])})])," ",_vm._h('h3',{staticClass:"card-title"},["\n            "+_vm._s(resource.label)+"\n        "])," ",_vm._h('a',{staticClass:"btn btn-primary",attrs:{"href":"#"},on:{"click":function($event){_vm.craft(resource)}}},["Craft"])])})])}
+__vue__options__.render = function render () {var _vm=this;return _vm._h('div',{staticClass:"card crafting"},[_vm._h('div',{staticClass:"card-header"},[_vm._h('ul',{staticClass:"nav nav-tabs card-header-tabs float-xs-left"},[_vm._l((_vm.categories),function(category){return _vm._h('li',{staticClass:"nav-item"},[_vm._h('a',{class:_vm.navClasses(category),attrs:{"href":"#"},on:{"click":function($event){_vm.switchCategory(category)}}},[_vm._s(_vm.capitalize(category))])])})])])," ",_vm._h('div',[_vm._l((_vm.inCategory(_vm.resources, _vm.category)),function(resource){return _vm._h('div',{staticClass:"card-block"},[_vm._h('span',{staticClass:"requirements"},[(resource.requires.energy)?_vm._h('span',{staticClass:"requirement"},[_vm._m(0,true)," x "+_vm._s(resource.requires.energy)+"\n                "]):_vm._e()," ",_vm._l((resource.requires.resources),function(amount,type){return _vm._h('span',{staticClass:"requirement"},[_vm._h('img',{staticClass:"icon",attrs:{"src":_vm.icon(type)}})," x "+_vm._s(amount)+"\n                "])})])," ",_vm._h('h3',{staticClass:"card-title"},["\n                "+_vm._s(resource.label)+"\n            "])," ",_vm._h('a',{staticClass:"btn btn-primary",attrs:{"href":"#"},on:{"click":function($event){_vm.craft(resource)}}},["Craft"])])})])])}
 __vue__options__.staticRenderFns = [function render () {var _vm=this;return _vm._h('img',{staticClass:"icon",attrs:{"src":"src/icons/energy.svg"}})}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -11289,9 +11320,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-4", __vue__options__)
+    hotAPI.rerender("data-v-3", __vue__options__)
   }
 })()}
 
@@ -11343,9 +11374,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-5", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-3", __vue__options__)
+    hotAPI.rerender("data-v-5", __vue__options__)
   }
 })()}
 
@@ -11456,9 +11487,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5", __vue__options__)
+    hotAPI.createRecord("data-v-4", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-5", __vue__options__)
+    hotAPI.rerender("data-v-4", __vue__options__)
   }
 })()}
 
