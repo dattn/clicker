@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 508.00003 508.00002"
+   width="143.3689mm"
+   height="143.3689mm">
+  <defs
+     id="defs8" />
+  <metadata
+     id="metadata4">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <circle
+     id="circle3141"
+     r="254"
+     cy="254"
+     cx="254"
+     style="fill:#c87533;fill-opacity:1" />
+  <g
+     id="g3151" />
+  <g
+     id="g3153" />
+  <g
+     id="g3155" />
+  <g
+     id="g3157" />
+  <g
+     id="g3159" />
+  <g
+     id="g3161" />
+  <g
+     id="g3163" />
+  <g
+     id="g3165" />
+  <g
+     id="g3167" />
+  <g
+     id="g3169" />
+  <g
+     id="g3171" />
+  <g
+     id="g3173" />
+  <g
+     id="g3175" />
+  <g
+     id="g3177" />
+  <g
+     id="g3179" />
+  <g
+     id="text3229"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:Ubuntu;-inkscape-font-specification:Ubuntu;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1">
+    <path
+       d="m 205.23828,163.5 c -11.83333,0 -22.91667,2 -33.25,6 -10.33333,4 -19.33333,9.91667 -27,17.75 -7.66667,7.66667 -13.75,17.08333 -18.25,28.25 -4.33333,11.16667 -6.5,24 -6.5,38.5 0,14.5 1.91667,27.33333 5.75,38.5 3.83333,11.16667 9.33333,20.66667 16.5,28.5 7.16667,7.66667 15.91667,13.5 26.25,17.5 10.33333,4 22,6 35,6 6.66667,0 12.91667,-0.41667 18.75,-1.25 5.83333,-0.66667 11.08333,-1.58333 15.75,-2.75 4.66667,-1.33333 8.66667,-2.66667 12,-4 3.5,-1.33333 6.25,-2.66667 8.25,-4 l -8.5,-25.75 c -3.83333,2 -9.25,4.16667 -16.25,6.5 -7,2.16667 -16.08333,3.25 -27.25,3.25 -9.33333,0 -17.33333,-1.5 -24,-4.5 -6.66667,-3.16667 -12.16667,-7.5 -16.5,-13 -4.33333,-5.66667 -7.58333,-12.33333 -9.75,-20 -2,-7.66667 -3,-16.08333 -3,-25.25 0,-10.33333 1.33333,-19.41667 4,-27.25 2.66667,-7.83333 6.33333,-14.33333 11,-19.5 4.83333,-5.16667 10.5,-9 17,-11.5 6.5,-2.66667 13.5,-4 21,-4 8.66667,0 16.66667,1.16667 24,3.5 7.5,2.16667 13.25,4.5 17.25,7 l 9.25,-25.75 c -1.16667,-0.66667 -3.16667,-1.75 -6,-3.25 -2.83333,-1.5 -6.41667,-2.91667 -10.75,-4.25 -4.33333,-1.33333 -9.41667,-2.5 -15.25,-3.5 -5.83333,-1.16667 -12.33333,-1.75 -19.5,-1.75 z m 73.77344,46.5 0,73.25 c 0,8.83333 0.91667,17 2.75,24.5 1.83333,7.33333 4.83333,13.66667 9,19 4.33333,5.33333 10,9.5 17,12.5 7.16667,3 16,4.5 26.5,4.5 11.16667,0 21.41667,-0.83333 30.75,-2.5 9.33333,-1.5 16.91667,-3 22.75,-4.5 l 0,-126.75 -30.25,0 0,105.75 c -2,0.5 -5.08333,0.91667 -9.25,1.25 -4,0.33333 -7.83333,0.5 -11.5,0.5 -10.16667,0 -17.33333,-3 -21.5,-9 -4,-6 -6,-16 -6,-30 l 0,-68.5 -30.25,0 z"
+       id="path3313"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:250px;font-family:Ubuntu;-inkscape-font-specification:'Ubuntu Medium';fill:#ffffff" />
+  </g>
+</svg>

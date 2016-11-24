@@ -1,38 +1,37 @@
 <template>
     <div class="container-fluid">
-        <div v-for="resource in resources" class="resource noselect row" @click="craft(resource)">
-            <div class="col-sm-6">
-                <h4>{{ resource.label }}</h4>
-            </div>
-            <div class="col-sm-6">
-                <div v-if="resource.requires.energy">
-                    <span class="category">Energy:</span> {{ resource.requires.energy }}
-                </div>
-                <div v-if="resource.requires.resources">
-                    <span class="category">Resources:</span><br />
-                    <ul>
-                        <li v-for="(amount, index) in resource.requires.resources">{{ resourceLabel(index) }}: {{ amount }}</li>
-                    </ul>
-                </div>
-            </div>
+        <div class="card card-block craft-box" v-for="resource in resources">
+            <span class="requirements">
+                <span v-if="resource.requires.energy" class="requirement">
+                    <img src="src/icons/energy.svg" class="icon" /> x {{ resource.requires.energy }}
+                </span>
+                <span v-for="(amount, type) in resource.requires.resources" class="requirement">
+                    <img :src="icon(type)" class="icon" /> x {{ amount }}
+                </span>
+            </span>
+            <h3 class="card-title">
+                {{ resource.label }}
+            </h3>
+            <a href="#" class="btn btn-primary" @click="craft(resource)">Craft</a>
         </div>
     </div>
 </template>
 
 <style>
-    .resource {
-        border: 1px solid #999;
-        padding: 10px;
-        cursor: pointer;
-        background-color: #CCC;
+    .craft-box .icon {
+        height: 2em;
     }
 
-    .resource:not(:last-child) {
-        margin-bottom: 10px;
+    .craft-box .requirements {
+        float: right;
     }
 
-    .resource .category {
-        font-weight: bold;
+    .craft-box .requirement {
+        display: inline-block;
+    }
+
+    .craft-box .requirement:not(:first-child) {
+        margin-left: 1em;
     }
 </style>
 
@@ -51,9 +50,11 @@
             ...mapActions([
                 'craft'
             ]),
-            resourceLabel: function(type) {
-                var [ resource ] = this.resources.filter(r => r.type === type);
-                return resource? resource.label : type;
+
+            icon: function(type) {
+                return this.$store.state.resources.find(function(resource) {
+                    return resource.type === type;
+                }).icon;
             }
         }
 

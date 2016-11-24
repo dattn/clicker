@@ -11,14 +11,7 @@
                     <div class="energyPlate noselect" @click.stop="BATTERY_CHARGE">Charge</div>
                 </div>
                 <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            Resources
-                        </div>
-                        <div class="card-block">
-                            <crafting></crafting>
-                        </div>
-                    </div>
+                    <crafting></crafting>
                 </div>
                 <div class="col-md-3">
                     <battery style="margin-bottom: 1em"></battery>

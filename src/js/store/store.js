@@ -18,7 +18,7 @@ var state = savedData? JSON.parse(savedData) : {
 var state = {
     ...state,
     resources,
-    time: gameTime(55)
+    inventory // reset inventory for testing
 }
 
 const store = new Vuex.Store({

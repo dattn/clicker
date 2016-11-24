@@ -2,6 +2,7 @@ export default [
     {
         type: 'iron',
         label: 'Iron',
+        icon: 'src/icons/iron.svg',
         requires: {
             energy: 10
         }
@@ -9,6 +10,7 @@ export default [
     {
         type: 'copper',
         label: 'Copper',
+        icon: 'src/icons/copper.svg',
         requires: {
             energy: 20
         }
@@ -16,13 +18,15 @@ export default [
     {
         type: 'silicon',
         label: 'Silicon',
+        icon: 'src/icons/silicon.svg',
         requires: {
             energy: 25
         }
     },
     {
-        type: 'solar-cell',
-        label: 'Solar Cell',
+        type: 'solar-panel',
+        label: 'Solar Panel',
+        icon: 'src/icons/solar-panel.svg',
         requires: {
             energy: 60,
             resources: {
