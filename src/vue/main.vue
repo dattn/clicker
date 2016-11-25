@@ -10,6 +10,7 @@
                 <div class="col-md-3">
                     <battery style="margin-bottom: 1em"></battery>
                     <img class="energyPlate" src="src/icons/energy-plate.svg" @click.stop="generateEnergy" :style="rotate" />
+                    <energy></energy>
                 </div>
                 <div class="col-md-6">
                     <crafting></crafting>
@@ -62,6 +63,7 @@
     import Battery from './battery.vue';
     import Crafting from './crafting.vue';
     import Watch from './watch.vue';
+    import Energy from './energy.vue';
 
     export default {
 
@@ -75,7 +77,8 @@
             Inventory,
             Battery,
             Crafting,
-            Watch
+            Watch,
+            Energy
         },
 
         computed: {
