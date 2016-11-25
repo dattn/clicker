@@ -23,7 +23,7 @@
         top: 0px;
         left: 0px;
         background-color: green;
-        transition: background-color 1s linear, width 1s linear;
+        transition: background-color 1s linear, width 0.2s linear;
         z-index: -1;
     }
 

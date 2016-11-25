@@ -55,9 +55,35 @@ export const craft = (store, item) => {
 
 }
 
-export const updateTime = ({ commit, state }) => {
-    const time = gameTime(55);
-    if (time !== state.time) {
-        commit('SET_TIME', { time });
+var timeHandle;
+export const startTime = ({ commit, state }) => {
+    if (timeHandle) {
+        clearInterval(timeHandle);
     }
+    timeHandle = setInterval(() => {
+        let time = gameTime(55);
+        if (time !== state.time) {
+            commit('SET_TIME', { time });
+        }
+    }, 100);
+}
+
+var batteryChargeHandle;
+export const startBatteryCharge = (store) => {
+    if (batteryChargeHandle) {
+        clearInterval(batteryChargeHandle);
+    }
+    batteryChargeHandle = setInterval(() => {
+        let amount = -store.state.energy.items.battery || 0;
+
+        if (!store.getters.isNight) {
+            amount += store.state.energy.items['solar-panel'] || 0;
+        }
+
+        if (amount < 0) {
+            store.commit('BATTERY_DISCHARGE', { amount: -amount });
+        } else {
+            store.commit('BATTERY_CHARGE', { amount });
+        }
+    }, 1000);
 }

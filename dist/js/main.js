@@ -10977,15 +10977,11 @@ new _vue2.default({
     }
 });
 
-// update virtual time
-setInterval(function () {
-    return _store2.default.dispatch('updateTime');
-}, 100);
+// start virtual time
+_store2.default.dispatch('startTime');
 
-// discharge batteries
-setInterval(function () {
-    return _store2.default.commit('BATTERY_DISCHARGE', { amount: 1 });
-}, 1000);
+// charge/discharge batteries
+_store2.default.dispatch('startBatteryCharge');
 
 },{"../vue/main.vue":22,"./store/store":16,"vue":4,"vuex":6}],10:[function(require,module,exports){
 'use strict';
@@ -10993,7 +10989,7 @@ setInterval(function () {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.updateTime = exports.craft = undefined;
+exports.startBatteryCharge = exports.startTime = exports.craft = undefined;
 
 var _utils = require('../utils');
 
@@ -11051,14 +11047,40 @@ var craft = exports.craft = function craft(store, item) {
     }
 };
 
-var updateTime = exports.updateTime = function updateTime(_ref) {
+var timeHandle;
+var startTime = exports.startTime = function startTime(_ref) {
     var commit = _ref.commit,
         state = _ref.state;
 
-    var time = (0, _utils.gameTime)(55);
-    if (time !== state.time) {
-        commit('SET_TIME', { time: time });
+    if (timeHandle) {
+        clearInterval(timeHandle);
     }
+    timeHandle = setInterval(function () {
+        var time = (0, _utils.gameTime)(55);
+        if (time !== state.time) {
+            commit('SET_TIME', { time: time });
+        }
+    }, 100);
+};
+
+var batteryChargeHandle;
+var startBatteryCharge = exports.startBatteryCharge = function startBatteryCharge(store) {
+    if (batteryChargeHandle) {
+        clearInterval(batteryChargeHandle);
+    }
+    batteryChargeHandle = setInterval(function () {
+        var amount = -store.state.energy.items.battery || 0;
+
+        if (!store.getters.isNight) {
+            amount += store.state.energy.items['solar-panel'] || 0;
+        }
+
+        if (amount < 0) {
+            store.commit('BATTERY_DISCHARGE', { amount: -amount });
+        } else {
+            store.commit('BATTERY_CHARGE', { amount: amount });
+        }
+    }, 1000);
 };
 
 },{"../utils":17}],11:[function(require,module,exports){
@@ -11077,6 +11099,10 @@ var energy = exports.energy = function energy(state) {
 
 var capacity = exports.capacity = function capacity(state) {
     return state.energy.items.battery * 100;
+};
+
+var isNight = exports.isNight = function isNight(state) {
+    return state.time < 60 * 8 || state.time >= 60 * 20;
 };
 
 },{}],12:[function(require,module,exports){
@@ -11313,7 +11339,7 @@ var gameTime = exports.gameTime = function gameTime(durationInMinutes) {
 };
 
 },{}],18:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".battery {\n    border: 1px solid #000;\n    height: 50px;\n    width: 100%;\n    position: relative;\n    line-height: 50px;\n    text-align: center;\n}\n\n.battery .energy {\n    position: absolute;\n    height: 100%;\n    top: 0px;\n    left: 0px;\n    background-color: green;\n    transition: background-color 1s linear, width 1s linear;\n    z-index: -1;\n}\n\n.battery .energy.medium {\n    background-color: yellow;\n}\n\n.battery .energy.low {\n    background-color: red;\n}")
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".battery {\n    border: 1px solid #000;\n    height: 50px;\n    width: 100%;\n    position: relative;\n    line-height: 50px;\n    text-align: center;\n}\n\n.battery .energy {\n    position: absolute;\n    height: 100%;\n    top: 0px;\n    left: 0px;\n    background-color: green;\n    transition: background-color 1s linear, width 0.2s linear;\n    z-index: -1;\n}\n\n.battery .energy.medium {\n    background-color: yellow;\n}\n\n.battery .energy.low {\n    background-color: red;\n}")
 ;(function(){
 'use strict';
 
@@ -11520,6 +11546,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _vuex = require('vuex');
 
 var _inventory = require('./inventory.vue');
@@ -11560,23 +11588,20 @@ exports.default = {
         Energy: _energy2.default
     },
 
-    computed: {
-        night: function night() {
-            return this.$store.state.time < 60 * 8 || this.$store.state.time >= 60 * 20;
-        },
+    computed: _extends({}, (0, _vuex.mapGetters)(['isNight']), {
         navClasses: function navClasses() {
             return {
                 navbar: true,
                 'navbar-fixed-top': true,
-                'navbar-dark': this.night,
-                'bg-inverse': this.night,
-                'bg-faded': !this.night
+                'navbar-dark': this.isNight,
+                'bg-inverse': this.isNight,
+                'bg-faded': !this.isNight
             };
         },
         rotate: function rotate() {
             return 'transform: rotate(' + this.angle + 'deg)';
         }
-    },
+    }),
 
     methods: {
         generateEnergy: function generateEnergy() {

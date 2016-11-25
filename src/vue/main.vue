@@ -58,7 +58,7 @@
 </style>
 
 <script>
-    import { mapMutations } from 'vuex';
+    import { mapMutations, mapGetters } from 'vuex';
     import Inventory from './inventory.vue';
     import Battery from './battery.vue';
     import Crafting from './crafting.vue';
@@ -82,18 +82,17 @@
         },
 
         computed: {
-            night() {
-                return this.$store.state.time < 60 * 8
-                    || this.$store.state.time >= 60 * 20;
-            },
+            ...mapGetters([
+                'isNight'
+            ]),
 
             navClasses() {
                 return {
                     navbar: true,
                     'navbar-fixed-top': true,
-                    'navbar-dark': this.night,
-                    'bg-inverse': this.night,
-                    'bg-faded': !this.night,
+                    'navbar-dark': this.isNight,
+                    'bg-inverse': this.isNight,
+                    'bg-faded': !this.isNight,
                 }
             },
 
