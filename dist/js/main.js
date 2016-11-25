@@ -11033,10 +11033,22 @@ var craft = exports.craft = function craft(store, item) {
         }
     }
 
-    store.commit('INVENTORY_ADD', {
-        type: item.type,
-        amount: 1
-    });
+    switch (item.category) {
+
+        case 'resource':
+            store.commit('INVENTORY_ADD', {
+                type: item.type,
+                amount: 1
+            });
+            break;
+
+        case 'energy':
+            store.commit('ENERGY_ADD', {
+                type: item.type,
+                amount: 1
+            });
+            break;
+    }
 };
 
 var updateTime = exports.updateTime = function updateTime(_ref) {
@@ -11073,7 +11085,7 @@ var capacity = exports.capacity = function capacity(state) {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.SET_TIME = exports.BATTERY_DISCHARGE = exports.BATTERY_CHARGE = exports.INVENTORY_REMOVE = exports.INVENTORY_ADD = undefined;
+exports.ENERGY_ADD = exports.SET_TIME = exports.BATTERY_DISCHARGE = exports.BATTERY_CHARGE = exports.INVENTORY_REMOVE = exports.INVENTORY_ADD = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -11113,6 +11125,15 @@ var BATTERY_DISCHARGE = exports.BATTERY_DISCHARGE = function BATTERY_DISCHARGE(s
 
 var SET_TIME = exports.SET_TIME = function SET_TIME(state, data) {
     state.time = data.time;
+};
+
+var ENERGY_ADD = exports.ENERGY_ADD = function ENERGY_ADD(state, data) {
+    var amount = data.amount || 1;
+    if (state.energy.items[data.type]) {
+        state.energy.items[data.type] += amount;
+    } else {
+        state.energy.items = _extends({}, state.energy.items, _defineProperty({}, data.type, amount));
+    }
 };
 
 },{"./store":16}],13:[function(require,module,exports){

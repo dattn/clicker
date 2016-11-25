@@ -32,3 +32,15 @@ export const BATTERY_DISCHARGE = (state, data) => {
 export const SET_TIME = (state, data) => {
     state.time = data.time;
 }
+
+export const ENERGY_ADD = (state, data) => {
+    const amount = data.amount || 1;
+    if (state.energy.items[data.type]) {
+        state.energy.items[data.type] += amount;
+    } else {
+        state.energy.items = {
+            ...state.energy.items,
+            [data.type]: amount
+        };
+    }
+}

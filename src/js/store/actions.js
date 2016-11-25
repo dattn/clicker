@@ -36,10 +36,23 @@ export const craft = (store, item) => {
         }
     }
 
-    store.commit('INVENTORY_ADD', {
-        type: item.type,
-        amount: 1
-    });
+    switch(item.category) {
+
+        case 'resource':
+            store.commit('INVENTORY_ADD', {
+                type: item.type,
+                amount: 1
+            });
+            break;
+
+        case 'energy':
+            store.commit('ENERGY_ADD', {
+                type: item.type,
+                amount: 1
+            });
+            break;
+    }
+
 }
 
 export const updateTime = ({ commit, state }) => {
