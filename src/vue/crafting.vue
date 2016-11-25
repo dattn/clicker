@@ -20,7 +20,7 @@
                 <h3 class="card-title">
                     {{ item.label }}
                 </h3>
-                <a href="#" class="btn btn-primary" @click="craft(item)">Craft</a>
+                <button class="btn btn-primary" @click="craft(item)" :disabled="!canCraft(item.requires)">Craft</button>
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
                 ]
             }
         },
-        
+
         methods: {
             ...mapActions([
                 'craft'

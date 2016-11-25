@@ -5,3 +5,19 @@ export const getItem = function(type) {
 export const itemsIn = function(category) {
     return this.$store.state.craftingItems.filter(item => item.category === category);
 }
+
+export const canCraft = function(requirements) {
+    if (requirements.energy && requirements.energy > this.$store.state.battery.energy) {
+        return false;
+    }
+
+    if (requirements.resources) {
+        for (var type in requirements.resources) {
+            if (!this.$store.state.inventory[type] || requirements.resources[type] > this.$store.state.inventory[type]) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}

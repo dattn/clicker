@@ -10922,6 +10922,22 @@ var itemsIn = exports.itemsIn = function itemsIn(category) {
     });
 };
 
+var canCraft = exports.canCraft = function canCraft(requirements) {
+    if (requirements.energy && requirements.energy > this.$store.state.battery.energy) {
+        return false;
+    }
+
+    if (requirements.resources) {
+        for (var type in requirements.resources) {
+            if (!this.$store.state.inventory[type] || requirements.resources[type] > this.$store.state.inventory[type]) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+};
+
 },{}],8:[function(require,module,exports){
 "use strict";
 
@@ -11357,7 +11373,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;return _vm._h('div',{staticClass:"card crafting"},[_vm._h('div',{staticClass:"card-header"},[_vm._h('ul',{staticClass:"nav nav-tabs card-header-tabs float-xs-left"},[_vm._l((_vm.categories),function(category){return _vm._h('li',{staticClass:"nav-item"},[_vm._h('a',{class:_vm.navClasses(category),attrs:{"href":"#"},on:{"click":function($event){_vm.switchCategory(category)}}},[_vm._s(_vm.capitalize(category))])])})])])," ",_vm._h('div',[_vm._l((_vm.itemsIn(_vm.category)),function(item){return _vm._h('div',{staticClass:"card-block"},[_vm._h('span',{staticClass:"requirements"},[(item.requires.energy)?_vm._h('span',{staticClass:"requirement"},[_vm._m(0,true)," x "+_vm._s(item.requires.energy)+"\n                "]):_vm._e()," ",_vm._l((item.requires.resources),function(amount,type){return _vm._h('span',{staticClass:"requirement"},[_vm._h('img',{staticClass:"icon",attrs:{"src":_vm.getItem(type).icon}})," x "+_vm._s(amount)+"\n                "])})])," ",_vm._h('h3',{staticClass:"card-title"},["\n                "+_vm._s(item.label)+"\n            "])," ",_vm._h('a',{staticClass:"btn btn-primary",attrs:{"href":"#"},on:{"click":function($event){_vm.craft(item)}}},["Craft"])])})])])}
+__vue__options__.render = function render () {var _vm=this;return _vm._h('div',{staticClass:"card crafting"},[_vm._h('div',{staticClass:"card-header"},[_vm._h('ul',{staticClass:"nav nav-tabs card-header-tabs float-xs-left"},[_vm._l((_vm.categories),function(category){return _vm._h('li',{staticClass:"nav-item"},[_vm._h('a',{class:_vm.navClasses(category),attrs:{"href":"#"},on:{"click":function($event){_vm.switchCategory(category)}}},[_vm._s(_vm.capitalize(category))])])})])])," ",_vm._h('div',[_vm._l((_vm.itemsIn(_vm.category)),function(item){return _vm._h('div',{staticClass:"card-block"},[_vm._h('span',{staticClass:"requirements"},[(item.requires.energy)?_vm._h('span',{staticClass:"requirement"},[_vm._m(0,true)," x "+_vm._s(item.requires.energy)+"\n                "]):_vm._e()," ",_vm._l((item.requires.resources),function(amount,type){return _vm._h('span',{staticClass:"requirement"},[_vm._h('img',{staticClass:"icon",attrs:{"src":_vm.getItem(type).icon}})," x "+_vm._s(amount)+"\n                "])})])," ",_vm._h('h3',{staticClass:"card-title"},["\n                "+_vm._s(item.label)+"\n            "])," ",_vm._h('button',{staticClass:"btn btn-primary",attrs:{"disabled":!_vm.canCraft(item.requires)},on:{"click":function($event){_vm.craft(item)}}},["Craft"])])})])])}
 __vue__options__.staticRenderFns = [function render () {var _vm=this;return _vm._h('img',{staticClass:"icon",attrs:{"src":"src/icons/energy.svg"}})}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -11367,7 +11383,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-4", __vue__options__)
   } else {
-    hotAPI.reload("data-v-4", __vue__options__)
+    hotAPI.rerender("data-v-4", __vue__options__)
   }
 })()}
 
