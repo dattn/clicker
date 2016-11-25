@@ -16,28 +16,28 @@ const validateRequirements = function(state, requirements) {
     return true;
 }
 
-export const craft = ({ commit, state }, resource) => {
-    if (!validateRequirements(state, resource.requires)) {
+export const craft = ({ commit, state }, item) => {
+    if (!validateRequirements(state, item.requires)) {
         return false;
     }
 
-    if (resource.requires.energy) {
+    if (item.requires.energy) {
         commit('BATTERY_DISCHARGE', {
-            amount: resource.requires.energy
+            amount: item.requires.energy
         });
     }
 
-    if (resource.requires.resources) {
-        for (var type in resource.requires.resources) {
+    if (item.requires.resources) {
+        for (var type in item.requires.resources) {
             commit('INVENTORY_REMOVE', {
                 type,
-                amount: resource.requires.resources[type]
+                amount: item.requires.resources[type]
             });
         }
     }
 
     commit('INVENTORY_ADD', {
-        type: resource.type,
+        type: item.type,
         amount: 1
     });
 }

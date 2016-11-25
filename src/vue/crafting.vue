@@ -8,19 +8,19 @@
             </ul>
         </div>
         <div>
-            <div class="card-block" v-for="resource in inCategory(resources, category)">
+            <div class="card-block" v-for="item in inCategory(craftingItems, category)">
                 <span class="requirements">
-                    <span v-if="resource.requires.energy" class="requirement">
-                        <img src="src/icons/energy.svg" class="icon" /> x {{ resource.requires.energy }}
+                    <span v-if="item.requires.energy" class="requirement">
+                        <img src="src/icons/energy.svg" class="icon" /> x {{ item.requires.energy }}
                     </span>
-                    <span v-for="(amount, type) in resource.requires.resources" class="requirement">
+                    <span v-for="(amount, type) in item.requires.resources" class="requirement">
                         <img :src="icon(type)" class="icon" /> x {{ amount }}
                     </span>
                 </span>
                 <h3 class="card-title">
-                    {{ resource.label }}
+                    {{ item.label }}
                 </h3>
-                <a href="#" class="btn btn-primary" @click="craft(resource)">Craft</a>
+                <a href="#" class="btn btn-primary" @click="craft(item)">Craft</a>
             </div>
         </div>
     </div>
@@ -63,8 +63,8 @@
         },
 
         computed: {
-            resources() {
-                return this.$store.state.resources;
+            craftingItems() {
+                return this.$store.state.craftingItems;
             }
         },
 
@@ -74,8 +74,8 @@
             ]),
 
             icon: function(type) {
-                return this.$store.state.resources.find(function(resource) {
-                    return resource.type === type;
+                return this.$store.state.craftingItems.find(function(item) {
+                    return item.type === type;
                 }).icon;
             },
 
@@ -90,8 +90,8 @@
                 this.category = category;
             },
 
-            inCategory(resources, category) {
-                return resources.filter(item => item.category === category);
+            inCategory(craftingItems, category) {
+                return craftingItems.filter(item => item.category === category);
             },
 
             capitalize(value) {

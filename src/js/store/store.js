@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import resources from './state/resources';
+import craftingItems from './state/craftingItems';
 import inventory from './state/inventory';
 import battery from './state/battery';
 import * as mutations from './mutations';
@@ -17,7 +17,7 @@ var state = savedData? JSON.parse(savedData) : {
 
 var state = {
     ...state,
-    resources,
+    craftingItems,
     inventory // reset inventory for testing
 }
 

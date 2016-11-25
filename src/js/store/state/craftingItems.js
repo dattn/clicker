@@ -27,6 +27,19 @@ export default [
         }
     },
     {
+        type: 'battery',
+        label: 'Battery',
+        category: 'energy',
+        icon: 'src/icons/battery.svg',
+        requires: {
+            energy: 40,
+            resources: {
+                iron: 2,
+                copper: 4
+            }
+        }
+    },
+    {
         type: 'solar-panel',
         label: 'Solar Panel',
         category: 'energy',

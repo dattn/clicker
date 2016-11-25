@@ -10969,31 +10969,31 @@ var validateRequirements = function validateRequirements(state, requirements) {
     return true;
 };
 
-var craft = exports.craft = function craft(_ref, resource) {
+var craft = exports.craft = function craft(_ref, item) {
     var commit = _ref.commit,
         state = _ref.state;
 
-    if (!validateRequirements(state, resource.requires)) {
+    if (!validateRequirements(state, item.requires)) {
         return false;
     }
 
-    if (resource.requires.energy) {
+    if (item.requires.energy) {
         commit('BATTERY_DISCHARGE', {
-            amount: resource.requires.energy
+            amount: item.requires.energy
         });
     }
 
-    if (resource.requires.resources) {
-        for (var type in resource.requires.resources) {
+    if (item.requires.resources) {
+        for (var type in item.requires.resources) {
             commit('INVENTORY_REMOVE', {
                 type: type,
-                amount: resource.requires.resources[type]
+                amount: item.requires.resources[type]
             });
         }
     }
 
     commit('INVENTORY_ADD', {
-        type: resource.type,
+        type: item.type,
         amount: 1
     });
 };
@@ -11061,14 +11061,6 @@ exports.default = {
 };
 
 },{}],11:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = {};
-
-},{}],12:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11099,6 +11091,18 @@ exports.default = [{
         energy: 25
     }
 }, {
+    type: 'battery',
+    label: 'Battery',
+    category: 'energy',
+    icon: 'src/icons/battery.svg',
+    requires: {
+        energy: 40,
+        resources: {
+            iron: 2,
+            copper: 4
+        }
+    }
+}, {
     type: 'solar-panel',
     label: 'Solar Panel',
     category: 'energy',
@@ -11112,6 +11116,14 @@ exports.default = [{
         }
     }
 }];
+
+},{}],12:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {};
 
 },{}],13:[function(require,module,exports){
 'use strict';
@@ -11130,9 +11142,9 @@ var _vuex = require('vuex');
 
 var _vuex2 = _interopRequireDefault(_vuex);
 
-var _resources = require('./state/resources');
+var _craftingItems = require('./state/craftingItems');
 
-var _resources2 = _interopRequireDefault(_resources);
+var _craftingItems2 = _interopRequireDefault(_craftingItems);
 
 var _inventory = require('./state/inventory');
 
@@ -11165,7 +11177,7 @@ var state = savedData ? JSON.parse(savedData) : {
 };
 
 var state = _extends({}, state, {
-    resources: _resources2.default,
+    craftingItems: _craftingItems2.default,
     inventory: _inventory2.default // reset inventory for testing
 });
 
@@ -11186,7 +11198,7 @@ setInterval(save, 60000);
 // add on unload
 window.onunload = save;
 
-},{"../utils":14,"./actions":8,"./mutations":9,"./state/battery":10,"./state/inventory":11,"./state/resources":12,"vue":4,"vuex":6}],14:[function(require,module,exports){
+},{"../utils":14,"./actions":8,"./mutations":9,"./state/battery":10,"./state/craftingItems":11,"./state/inventory":12,"vue":4,"vuex":6}],14:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11244,9 +11256,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-2", __vue__options__)
+    hotAPI.createRecord("data-v-3", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-2", __vue__options__)
+    hotAPI.rerender("data-v-3", __vue__options__)
   }
 })()}
 
@@ -11273,16 +11285,16 @@ exports.default = {
 
 
     computed: {
-        resources: function resources() {
-            return this.$store.state.resources;
+        craftingItems: function craftingItems() {
+            return this.$store.state.craftingItems;
         }
     },
 
     methods: _extends({}, (0, _vuex.mapActions)(['craft']), {
 
         icon: function icon(type) {
-            return this.$store.state.resources.find(function (resource) {
-                return resource.type === type;
+            return this.$store.state.craftingItems.find(function (item) {
+                return item.type === type;
             }).icon;
         },
 
@@ -11297,8 +11309,8 @@ exports.default = {
             this.category = category;
         },
 
-        inCategory: function inCategory(resources, category) {
-            return resources.filter(function (item) {
+        inCategory: function inCategory(craftingItems, category) {
+            return craftingItems.filter(function (item) {
                 return item.category === category;
             });
         },
@@ -11312,7 +11324,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;return _vm._h('div',{staticClass:"card crafting"},[_vm._h('div',{staticClass:"card-header"},[_vm._h('ul',{staticClass:"nav nav-tabs card-header-tabs float-xs-left"},[_vm._l((_vm.categories),function(category){return _vm._h('li',{staticClass:"nav-item"},[_vm._h('a',{class:_vm.navClasses(category),attrs:{"href":"#"},on:{"click":function($event){_vm.switchCategory(category)}}},[_vm._s(_vm.capitalize(category))])])})])])," ",_vm._h('div',[_vm._l((_vm.inCategory(_vm.resources, _vm.category)),function(resource){return _vm._h('div',{staticClass:"card-block"},[_vm._h('span',{staticClass:"requirements"},[(resource.requires.energy)?_vm._h('span',{staticClass:"requirement"},[_vm._m(0,true)," x "+_vm._s(resource.requires.energy)+"\n                "]):_vm._e()," ",_vm._l((resource.requires.resources),function(amount,type){return _vm._h('span',{staticClass:"requirement"},[_vm._h('img',{staticClass:"icon",attrs:{"src":_vm.icon(type)}})," x "+_vm._s(amount)+"\n                "])})])," ",_vm._h('h3',{staticClass:"card-title"},["\n                "+_vm._s(resource.label)+"\n            "])," ",_vm._h('a',{staticClass:"btn btn-primary",attrs:{"href":"#"},on:{"click":function($event){_vm.craft(resource)}}},["Craft"])])})])])}
+__vue__options__.render = function render () {var _vm=this;return _vm._h('div',{staticClass:"card crafting"},[_vm._h('div',{staticClass:"card-header"},[_vm._h('ul',{staticClass:"nav nav-tabs card-header-tabs float-xs-left"},[_vm._l((_vm.categories),function(category){return _vm._h('li',{staticClass:"nav-item"},[_vm._h('a',{class:_vm.navClasses(category),attrs:{"href":"#"},on:{"click":function($event){_vm.switchCategory(category)}}},[_vm._s(_vm.capitalize(category))])])})])])," ",_vm._h('div',[_vm._l((_vm.inCategory(_vm.craftingItems, _vm.category)),function(item){return _vm._h('div',{staticClass:"card-block"},[_vm._h('span',{staticClass:"requirements"},[(item.requires.energy)?_vm._h('span',{staticClass:"requirement"},[_vm._m(0,true)," x "+_vm._s(item.requires.energy)+"\n                "]):_vm._e()," ",_vm._l((item.requires.resources),function(amount,type){return _vm._h('span',{staticClass:"requirement"},[_vm._h('img',{staticClass:"icon",attrs:{"src":_vm.icon(type)}})," x "+_vm._s(amount)+"\n                "])})])," ",_vm._h('h3',{staticClass:"card-title"},["\n                "+_vm._s(item.label)+"\n            "])," ",_vm._h('a',{staticClass:"btn btn-primary",attrs:{"href":"#"},on:{"click":function($event){_vm.craft(item)}}},["Craft"])])})])])}
 __vue__options__.staticRenderFns = [function render () {var _vm=this;return _vm._h('img',{staticClass:"icon",attrs:{"src":"src/icons/energy.svg"}})}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)
@@ -11320,9 +11332,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-3", __vue__options__)
+    hotAPI.createRecord("data-v-4", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-3", __vue__options__)
+    hotAPI.rerender("data-v-4", __vue__options__)
   }
 })()}
 
@@ -11343,22 +11355,22 @@ exports.default = {
 
     methods: {
         icon: function icon(type) {
-            var resource = this.$store.state.resources.find(function (resource) {
-                return resource.type === type;
+            var item = this.$store.state.craftingItems.find(function (item) {
+                return item.type === type;
             });
-            if (!resource) {
+            if (!item) {
                 return null;
             }
-            return resource.icon;
+            return item.icon;
         },
         label: function label(type) {
-            var resource = this.$store.state.resources.find(function (resource) {
-                return resource.type === type;
+            var item = this.$store.state.craftingItems.find(function (item) {
+                return item.type === type;
             });
-            if (!resource) {
+            if (!item) {
                 return null;
             }
-            return resource.label;
+            return item.label;
         }
     }
 };
@@ -11374,9 +11386,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   module.hot.accept()
   module.hot.dispose(__vueify_style_dispose__)
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5", __vue__options__)
+    hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-5", __vue__options__)
+    hotAPI.rerender("data-v-2", __vue__options__)
   }
 })()}
 
@@ -11499,9 +11511,9 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-4", __vue__options__)
+    hotAPI.createRecord("data-v-5", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-4", __vue__options__)
+    hotAPI.rerender("data-v-5", __vue__options__)
   }
 })()}
 

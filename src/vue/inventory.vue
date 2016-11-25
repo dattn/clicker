@@ -41,23 +41,23 @@
 
         methods: {
             icon(type) {
-                const resource = this.$store.state.resources.find(function(resource) {
-                    return resource.type === type;
+                const item = this.$store.state.craftingItems.find(function(item) {
+                    return item.type === type;
                 });
-                if (!resource) {
+                if (!item) {
                     return null;
                 }
-                return resource.icon;
+                return item.icon;
             },
 
             label(type) {
-                const resource = this.$store.state.resources.find(function(resource) {
-                    return resource.type === type;
+                const item = this.$store.state.craftingItems.find(function(item) {
+                    return item.type === type;
                 });
-                if (!resource) {
+                if (!item) {
                     return null;
                 }
-                return resource.label;
+                return item.label;
             }
         }
     }
