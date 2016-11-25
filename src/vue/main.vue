@@ -101,7 +101,7 @@
 
         methods: {
             generateEnergy: function() {
-                this.angle += 360;
+                this.angle += 90;
                 this.$store.commit('BATTERY_CHARGE', {});
             }
         }

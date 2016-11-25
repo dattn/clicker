@@ -11408,7 +11408,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-2", __vue__options__)
   } else {
-    hotAPI.reload("data-v-2", __vue__options__)
+    hotAPI.rerender("data-v-2", __vue__options__)
   }
 })()}
 
@@ -11476,7 +11476,7 @@ exports.default = {
 
     methods: {
         generateEnergy: function generateEnergy() {
-            this.angle += 360;
+            this.angle += 90;
             this.$store.commit('BATTERY_CHARGE', {});
         }
     }
@@ -11495,7 +11495,7 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   if (!module.hot.data) {
     hotAPI.createRecord("data-v-1", __vue__options__)
   } else {
-    hotAPI.rerender("data-v-1", __vue__options__)
+    hotAPI.reload("data-v-1", __vue__options__)
   }
 })()}
 
