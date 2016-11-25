@@ -1,5 +1,5 @@
 <template>
-    <div class="card inventory">
+    <div class="card inventory" v-if="!inventoryIsEmpty">
         <div class="card-header">
             Inventory
         </div>
@@ -32,8 +32,14 @@
 </style>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         computed: {
+            ...mapGetters([
+                'inventoryIsEmpty'
+            ]),
+
             inventory() {
                 return this.$store.state.inventory;
             }

@@ -5,6 +5,7 @@ import inventory from './state/inventory';
 import battery from './state/battery';
 import * as mutations from './mutations';
 import * as actions from './actions';
+import * as getters from './getters';
 import { gameTime } from '../utils';
 
 Vue.use(Vuex);
@@ -24,7 +25,8 @@ var state = {
 const store = new Vuex.Store({
     state,
     mutations,
-    actions
+    actions,
+    getters
 });
 
 export default store;
