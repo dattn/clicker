@@ -8,13 +8,13 @@
             </ul>
         </div>
         <div>
-            <div class="card-block" v-for="item in inCategory(craftingItems, category)">
+            <div class="card-block" v-for="item in itemsIn(category)">
                 <span class="requirements">
                     <span v-if="item.requires.energy" class="requirement">
                         <img src="src/icons/energy.svg" class="icon" /> x {{ item.requires.energy }}
                     </span>
                     <span v-for="(amount, type) in item.requires.resources" class="requirement">
-                        <img :src="icon(type)" class="icon" /> x {{ amount }}
+                        <img :src="getItem(type).icon" class="icon" /> x {{ amount }}
                     </span>
                 </span>
                 <h3 class="card-title">
@@ -50,6 +50,8 @@
 
 <script>
     import { mapActions } from 'vuex';
+    import * as items from '../js/helpers/items';
+    import * as text from '../js/helpers/text';
 
     export default {
 
@@ -61,23 +63,13 @@
                 ]
             }
         },
-
-        computed: {
-            craftingItems() {
-                return this.$store.state.craftingItems;
-            }
-        },
-
+        
         methods: {
             ...mapActions([
                 'craft'
             ]),
-
-            icon: function(type) {
-                return this.$store.state.craftingItems.find(function(item) {
-                    return item.type === type;
-                }).icon;
-            },
+            ...items,
+            ...text,
 
             navClasses: function(category) {
                 return {
@@ -90,13 +82,6 @@
                 this.category = category;
             },
 
-            inCategory(craftingItems, category) {
-                return craftingItems.filter(item => item.category === category);
-            },
-
-            capitalize(value) {
-                return value[0].toUpperCase() + value.slice(1);
-            }
         },
 
     }
