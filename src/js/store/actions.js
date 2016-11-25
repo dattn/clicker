@@ -82,7 +82,8 @@ export const startBatteryCharge = (store) => {
 
         if (amount < 0) {
             store.commit('BATTERY_DISCHARGE', { amount: -amount });
-        } else {
+        }
+        if (amount > 0) {
             store.commit('BATTERY_CHARGE', { amount });
         }
     }, 1000);

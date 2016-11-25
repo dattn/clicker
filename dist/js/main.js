@@ -11077,7 +11077,8 @@ var startBatteryCharge = exports.startBatteryCharge = function startBatteryCharg
 
         if (amount < 0) {
             store.commit('BATTERY_DISCHARGE', { amount: -amount });
-        } else {
+        }
+        if (amount > 0) {
             store.commit('BATTERY_CHARGE', { amount: amount });
         }
     }, 1000);
