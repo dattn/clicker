@@ -8,13 +8,13 @@
         <div class="container-fluid mainContent">
             <div class="row">
                 <div class="col-md-3">
+                    <battery style="margin-bottom: 1em"></battery>
                     <img class="energyPlate" src="src/icons/energy-plate.svg" @click.stop="generateEnergy" :style="rotate" />
                 </div>
                 <div class="col-md-6">
                     <crafting></crafting>
                 </div>
                 <div class="col-md-3">
-                    <battery style="margin-bottom: 1em"></battery>
                     <inventory></inventory>
                 </div>
             </div>
