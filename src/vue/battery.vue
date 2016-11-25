@@ -37,17 +37,15 @@
 </style>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
 
         computed: {
-
-            energy() {
-                return this.$store.state.battery.energy;
-            },
-
-            capacity() {
-                return this.$store.state.battery.capacity;
-            },
+            ...mapGetters([
+                'capacity',
+                'energy'
+            ]),
 
             percentage() {
                 return Math.round((this.energy / this.capacity) * 100);

@@ -10923,7 +10923,7 @@ var itemsIn = exports.itemsIn = function itemsIn(category) {
 };
 
 var canCraft = exports.canCraft = function canCraft(requirements) {
-    if (requirements.energy && requirements.energy > this.$store.state.battery.energy) {
+    if (requirements.energy && requirements.energy > this.$store.getters.energy) {
         return false;
     }
 
@@ -10997,14 +10997,14 @@ exports.updateTime = exports.craft = undefined;
 
 var _utils = require('../utils');
 
-var validateRequirements = function validateRequirements(state, requirements) {
-    if (requirements.energy && requirements.energy > state.battery.energy) {
+var validateRequirements = function validateRequirements(store, requirements) {
+    if (requirements.energy && requirements.energy > store.getters.energy) {
         return false;
     }
 
     if (requirements.resources) {
         for (var type in requirements.resources) {
-            if (requirements.resources[type] > state.inventory[type]) {
+            if (requirements.resources[type] > store.state.inventory[type]) {
                 return false;
             }
         }
@@ -11013,38 +11013,35 @@ var validateRequirements = function validateRequirements(state, requirements) {
     return true;
 };
 
-var craft = exports.craft = function craft(_ref, item) {
-    var commit = _ref.commit,
-        state = _ref.state;
-
-    if (!validateRequirements(state, item.requires)) {
+var craft = exports.craft = function craft(store, item) {
+    if (!validateRequirements(store, item.requires)) {
         return false;
     }
 
     if (item.requires.energy) {
-        commit('BATTERY_DISCHARGE', {
+        store.commit('BATTERY_DISCHARGE', {
             amount: item.requires.energy
         });
     }
 
     if (item.requires.resources) {
         for (var type in item.requires.resources) {
-            commit('INVENTORY_REMOVE', {
+            store.commit('INVENTORY_REMOVE', {
                 type: type,
                 amount: item.requires.resources[type]
             });
         }
     }
 
-    commit('INVENTORY_ADD', {
+    store.commit('INVENTORY_ADD', {
         type: item.type,
         amount: 1
     });
 };
 
-var updateTime = exports.updateTime = function updateTime(_ref2) {
-    var commit = _ref2.commit,
-        state = _ref2.state;
+var updateTime = exports.updateTime = function updateTime(_ref) {
+    var commit = _ref.commit,
+        state = _ref.state;
 
     var time = (0, _utils.gameTime)(55);
     if (time !== state.time) {
@@ -11062,14 +11059,29 @@ var inventoryIsEmpty = exports.inventoryIsEmpty = function inventoryIsEmpty(stat
     return Object.keys(state.inventory).length === 0;
 };
 
+var energy = exports.energy = function energy(state) {
+    return state.energy.energy;
+};
+
+var capacity = exports.capacity = function capacity(state) {
+    return state.energy.items.battery * 100;
+};
+
 },{}],12:[function(require,module,exports){
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.SET_TIME = exports.BATTERY_DISCHARGE = exports.BATTERY_CHARGE = exports.INVENTORY_REMOVE = exports.INVENTORY_ADD = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _store = require('./store');
+
+var _store2 = _interopRequireDefault(_store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -11091,30 +11103,19 @@ var INVENTORY_REMOVE = exports.INVENTORY_REMOVE = function INVENTORY_REMOVE(stat
 
 var BATTERY_CHARGE = exports.BATTERY_CHARGE = function BATTERY_CHARGE(state, data) {
     var amount = data.amount || 1;
-    state.battery.energy = Math.min(state.battery.capacity, state.battery.energy + amount);
+    state.energy.energy = Math.min(_store2.default.getters.capacity, state.energy.energy + amount);
 };
 
 var BATTERY_DISCHARGE = exports.BATTERY_DISCHARGE = function BATTERY_DISCHARGE(state, data) {
     var amount = data.amount || 1;
-    state.battery.energy = Math.max(0, state.battery.energy - amount);
+    state.energy.energy = Math.max(0, state.energy.energy - amount);
 };
 
 var SET_TIME = exports.SET_TIME = function SET_TIME(state, data) {
     state.time = data.time;
 };
 
-},{}],13:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = {
-    energy: 0,
-    capacity: 100
-};
-
-},{}],14:[function(require,module,exports){
+},{"./store":16}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11171,6 +11172,19 @@ exports.default = [{
     }
 }];
 
+},{}],14:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = {
+    energy: 0,
+    items: {
+        battery: 1
+    }
+};
+
 },{}],15:[function(require,module,exports){
 "use strict";
 
@@ -11185,8 +11199,6 @@ exports.default = {};
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _vue = require('vue');
 
@@ -11204,9 +11216,9 @@ var _inventory = require('./state/inventory');
 
 var _inventory2 = _interopRequireDefault(_inventory);
 
-var _battery = require('./state/battery');
+var _energy = require('./state/energy');
 
-var _battery2 = _interopRequireDefault(_battery);
+var _energy2 = _interopRequireDefault(_energy);
 
 var _mutations = require('./mutations');
 
@@ -11228,22 +11240,30 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _vue2.default.use(_vuex2.default);
 
-var savedData = localStorage.getItem('CLICKER');
-var state = savedData ? JSON.parse(savedData) : {
-    inventory: _inventory2.default,
-    battery: _battery2.default
+/*const savedData = localStorage.getItem('CLICKER');
+var state = savedData? JSON.parse(savedData) : {
+    inventory,
+    energy
 };
 
-var state = _extends({}, state, {
+var state = {
+    ...state,
+    craftingItems
+}*/
+
+var state = {
+    inventory: _inventory2.default,
+    energy: _energy2.default,
     craftingItems: _craftingItems2.default,
-    inventory: _inventory2.default // reset inventory for testing
-});
+    time: (0, _utils.gameTime)(55)
+};
 
 var store = new _vuex2.default.Store({
     state: state,
     mutations: mutations,
     actions: actions,
-    getters: getters
+    getters: getters,
+    strict: true
 });
 
 exports.default = store;
@@ -11257,7 +11277,7 @@ setInterval(save, 60000);
 // add on unload
 window.onunload = save;
 
-},{"../utils":17,"./actions":10,"./getters":11,"./mutations":12,"./state/battery":13,"./state/craftingItems":14,"./state/inventory":15,"vue":4,"vuex":6}],17:[function(require,module,exports){
+},{"../utils":17,"./actions":10,"./getters":11,"./mutations":12,"./state/craftingItems":13,"./state/energy":14,"./state/inventory":15,"vue":4,"vuex":6}],17:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11279,15 +11299,14 @@ var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".battery
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _vuex = require('vuex');
+
 exports.default = {
 
-    computed: {
-        energy: function energy() {
-            return this.$store.state.battery.energy;
-        },
-        capacity: function capacity() {
-            return this.$store.state.battery.capacity;
-        },
+    computed: _extends({}, (0, _vuex.mapGetters)(['capacity', 'energy']), {
         percentage: function percentage() {
             return Math.round(this.energy / this.capacity * 100);
         },
@@ -11301,7 +11320,7 @@ exports.default = {
         style: function style() {
             return 'width: ' + this.percentage + '%';
         }
-    }
+    })
 };
 })()
 if (module.exports.__esModule) module.exports = module.exports.default
@@ -11321,8 +11340,8 @@ if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   }
 })()}
 
-},{"vue":4,"vue-hot-reload-api":3,"vueify/lib/insert-css":5}],19:[function(require,module,exports){
-var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".crafting .icon {\n    height: 2em;\n}\n\n.crafting .requirements {\n    float: right;\n}\n\n.crafting .requirement {\n    display: inline-block;\n}\n\n.crafting .requirement:not(:first-child) {\n    margin-left: 1em;\n}\n\n.crafting .card-block:not(:first-child) {\n    border-top: 1px solid #ddd;\n}")
+},{"vue":4,"vue-hot-reload-api":3,"vueify/lib/insert-css":5,"vuex":6}],19:[function(require,module,exports){
+var __vueify_style_dispose__ = require("vueify/lib/insert-css").insert(".crafting .icon {\n    height: 2em;\n}\n\n.crafting .requirement {\n    display: inline-block;\n}\n\n.crafting .requirement:not(:first-child) {\n    margin-left: 1em;\n}\n\n.crafting .card-block:not(:first-child) {\n    border-top: 1px solid #ddd;\n}\n\n.crafting  .item-info {\n    text-align: right;\n}")
 ;(function(){
 'use strict';
 
@@ -11373,7 +11392,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;return _vm._h('div',{staticClass:"card crafting"},[_vm._h('div',{staticClass:"card-header"},[_vm._h('ul',{staticClass:"nav nav-tabs card-header-tabs float-xs-left"},[_vm._l((_vm.categories),function(category){return _vm._h('li',{staticClass:"nav-item"},[_vm._h('a',{class:_vm.navClasses(category),attrs:{"href":"#"},on:{"click":function($event){_vm.switchCategory(category)}}},[_vm._s(_vm.capitalize(category))])])})])])," ",_vm._h('div',[_vm._l((_vm.itemsIn(_vm.category)),function(item){return _vm._h('div',{staticClass:"card-block"},[_vm._h('span',{staticClass:"requirements"},[(item.requires.energy)?_vm._h('span',{staticClass:"requirement"},[_vm._m(0,true)," x "+_vm._s(item.requires.energy)+"\n                "]):_vm._e()," ",_vm._l((item.requires.resources),function(amount,type){return _vm._h('span',{staticClass:"requirement"},[_vm._h('img',{staticClass:"icon",attrs:{"src":_vm.getItem(type).icon}})," x "+_vm._s(amount)+"\n                "])})])," ",_vm._h('h3',{staticClass:"card-title"},["\n                "+_vm._s(item.label)+"\n            "])," ",_vm._h('button',{staticClass:"btn btn-primary",attrs:{"disabled":!_vm.canCraft(item.requires)},on:{"click":function($event){_vm.craft(item)}}},["Craft"])])})])])}
+__vue__options__.render = function render () {var _vm=this;return _vm._h('div',{staticClass:"card crafting"},[_vm._h('div',{staticClass:"card-header"},[_vm._h('ul',{staticClass:"nav nav-tabs card-header-tabs float-xs-left"},[_vm._l((_vm.categories),function(category){return _vm._h('li',{staticClass:"nav-item"},[_vm._h('a',{class:_vm.navClasses(category),attrs:{"href":"#"},on:{"click":function($event){_vm.switchCategory(category)}}},[_vm._s(_vm.capitalize(category))])])})])])," ",_vm._h('div',[_vm._l((_vm.itemsIn(_vm.category)),function(item){return _vm._h('div',{staticClass:"card-block"},[_vm._h('h3',{staticClass:"card-title float-xs-left"},[_vm._h('img',{staticClass:"icon",attrs:{"src":item.icon}})," "+_vm._s(item.label)+"\n            "])," ",_vm._h('div',{staticClass:"float-xs-right item-info"},[_vm._h('p',{staticClass:"requirements"},[(item.requires.energy)?_vm._h('span',{staticClass:"requirement"},[_vm._m(0,true)," x "+_vm._s(item.requires.energy)+"\n                    "]):_vm._e()," ",_vm._l((item.requires.resources),function(amount,type){return _vm._h('span',{staticClass:"requirement"},[_vm._h('img',{staticClass:"icon",attrs:{"src":_vm.getItem(type).icon}})," x "+_vm._s(amount)+"\n                    "])})])," ",_vm._h('button',{staticClass:"btn btn-primary",attrs:{"disabled":!_vm.canCraft(item.requires)},on:{"click":function($event){_vm.craft(item)}}},["Craft"])])])})])])}
 __vue__options__.staticRenderFns = [function render () {var _vm=this;return _vm._h('img',{staticClass:"icon",attrs:{"src":"src/icons/energy.svg"}})}]
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

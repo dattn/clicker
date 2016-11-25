@@ -9,18 +9,20 @@
         </div>
         <div>
             <div class="card-block" v-for="item in itemsIn(category)">
-                <span class="requirements">
-                    <span v-if="item.requires.energy" class="requirement">
-                        <img src="src/icons/energy.svg" class="icon" /> x {{ item.requires.energy }}
-                    </span>
-                    <span v-for="(amount, type) in item.requires.resources" class="requirement">
-                        <img :src="getItem(type).icon" class="icon" /> x {{ amount }}
-                    </span>
-                </span>
-                <h3 class="card-title">
-                    {{ item.label }}
+                <h3 class="card-title float-xs-left">
+                    <img :src="item.icon" class="icon" /> {{ item.label }}
                 </h3>
-                <button class="btn btn-primary" @click="craft(item)" :disabled="!canCraft(item.requires)">Craft</button>
+                <div class="float-xs-right item-info">
+                    <p class="requirements">
+                        <span v-if="item.requires.energy" class="requirement">
+                            <img src="src/icons/energy.svg" class="icon" /> x {{ item.requires.energy }}
+                        </span>
+                        <span v-for="(amount, type) in item.requires.resources" class="requirement">
+                            <img :src="getItem(type).icon" class="icon" /> x {{ amount }}
+                        </span>
+                    </p>
+                    <button class="btn btn-primary" @click="craft(item)" :disabled="!canCraft(item.requires)">Craft</button>
+                </div>
             </div>
         </div>
     </div>
@@ -29,10 +31,6 @@
 <style>
     .crafting .icon {
         height: 2em;
-    }
-
-    .crafting .requirements {
-        float: right;
     }
 
     .crafting .requirement {
@@ -45,6 +43,10 @@
 
     .crafting .card-block:not(:first-child) {
         border-top: 1px solid #ddd;
+    }
+
+    .crafting  .item-info {
+        text-align: right;
     }
 </style>
 

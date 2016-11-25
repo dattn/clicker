@@ -1,13 +1,13 @@
 import { gameTime } from '../utils';
 
-const validateRequirements = function(state, requirements) {
-    if (requirements.energy && requirements.energy > state.battery.energy) {
+const validateRequirements = function(store, requirements) {
+    if (requirements.energy && requirements.energy > store.getters.energy) {
         return false;
     }
 
     if (requirements.resources) {
         for (var type in requirements.resources) {
-            if (requirements.resources[type] > state.inventory[type]) {
+            if (requirements.resources[type] > store.state.inventory[type]) {
                 return false;
             }
         }
@@ -16,27 +16,27 @@ const validateRequirements = function(state, requirements) {
     return true;
 }
 
-export const craft = ({ commit, state }, item) => {
-    if (!validateRequirements(state, item.requires)) {
+export const craft = (store, item) => {
+    if (!validateRequirements(store, item.requires)) {
         return false;
     }
 
     if (item.requires.energy) {
-        commit('BATTERY_DISCHARGE', {
+        store.commit('BATTERY_DISCHARGE', {
             amount: item.requires.energy
         });
     }
 
     if (item.requires.resources) {
         for (var type in item.requires.resources) {
-            commit('INVENTORY_REMOVE', {
+            store.commit('INVENTORY_REMOVE', {
                 type,
                 amount: item.requires.resources[type]
             });
         }
     }
 
-    commit('INVENTORY_ADD', {
+    store.commit('INVENTORY_ADD', {
         type: item.type,
         amount: 1
     });

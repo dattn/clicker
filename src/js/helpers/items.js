@@ -7,7 +7,7 @@ export const itemsIn = function(category) {
 }
 
 export const canCraft = function(requirements) {
-    if (requirements.energy && requirements.energy > this.$store.state.battery.energy) {
+    if (requirements.energy && requirements.energy > this.$store.getters.energy) {
         return false;
     }
 

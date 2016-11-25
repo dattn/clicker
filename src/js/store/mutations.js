@@ -1,3 +1,5 @@
+import store from './store';
+
 export const INVENTORY_ADD = (state, data) => {
     const amount = data.amount || 1;
     if (state.inventory[data.type]) {
@@ -19,12 +21,12 @@ export const INVENTORY_REMOVE = (state, data) => {
 
 export const BATTERY_CHARGE = (state, data) => {
     const amount = data.amount || 1;
-    state.battery.energy = Math.min(state.battery.capacity, state.battery.energy + amount);
+    state.energy.energy = Math.min(store.getters.capacity, state.energy.energy + amount);
 }
 
 export const BATTERY_DISCHARGE = (state, data) => {
     const amount = data.amount || 1;
-    state.battery.energy = Math.max(0, state.battery.energy - amount);
+    state.energy.energy = Math.max(0, state.energy.energy - amount);
 }
 
 export const SET_TIME = (state, data) => {
