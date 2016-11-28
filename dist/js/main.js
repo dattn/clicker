@@ -11246,6 +11246,30 @@ exports.default = [{
             silicon: 5
         }
     }
+}, {
+    type: 'wind-mill',
+    label: 'Wind Mill',
+    category: 'energy',
+    icon: 'src/icons/wind-mill.svg',
+    requires: {
+        energy: 60,
+        resources: {
+            iron: 10,
+            copper: 5
+        }
+    }
+}, {
+    type: 'hydro-dam',
+    label: 'Hydroelectric Dam',
+    category: 'energy',
+    icon: 'src/icons/hydro-dam.svg',
+    requires: {
+        energy: 500,
+        resources: {
+            iron: 50,
+            copper: 10
+        }
+    }
 }];
 
 },{}],14:[function(require,module,exports){
