@@ -74,7 +74,7 @@ export const startBatteryCharge = (store) => {
         clearInterval(batteryChargeHandle);
     }
     batteryChargeHandle = setInterval(() => {
-        let amount = -store.state.energy.items.battery || 0;
+        let amount = -Math.ceil(store.state.energy.energy / 100);
 
         if (!store.getters.isNight) {
             amount += store.state.energy.items['solar-panel'] || 0;
