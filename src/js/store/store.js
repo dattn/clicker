@@ -26,7 +26,7 @@ var state = {
     energy,
     craftingItems,
     time: gameTime(55),
-    force: 0,
+    windForce: 0,
 }
 
 const store = new Vuex.Store({

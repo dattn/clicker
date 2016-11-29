@@ -3,7 +3,7 @@
         <nav :class="navClasses">
             <div class="float-xs-right">
                 <div class="navbar-text">
-                    Wind Force: <span>{{ force }}</span>
+                    Wind Force: <span>{{ windForce }}</span>
                 </div>
                 <div class="navbar-text">
                     Clock: <watch></watch>
@@ -105,8 +105,8 @@
                 return 'transform: rotate(' + this.angle + 'deg)';
             },
 
-            force() {
-                return this.$store.state.force;
+            windForce() {
+                return this.$store.state.windForce;
             }
         },
 

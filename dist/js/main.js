@@ -11092,7 +11092,7 @@ var startBatteryCharge = exports.startBatteryCharge = function startBatteryCharg
             amount += store.state.energy.items['solar-panel'] || 0;
         }
 
-        amount += (store.state.energy.items['wind-mill'] || 0) * (store.state.force / 100);
+        amount += (store.state.energy.items['wind-mill'] || 0) * (store.state.windForce / 100);
 
         amount += (store.state.energy.items['hydro-dam'] || 0) * 5;
 
@@ -11176,7 +11176,7 @@ var SET_TIME = exports.SET_TIME = function SET_TIME(state, data) {
 };
 
 var SET_WIND_FORCE = exports.SET_WIND_FORCE = function SET_WIND_FORCE(state, data) {
-    state.force = data.force;
+    state.windForce = data.force;
 };
 
 var ENERGY_ADD = exports.ENERGY_ADD = function ENERGY_ADD(state, data) {
@@ -11353,7 +11353,7 @@ var state = {
     energy: _energy2.default,
     craftingItems: _craftingItems2.default,
     time: (0, _utils.gameTime)(55),
-    force: 0
+    windForce: 0
 };
 
 var store = new _vuex2.default.Store({
@@ -11473,7 +11473,7 @@ exports.default = {
     data: function data() {
         return {
             category: 'resource',
-            categories: ['resource', 'energy']
+            categories: ['resource', 'energy', 'upgrade', 'research']
         };
     },
 
@@ -11660,8 +11660,8 @@ exports.default = {
         rotate: function rotate() {
             return 'transform: rotate(' + this.angle + 'deg)';
         },
-        force: function force() {
-            return this.$store.state.force;
+        windForce: function windForce() {
+            return this.$store.state.windForce;
         }
     }),
 
@@ -11676,7 +11676,7 @@ exports.default = {
 if (module.exports.__esModule) module.exports = module.exports.default
 var __vue__options__ = (typeof module.exports === "function"? module.exports.options: module.exports)
 if (__vue__options__.functional) {console.error("[vueify] functional components are not supported and should be defined in plain js files using render functions.")}
-__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._h('nav',{class:_vm.navClasses},[_vm._h('div',{staticClass:"float-xs-right"},[_vm._h('div',{staticClass:"navbar-text"},["\n                Wind Force: ",_vm._h('span',[_vm._s(_vm.force)])])," ",_vm._h('div',{staticClass:"navbar-text"},["\n                Clock: ",_vm._h('watch')])])])," ",_vm._h('div',{staticClass:"container-fluid mainContent"},[_vm._h('div',{staticClass:"row"},[_vm._h('div',{staticClass:"col-md-3"},[_vm._h('battery',{staticStyle:{"margin-bottom":"1em"}})," ",_vm._h('img',{staticClass:"energyPlate",style:(_vm.rotate),attrs:{"src":"src/icons/energy-plate.svg"},on:{"click":function($event){$event.stopPropagation();_vm.generateEnergy($event)}}})," ",_vm._h('energy')])," ",_vm._h('div',{staticClass:"col-md-6"},[_vm._h('crafting')])," ",_vm._h('div',{staticClass:"col-md-3"},[_vm._h('inventory')])])])])}
+__vue__options__.render = function render () {var _vm=this;return _vm._h('div',[_vm._h('nav',{class:_vm.navClasses},[_vm._h('div',{staticClass:"float-xs-right"},[_vm._h('div',{staticClass:"navbar-text"},["\n                Wind Force: ",_vm._h('span',[_vm._s(_vm.windForce)])])," ",_vm._h('div',{staticClass:"navbar-text"},["\n                Clock: ",_vm._h('watch')])])])," ",_vm._h('div',{staticClass:"container-fluid mainContent"},[_vm._h('div',{staticClass:"row"},[_vm._h('div',{staticClass:"col-md-3"},[_vm._h('battery',{staticStyle:{"margin-bottom":"1em"}})," ",_vm._h('img',{staticClass:"energyPlate",style:(_vm.rotate),attrs:{"src":"src/icons/energy-plate.svg"},on:{"click":function($event){$event.stopPropagation();_vm.generateEnergy($event)}}})," ",_vm._h('energy')])," ",_vm._h('div',{staticClass:"col-md-6"},[_vm._h('crafting')])," ",_vm._h('div',{staticClass:"col-md-3"},[_vm._h('inventory')])])])])}
 __vue__options__.staticRenderFns = []
 if (module.hot) {(function () {  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), true)

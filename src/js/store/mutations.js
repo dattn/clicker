@@ -34,7 +34,7 @@ export const SET_TIME = (state, data) => {
 }
 
 export const SET_WIND_FORCE = (state, data) => {
-    state.force = data.force;
+    state.windForce = data.force;
 }
 
 export const ENERGY_ADD = (state, data) => {

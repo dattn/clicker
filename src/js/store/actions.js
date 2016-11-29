@@ -91,7 +91,7 @@ export const startBatteryCharge = (store) => {
             amount += store.state.energy.items['solar-panel'] || 0;
         }
 
-        amount += (store.state.energy.items['wind-mill'] || 0) * (store.state.force / 100);
+        amount += (store.state.energy.items['wind-mill'] || 0) * (store.state.windForce / 100);
 
         amount += (store.state.energy.items['hydro-dam'] || 0) * 5;
 
