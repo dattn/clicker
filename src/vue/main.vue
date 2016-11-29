@@ -1,9 +1,13 @@
 <template>
     <div>
         <nav :class="navClasses">
-            <div class="navbar-text float-xs-right">
-                <span>{{ force }}</span>
-                <watch></watch>
+            <div class="float-xs-right">
+                <div class="navbar-text">
+                    Wind Force: <span>{{ force }}</span>
+                </div>
+                <div class="navbar-text">
+                    Clock: <watch></watch>
+                </div>
             </div>
         </nav>
         <div class="container-fluid mainContent">

@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <span>
         {{ formattedTime }}
-    </div>
+    </span>
 </template>
 
 <script>
