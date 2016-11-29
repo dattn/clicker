@@ -2,6 +2,7 @@
     <div>
         <nav :class="navClasses">
             <div class="navbar-text float-xs-right">
+                <span>{{ force }}</span>
                 <watch></watch>
             </div>
         </nav>
@@ -98,6 +99,10 @@
 
             rotate() {
                 return 'transform: rotate(' + this.angle + 'deg)';
+            },
+
+            force() {
+                return this.$store.state.force;
             }
         },
 

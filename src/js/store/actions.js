@@ -1,4 +1,4 @@
-import { gameTime } from '../utils';
+import { gameTime, windForce } from '../utils';
 
 const validateRequirements = function(store, requirements) {
     if (requirements.energy && requirements.energy > store.getters.energy) {
@@ -66,6 +66,17 @@ export const startTime = ({ commit, state }) => {
             commit('SET_TIME', { time });
         }
     }, 100);
+}
+
+var windForceHandle;
+export const startWindForce = ({ commit, state }) => {
+    if (windForceHandle) {
+        clearInterval(windForceHandle);
+    }
+    windForceHandle = setInterval(() => {
+        let force = windForce();
+        commit('SET_WIND_FORCE', { force });
+    }, 1000);
 }
 
 var batteryChargeHandle;

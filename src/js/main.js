@@ -17,5 +17,8 @@ new Vue({
 // start virtual time
 store.dispatch('startTime');
 
+// wind force
+store.dispatch('startWindForce');
+
 // charge/discharge batteries
 store.dispatch('startBatteryCharge');

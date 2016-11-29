@@ -5,3 +5,11 @@ export const gameTime = (durationInMinutes) => {
     const currentTimeInMs = ((Date.now() % gameDurationInMs) / gameDurationInMs) * realDurationInMs;
     return Math.round(currentTimeInMs / (1000 * 60));
 }
+
+export const windForce = () => {
+    const now = Date.now();
+    const maxForce = 100;
+    const x = now / 10000;
+    const y = ((((Math.sin(x) + Math.sin(x / 5.2) + Math.sin((x + 0.2) / 2.1) ) / 3) + 1) / 2);
+    return y * maxForce;
+}
