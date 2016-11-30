@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import craftingItems from './state/craftingItems';
 import inventory from './state/inventory';
 import energy from './state/energy';
 import * as mutations from './mutations';
@@ -14,17 +13,11 @@ Vue.use(Vuex);
 var state = savedData? JSON.parse(savedData) : {
     inventory,
     energy
-};
-
-var state = {
-    ...state,
-    craftingItems
-}*/
+};*/
 
 var state = {
     inventory,
     energy,
-    craftingItems,
     time: gameTime(55),
     windForce: 0,
 }
