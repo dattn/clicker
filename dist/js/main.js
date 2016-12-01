@@ -11073,55 +11073,82 @@ exports.indexedItems = indexedItems;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _store = require('../../store/store');
+
+var _store2 = _interopRequireDefault(_store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var Copper = {
     type: 'copper',
     label: 'Copper',
     category: 'resource',
     icon: 'src/icons/copper.svg',
     requires: {
-        energy: 20
+        get energy() {
+            return Math.floor(20 * Math.pow(1.01, _store2.default.state.inventory[Copper.type] || 0));
+        }
     }
 };
 
 exports.default = Copper;
 
-},{}],13:[function(require,module,exports){
+},{"../../store/store":24}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _store = require('../../store/store');
+
+var _store2 = _interopRequireDefault(_store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var Iron = {
     type: 'iron',
     label: 'Iron',
     category: 'resource',
     icon: 'src/icons/iron.svg',
     requires: {
-        energy: 10
+        get energy() {
+            return Math.floor(10 * Math.pow(1.01, _store2.default.state.inventory[Iron.type] || 0));
+        }
     }
 };
 
 exports.default = Iron;
 
-},{}],14:[function(require,module,exports){
+},{"../../store/store":24}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _store = require('../../store/store');
+
+var _store2 = _interopRequireDefault(_store);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var Silicon = {
     type: 'silicon',
     label: 'Silicon',
     category: 'resource',
     icon: 'src/icons/silicon.svg',
     requires: {
-        energy: 25
+        get energy() {
+            return Math.floor(25 * Math.pow(1.01, _store2.default.state.inventory[Silicon.type] || 0));
+        }
     }
 };
 
 exports.default = Silicon;
 
-},{}],15:[function(require,module,exports){
+},{"../../store/store":24}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

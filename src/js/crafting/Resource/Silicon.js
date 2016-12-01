@@ -1,10 +1,14 @@
+import store from '../../store/store';
+
 const Silicon = {
     type: 'silicon',
     label: 'Silicon',
     category: 'resource',
     icon: 'src/icons/silicon.svg',
     requires: {
-        energy: 25
+        get energy() {
+            return Math.floor(25 * Math.pow(1.01, store.state.inventory[Silicon.type] || 0));
+        }
     }
 };
 
