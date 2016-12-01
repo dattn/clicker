@@ -28,16 +28,16 @@ const fromCategory = function(category) {
     return items.filter(item => item.category === category);
 }
 
-const canCraft = function(state, type) {
+const canCraft = function(store, type) {
     const requires = item(type).requires;
 
-    if (requires.energy && requires.energy > state.energy.energy) {
+    if (requires.energy && requires.energy > store.state.energy.energy) {
         return false;
     }
 
     if (requires.resources) {
         for (let type in requires.resources) {
-            if (!state.inventory[type] || requires.resources[type] > state.inventory[type]) {
+            if (!store.state.inventory[type] || requires.resources[type] > store.state.inventory[type]) {
                 return false;
             }
         }
@@ -46,11 +46,52 @@ const canCraft = function(state, type) {
     return true;
 }
 
+const craft = function(store, type) {
+    if (!canCraft(store, type)) {
+        return false;
+    }
+    const requires = item(type).requires;
+
+    if (requires.energy) {
+        store.commit('BATTERY_DISCHARGE', {
+            amount: requires.energy
+        });
+    }
+
+    if (requires.resources) {
+        for (var type in requires.resources) {
+            store.commit('INVENTORY_REMOVE', {
+                type,
+                amount: requires.resources[type]
+            });
+        }
+    }
+
+    switch(item(type).category) {
+
+        case 'resource':
+            store.commit('INVENTORY_ADD', {
+                type: type,
+                amount: 1
+            });
+            break;
+
+        case 'energy':
+            store.commit('ENERGY_ADD', {
+                type: type,
+                amount: 1
+            });
+            break;
+    }
+
+}
+
 export default items;
 export {
     items,
     indexedItems,
     item,
     fromCategory,
-    canCraft
+    canCraft,
+    craft
 };
