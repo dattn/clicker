@@ -39,7 +39,7 @@ export const startBatteryCharge = (store) => {
         for (let type in store.state.energy.items) {
             const generate = item(type).generate;
             if (generate && generate.energy) {
-                energy += generate.energy(store);
+                energy += generate.energy;
             }
         }
         if (energy < 0) {

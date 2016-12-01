@@ -1,3 +1,5 @@
+import { store } from '../../main';
+
 const SolarPanel = {
     type: 'solar-panel',
     label: 'Solar Panel',
@@ -12,11 +14,11 @@ const SolarPanel = {
         }
     },
     generate: {
-        energy({ state, getters }) {
-            if (getters.isNight) {
+        get energy() {
+            if (store.getters.isNight) {
                 return 0;
             }
-            return state.energy.items[SolarPanel.type] || 0;
+            return store.state.energy.items[SolarPanel.type] || 0;
         }
     }
 };

@@ -10910,6 +10910,9 @@ return index;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _main = require('../../main');
+
 var Battery = {
     type: 'battery',
     label: 'Battery',
@@ -10923,27 +10926,26 @@ var Battery = {
         }
     },
     generate: {
-        energy: function energy(_ref) {
-            var state = _ref.state;
-
-            return -Math.ceil(state.energy.energy / 100);
+        get energy() {
+            return -Math.ceil(_main.store.state.energy.energy / 100);
         },
-        capactity: function capactity(_ref2) {
-            var state = _ref2.state;
-
-            return (state.energy.items[Battery.type] || 0) * 100;
+        get capactity() {
+            return (_main.store.state.energy.items[Battery.type] || 0) * 100;
         }
     }
 };
 
 exports.default = Battery;
 
-},{}],8:[function(require,module,exports){
+},{"../../main":18}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _main = require('../../main');
+
 var HydroDam = {
     type: 'hydro-dam',
     label: 'Hydroelectric Dam',
@@ -10957,22 +10959,23 @@ var HydroDam = {
         }
     },
     generate: {
-        energy: function energy(_ref) {
-            var state = _ref.state;
-
-            return (state.energy.items[HydroDam.type] || 0) * 5;
+        get energy() {
+            return (_main.store.state.energy.items[HydroDam.type] || 0) * 5;
         }
     }
 };
 
 exports.default = HydroDam;
 
-},{}],9:[function(require,module,exports){
+},{"../../main":18}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _main = require('../../main');
+
 var SolarPanel = {
     type: 'solar-panel',
     label: 'Solar Panel',
@@ -10987,26 +10990,26 @@ var SolarPanel = {
         }
     },
     generate: {
-        energy: function energy(_ref) {
-            var state = _ref.state,
-                getters = _ref.getters;
-
-            if (getters.isNight) {
+        get energy() {
+            if (_main.store.getters.isNight) {
                 return 0;
             }
-            return state.energy.items[SolarPanel.type] || 0;
+            return _main.store.state.energy.items[SolarPanel.type] || 0;
         }
     }
 };
 
 exports.default = SolarPanel;
 
-},{}],10:[function(require,module,exports){
+},{"../../main":18}],10:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _main = require('../../main');
+
 var WindMill = {
     type: 'wind-mill',
     label: 'Wind Mill',
@@ -11020,17 +11023,15 @@ var WindMill = {
         }
     },
     generate: {
-        energy: function energy(_ref) {
-            var state = _ref.state;
-
-            return (state.energy.items[WindMill.type] || 0) * (state.windForce / 100);
+        get energy() {
+            return (_main.store.state.energy.items[WindMill.type] || 0) * (_main.store.state.windForce / 100);
         }
     }
 };
 
 exports.default = WindMill;
 
-},{}],11:[function(require,module,exports){
+},{"../../main":18}],11:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11277,6 +11278,11 @@ var capitalize = exports.capitalize = function capitalize(text) {
 },{}],18:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.store = undefined;
+
 var _vue = require('vue');
 
 var _vue2 = _interopRequireDefault(_vue);
@@ -11311,6 +11317,8 @@ _store2.default.dispatch('startWindForce');
 
 // charge/discharge batteries
 _store2.default.dispatch('startBatteryCharge');
+
+exports.store = _store2.default;
 
 },{"../vue/main.vue":30,"./store/store":24,"vue":4,"vuex":6}],19:[function(require,module,exports){
 'use strict';
@@ -11367,7 +11375,7 @@ var startBatteryCharge = exports.startBatteryCharge = function startBatteryCharg
         for (var type in store.state.energy.items) {
             var generate = (0, _crafting.item)(type).generate;
             if (generate && generate.energy) {
-                energy += generate.energy(store);
+                energy += generate.energy;
             }
         }
         if (energy < 0) {

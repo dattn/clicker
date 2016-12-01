@@ -1,3 +1,5 @@
+import { store } from '../../main';
+
 const HydroDam = {
     type: 'hydro-dam',
     label: 'Hydroelectric Dam',
@@ -11,8 +13,8 @@ const HydroDam = {
         }
     },
     generate: {
-        energy({ state }) {
-            return (state.energy.items[HydroDam.type] || 0) * 5;
+        get energy() {
+            return (store.state.energy.items[HydroDam.type] || 0) * 5;
         }
     }
 };

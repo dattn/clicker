@@ -1,3 +1,5 @@
+import { store } from '../../main';
+
 const WindMill = {
     type: 'wind-mill',
     label: 'Wind Mill',
@@ -11,8 +13,8 @@ const WindMill = {
         }
     },
     generate: {
-        energy({ state }) {
-            return (state.energy.items[WindMill.type] || 0) * (state.windForce / 100);
+        get energy() {
+            return (store.state.energy.items[WindMill.type] || 0) * (store.state.windForce / 100);
         }
     }
 };

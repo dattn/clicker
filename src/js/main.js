@@ -22,3 +22,7 @@ store.dispatch('startWindForce');
 
 // charge/discharge batteries
 store.dispatch('startBatteryCharge');
+
+export {
+    store
+}
