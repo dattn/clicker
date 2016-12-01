@@ -16,13 +16,7 @@ const items = [
     ...Resource.items
 ];
 
-export default items;
-export {
-    items,
-    indexedItems
-};
-
-export const item = function(type) {
+const item = function(type) {
     const index = fromSnakeCase(type);
     if (!indexedItems[index]) {
         throw 'Item "' + type + '" not found';
@@ -30,6 +24,33 @@ export const item = function(type) {
     return indexedItems[index];
 }
 
-export const fromCategory = function(category) {
+const fromCategory = function(category) {
     return items.filter(item => item.category === category);
 }
+
+const canCraft = function(state, type) {
+    const requires = item(type).requires;
+
+    if (requires.energy && requires.energy > state.energy.energy) {
+        return false;
+    }
+
+    if (requires.resources) {
+        for (let type in requires.resources) {
+            if (!state.inventory[type] || requires.resources[type] > state.inventory[type]) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+export default items;
+export {
+    items,
+    indexedItems,
+    item,
+    fromCategory,
+    canCraft
+};

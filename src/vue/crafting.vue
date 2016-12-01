@@ -18,10 +18,10 @@
                             <img src="src/icons/energy.svg" class="icon" /> x {{ item.requires.energy }}
                         </span>
                         <span v-for="(amount, type) in item.requires.resources" class="requirement">
-                            <img :src="getItem(type).icon" class="icon" /> x {{ amount }}
+                            <img :src="item(type).icon" class="icon" /> x {{ amount }}
                         </span>
                     </p>
-                    <button class="btn btn-primary" @click="craft(item)" :disabled="!canCraft(item.requires)">Craft</button>
+                    <button class="btn btn-primary" @click="craft(item)" :disabled="!canCraft(item.type)">Craft</button>
                 </div>
             </div>
         </div>
@@ -52,9 +52,8 @@
 
 <script>
     import { mapActions }   from 'vuex';
-    import * as items       from '../js/helpers/items';
     import * as text        from '../js/helpers/text';
-    import { fromCategory } from '../js/crafting';
+    import { item, fromCategory, canCraft } from '../js/crafting';
 
     export default {
 
@@ -71,9 +70,13 @@
             ...mapActions([
                 'craft'
             ]),
-            ...items,
             ...text,
+            item,
             fromCategory,
+
+            canCraft: function(type) {
+                return canCraft(this.$store.state, type);
+            },
 
             navClasses: function(category) {
                 return {
