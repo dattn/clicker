@@ -1,5 +1,5 @@
 import { gameTime, windForce } from '../utils';
-import { craft } from '../crafting';
+import { craft, item } from '../crafting';
 
 export {
     craft
@@ -35,21 +35,18 @@ export const startBatteryCharge = (store) => {
         clearInterval(batteryChargeHandle);
     }
     batteryChargeHandle = setInterval(() => {
-        let amount = -Math.ceil(store.state.energy.energy / 100);
-
-        if (!store.getters.isNight) {
-            amount += store.state.energy.items['solar-panel'] || 0;
+        var energy = 0;
+        for (let type in store.state.energy.items) {
+            const generate = item(type).generate;
+            if (generate && generate.energy) {
+                energy += generate.energy(store);
+            }
         }
-
-        amount += (store.state.energy.items['wind-mill'] || 0) * (store.state.windForce / 100);
-
-        amount += (store.state.energy.items['hydro-dam'] || 0) * 5;
-
-        if (amount < 0) {
-            store.commit('BATTERY_DISCHARGE', { amount: -amount });
+        if (energy < 0) {
+            store.commit('BATTERY_DISCHARGE', { amount: -energy });
         }
-        if (amount > 0) {
-            store.commit('BATTERY_CHARGE', { amount });
+        if (energy > 0) {
+            store.commit('BATTERY_CHARGE', { amount: energy });
         }
     }, 1000);
 }

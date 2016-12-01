@@ -10921,6 +10921,18 @@ var Battery = {
             iron: 2,
             copper: 4
         }
+    },
+    generate: {
+        energy: function energy(_ref) {
+            var state = _ref.state;
+
+            return -Math.ceil(state.energy.energy / 100);
+        },
+        capactity: function capactity(_ref2) {
+            var state = _ref2.state;
+
+            return (state.energy.items[Battery.type] || 0) * 100;
+        }
     }
 };
 
@@ -10932,7 +10944,7 @@ exports.default = Battery;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var hydroDam = {
+var HydroDam = {
     type: 'hydro-dam',
     label: 'Hydroelectric Dam',
     category: 'energy',
@@ -10943,10 +10955,17 @@ var hydroDam = {
             iron: 50,
             copper: 10
         }
+    },
+    generate: {
+        energy: function energy(_ref) {
+            var state = _ref.state;
+
+            return (state.energy.items[HydroDam.type] || 0) * 5;
+        }
     }
 };
 
-exports.default = hydroDam;
+exports.default = HydroDam;
 
 },{}],9:[function(require,module,exports){
 'use strict';
@@ -10954,7 +10973,7 @@ exports.default = hydroDam;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var solarPanel = {
+var SolarPanel = {
     type: 'solar-panel',
     label: 'Solar Panel',
     category: 'energy',
@@ -10966,10 +10985,21 @@ var solarPanel = {
             copper: 5,
             silicon: 5
         }
+    },
+    generate: {
+        energy: function energy(_ref) {
+            var state = _ref.state,
+                getters = _ref.getters;
+
+            if (getters.isNight) {
+                return 0;
+            }
+            return state.energy.items[SolarPanel.type] || 0;
+        }
     }
 };
 
-exports.default = solarPanel;
+exports.default = SolarPanel;
 
 },{}],10:[function(require,module,exports){
 'use strict';
@@ -10977,7 +11007,7 @@ exports.default = solarPanel;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var windMill = {
+var WindMill = {
     type: 'wind-mill',
     label: 'Wind Mill',
     category: 'energy',
@@ -10988,10 +11018,17 @@ var windMill = {
             iron: 10,
             copper: 5
         }
+    },
+    generate: {
+        energy: function energy(_ref) {
+            var state = _ref.state;
+
+            return (state.energy.items[WindMill.type] || 0) * (state.windForce / 100);
+        }
     }
 };
 
-exports.default = windMill;
+exports.default = WindMill;
 
 },{}],11:[function(require,module,exports){
 'use strict';
@@ -11193,10 +11230,10 @@ var craft = function craft(store, type) {
     }
 
     if (requires.resources) {
-        for (var type in requires.resources) {
+        for (var _type2 in requires.resources) {
             store.commit('INVENTORY_REMOVE', {
-                type: type,
-                amount: requires.resources[type]
+                type: _type2,
+                amount: requires.resources[_type2]
             });
         }
     }
@@ -11326,21 +11363,18 @@ var startBatteryCharge = exports.startBatteryCharge = function startBatteryCharg
         clearInterval(batteryChargeHandle);
     }
     batteryChargeHandle = setInterval(function () {
-        var amount = -Math.ceil(store.state.energy.energy / 100);
-
-        if (!store.getters.isNight) {
-            amount += store.state.energy.items['solar-panel'] || 0;
+        var energy = 0;
+        for (var type in store.state.energy.items) {
+            var generate = (0, _crafting.item)(type).generate;
+            if (generate && generate.energy) {
+                energy += generate.energy(store);
+            }
         }
-
-        amount += (store.state.energy.items['wind-mill'] || 0) * (store.state.windForce / 100);
-
-        amount += (store.state.energy.items['hydro-dam'] || 0) * 5;
-
-        if (amount < 0) {
-            store.commit('BATTERY_DISCHARGE', { amount: -amount });
+        if (energy < 0) {
+            store.commit('BATTERY_DISCHARGE', { amount: -energy });
         }
-        if (amount > 0) {
-            store.commit('BATTERY_CHARGE', { amount: amount });
+        if (energy > 0) {
+            store.commit('BATTERY_CHARGE', { amount: energy });
         }
     }, 1000);
 };

@@ -1,4 +1,4 @@
-const solarPanel = {
+const SolarPanel = {
     type: 'solar-panel',
     label: 'Solar Panel',
     category: 'energy',
@@ -10,7 +10,15 @@ const solarPanel = {
             copper: 5,
             silicon: 5
         }
+    },
+    generate: {
+        energy({ state, getters }) {
+            if (getters.isNight) {
+                return 0;
+            }
+            return state.energy.items[SolarPanel.type] || 0;
+        }
     }
 };
 
-export default solarPanel;
+export default SolarPanel;

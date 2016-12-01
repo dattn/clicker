@@ -1,4 +1,4 @@
-const windMill = {
+const WindMill = {
     type: 'wind-mill',
     label: 'Wind Mill',
     category: 'energy',
@@ -9,7 +9,12 @@ const windMill = {
             iron: 10,
             copper: 5
         }
+    },
+    generate: {
+        energy({ state }) {
+            return (state.energy.items[WindMill.type] || 0) * (state.windForce / 100);
+        }
     }
 };
 
-export default windMill;
+export default WindMill;

@@ -1,4 +1,4 @@
-const hydroDam = {
+const HydroDam = {
     type: 'hydro-dam',
     label: 'Hydroelectric Dam',
     category: 'energy',
@@ -9,7 +9,12 @@ const hydroDam = {
             iron: 50,
             copper: 10
         }
+    },
+    generate: {
+        energy({ state }) {
+            return (state.energy.items[HydroDam.type] || 0) * 5;
+        }
     }
 };
 
-export default hydroDam;
+export default HydroDam;

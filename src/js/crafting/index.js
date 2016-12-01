@@ -59,7 +59,7 @@ const craft = function(store, type) {
     }
 
     if (requires.resources) {
-        for (var type in requires.resources) {
+        for (let type in requires.resources) {
             store.commit('INVENTORY_REMOVE', {
                 type,
                 amount: requires.resources[type]
