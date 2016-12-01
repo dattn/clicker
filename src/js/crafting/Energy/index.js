@@ -3,6 +3,16 @@ import HydroDam   from './HydroDam';
 import SolarPanel from './SolarPanel';
 import WindMill   from './WindMill';
 
-export default [
+const indexedItems = {
     Battery, HydroDam, SolarPanel, WindMill
-]
+};
+
+const items = [
+    Battery, HydroDam, SolarPanel, WindMill
+];
+
+export default items;
+export {
+    items,
+    indexedItems
+};

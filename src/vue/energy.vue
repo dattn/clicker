@@ -3,7 +3,7 @@
         <li class="list-group-item" v-for="(count, type) in items">
             <div class="icon-container">
                 <div class="icon-wrapper" v-for="n in count">
-                    <img :src="byType(type).icon" class="icon" />
+                    <img :src="item(type).icon" class="icon" />
                 </div>
             </div>
         </li>
@@ -30,7 +30,7 @@
 </style>
 
 <script>
-    import { byType } from '../js/crafting';
+    import { item } from '../js/crafting';
 
     export default {
         computed: {
@@ -40,7 +40,7 @@
         },
 
         methods: {
-            byType
+            item
         }
     }
 </script>

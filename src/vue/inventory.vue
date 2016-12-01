@@ -6,8 +6,8 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item" v-for="(count, type) in inventory">
                 <span class="tag tag-default tag-pill float-xs-right">{{ count }}</span>
-                <img :src="byType(type).icon" class="icon" />
-                <span>{{ byType(type).label }}</span>
+                <img :src="item(type).icon" class="icon" />
+                <span>{{ item(type).label }}</span>
             </li>
         </ul>
     </div>
@@ -32,7 +32,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import { byType } from '../js/crafting';
+    import { item }       from '../js/crafting';
 
     export default {
         computed: {
@@ -46,7 +46,7 @@
         },
 
         methods: {
-            byType
+            item
         }
     }
 </script>

@@ -8,7 +8,7 @@
             </ul>
         </div>
         <div>
-            <div class="card-block" v-for="item in byCategory(category)">
+            <div class="card-block" v-for="item in fromCategory(category)">
                 <h3 class="card-title float-xs-left">
                     <img :src="item.icon" class="icon" /> {{ item.label }}
                 </h3>
@@ -51,10 +51,10 @@
 </style>
 
 <script>
-    import { mapActions } from 'vuex';
-    import * as items from '../js/helpers/items';
-    import * as text from '../js/helpers/text';
-    import { byCategory } from '../js/crafting';
+    import { mapActions }   from 'vuex';
+    import * as items       from '../js/helpers/items';
+    import * as text        from '../js/helpers/text';
+    import { fromCategory } from '../js/crafting';
 
     export default {
 
@@ -73,7 +73,7 @@
             ]),
             ...items,
             ...text,
-            byCategory,
+            fromCategory,
 
             navClasses: function(category) {
                 return {
