@@ -10,6 +10,16 @@ export const INVENTORY_ADD = (state, data) => {
             [data.type]: amount
         };
     }
+
+    // stats
+    if (state.stats.crafting[data.type]) {
+        state.stats.crafting[data.type] += amount;
+    } else {
+        state.stats.crafting = {
+            ...state.stats.crafting,
+            [data.type]: amount
+        };
+    }
 }
 
 export const INVENTORY_REMOVE = (state, data) => {
