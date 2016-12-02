@@ -18,6 +18,10 @@ var state = savedData? JSON.parse(savedData) : {
 var state = {
     inventory,
     energy,
+    stats: {
+        energy: 0,
+        crafting: {}
+    },
     time: gameTime(55),
     windForce: 0,
 }

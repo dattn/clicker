@@ -35,17 +35,17 @@ export const startBatteryCharge = (store) => {
         clearInterval(batteryChargeHandle);
     }
     batteryChargeHandle = setInterval(() => {
-        var energy = 0;
+        var energy;
         for (let type in store.state.energy.items) {
             const generate = item(type).generate;
-            if (generate && generate.energy) {
-                energy += generate.energy;
+            if (!generate || !generate.energy) {
+                continue;
             }
-        }
-        if (energy < 0) {
-            store.commit('BATTERY_DISCHARGE', { amount: -energy });
-        }
-        if (energy > 0) {
+            energy = generate.energy;
+            if (energy < 0) {
+                store.commit('BATTERY_DISCHARGE', { amount: -energy });
+                continue;
+            }
             store.commit('BATTERY_CHARGE', { amount: energy });
         }
     }, 1000);
