@@ -7,7 +7,7 @@ const Iron = {
     icon: 'src/icons/iron.svg',
     requires: {
         get energy() {
-            return Math.floor(10 * Math.pow(1.01, store.state.stats.items[Iron.type] || 0));
+            return Math.floor(10 * Math.pow(1.002, store.state.stats.items[Iron.type] || 0));
         }
     }
 };
