@@ -1,7 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import inventory from './state/inventory';
-import energy from './state/energy';
 import * as mutations from './mutations';
 import * as actions from './actions';
 import * as getters from './getters';
@@ -15,14 +13,16 @@ var state = savedData? JSON.parse(savedData) : {
     energy
 };*/
 
-var state = {
-    inventory,
-    energy,
-    research: {},
-    stats: {
-        energy: 0,
-        crafting: {}
+const baseItems = {
+    items: {
+        battery: 1
     },
+    energy: 0
+};
+
+var state = {
+    ...baseItems,
+    stats: baseItems,
     time: gameTime(55),
     windForce: 0,
 }

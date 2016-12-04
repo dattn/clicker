@@ -1,5 +1,5 @@
 <template>
-    <div class="card inventory" v-if="!inventoryIsEmpty">
+    <div class="card inventory" v-if="!isEmpty">
         <div class="card-header">
             Inventory
         </div>
@@ -31,17 +31,23 @@
 </style>
 
 <script>
-    import { mapGetters } from 'vuex';
-    import { item }       from '../js/crafting';
+    import { item, fromCategory } from '../js/crafting';
 
     export default {
         computed: {
-            ...mapGetters([
-                'inventoryIsEmpty'
-            ]),
+            isEmpty() {
+                return Object.keys(this.inventory).length === 0;
+            },
 
             inventory() {
-                return this.$store.state.inventory;
+                const items = fromCategory('resource');
+                var inventory = {};
+                for (let i = 0; i < items.length; i++) {
+                    if (this.$store.state.items[items[i].type]) {
+                        inventory[items[i].type] = this.$store.state.items[items[i].type];
+                    }
+                }
+                return inventory;
             }
         },
 

@@ -17,7 +17,7 @@ const WindMill = {
     },
     generate: {
         get energy() {
-            return (store.state.energy.items[WindMill.type] || 0) * (store.state.windForce / 100);
+            return (store.state.items[WindMill.type] || 0) * (store.state.windForce / 100);
         }
     }
 };

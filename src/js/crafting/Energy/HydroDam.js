@@ -17,7 +17,7 @@ const HydroDam = {
     },
     generate: {
         get energy() {
-            return (store.state.energy.items[HydroDam.type] || 0) * 5;
+            return (store.state.items[HydroDam.type] || 0) * 5;
         }
     }
 };

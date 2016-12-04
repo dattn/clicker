@@ -36,7 +36,7 @@ export const startBatteryCharge = (store) => {
     }
     batteryChargeHandle = setInterval(() => {
         var energy;
-        for (let type in store.state.energy.items) {
+        for (let type in store.state.items) {
             const generate = item(type).generate;
             if (!generate || !generate.energy) {
                 continue;

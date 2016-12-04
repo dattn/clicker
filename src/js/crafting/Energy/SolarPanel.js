@@ -21,7 +21,7 @@ const SolarPanel = {
             if (store.getters.isNight) {
                 return 0;
             }
-            return store.state.energy.items[SolarPanel.type] || 0;
+            return store.state.items[SolarPanel.type] || 0;
         }
     }
 };

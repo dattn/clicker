@@ -63,7 +63,7 @@
 </style>
 
 <script>
-    import { mapMutations, mapGetters } from 'vuex';
+    import { mapGetters } from 'vuex';
     import Inventory from './inventory.vue';
     import Battery from './battery.vue';
     import Crafting from './crafting.vue';

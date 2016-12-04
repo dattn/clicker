@@ -47,7 +47,7 @@
             ]),
 
             energy() {
-                return Math.floor(this.$store.getters.energy);
+                return Math.floor(this.$store.state.energy);
             },
 
             percentage() {

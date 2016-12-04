@@ -38,13 +38,13 @@ const canCraft = function(store, type) {
 
     const requires = item(type).requires;
 
-    if (requires.energy && requires.energy > store.state.energy.energy) {
+    if (requires.energy && requires.energy > store.state.energy) {
         return false;
     }
 
     if (requires.resources) {
         for (let type in requires.resources) {
-            if (!store.state.inventory[type] || requires.resources[type] > store.state.inventory[type]) {
+            if (!store.state.items[type] || requires.resources[type] > store.state.items[type]) {
                 return false;
             }
         }
@@ -58,7 +58,7 @@ const isAvailable = function(store, type) {
 
     if (requires.research) {
         for (let type in requires.research) {
-            if (!store.state.research[type] || requires.research[type] > store.state.research[type]) {
+            if (!store.state.items[type] || requires.research[type] > store.state.items[type]) {
                 return false;
             }
         }
@@ -81,37 +81,17 @@ const craft = function(store, type) {
 
     if (requires.resources) {
         for (let type in requires.resources) {
-            store.commit('INVENTORY_REMOVE', {
+            store.commit('ITEM_REMOVE', {
                 type,
                 amount: requires.resources[type]
             });
         }
     }
 
-    switch(item(type).category) {
-
-        case 'resource':
-            store.commit('INVENTORY_ADD', {
-                type: type,
-                amount: 1
-            });
-            break;
-
-        case 'energy':
-            store.commit('ENERGY_ADD', {
-                type: type,
-                amount: 1
-            });
-            break;
-
-        case 'research':
-            store.commit('RESEARCH_ADD', {
-                type: type,
-                amount: 1
-            });
-            break;
-    }
-
+    store.commit('ITEM_ADD', {
+        type,
+        amount: 1
+    });
 }
 
 export default items;

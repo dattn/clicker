@@ -14,10 +14,10 @@ const Battery = {
     },
     generate: {
         get energy() {
-            return -Math.ceil(store.state.energy.energy / 100);
+            return -Math.ceil(store.state.energy / 100);
         },
         get capactity() {
-            return (store.state.energy.items[Battery.type] || 0) * 100;
+            return (store.state.items[Battery.type] || 0) * 100;
         }
     }
 };

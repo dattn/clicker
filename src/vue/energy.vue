@@ -30,12 +30,19 @@
 </style>
 
 <script>
-    import { item } from '../js/crafting';
+    import { item, fromCategory } from '../js/crafting';
 
     export default {
         computed: {
             items() {
-                return this.$store.state.energy.items;
+                const items = fromCategory('energy');
+                var energy = {};
+                for (let i = 0; i < items.length; i++) {
+                    if (this.$store.state.items[items[i].type]) {
+                        energy[items[i].type] = this.$store.state.items[items[i].type];
+                    }
+                }
+                return energy;
             }
         },
 
