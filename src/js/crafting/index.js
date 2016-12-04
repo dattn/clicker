@@ -1,5 +1,6 @@
 import * as Energy   from './Energy';
 import * as Resource from './Resource';
+import * as Research from './Research';
 
 const fromSnakeCase = function(text) {
     var camelCase = text.replace(/(\-\w)/g, m => m[1].toUpperCase());
@@ -8,12 +9,14 @@ const fromSnakeCase = function(text) {
 
 const indexedItems = {
     ...Energy.indexedItems,
-    ...Resource.indexedItems
+    ...Resource.indexedItems,
+    ...Research.indexedItems
 };
 
 const items = [
     ...Energy.items,
-    ...Resource.items
+    ...Resource.items,
+    ...Research.items
 ];
 
 const item = function(type) {
