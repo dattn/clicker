@@ -11,6 +11,9 @@ const SolarPanel = {
             iron: 5,
             copper: 5,
             silicon: 5
+        },
+        research: {
+            sun: 1
         }
     },
     generate: {

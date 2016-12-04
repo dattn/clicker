@@ -22,6 +22,28 @@ export const INVENTORY_ADD = (state, data) => {
     }
 }
 
+export const RESEARCH_ADD = (state, data) => {
+    const amount = data.amount || 1;
+    if (state.research[data.type]) {
+        state.research[data.type] += amount;
+    } else {
+        state.research = {
+            ...state.research,
+            [data.type]: amount
+        };
+    }
+
+    // stats
+    if (state.stats.crafting[data.type]) {
+        state.stats.crafting[data.type] += amount;
+    } else {
+        state.stats.crafting = {
+            ...state.stats.crafting,
+            [data.type]: amount
+        };
+    }
+}
+
 export const INVENTORY_REMOVE = (state, data) => {
     const amount = data.amount || 1;
     if (state.inventory[data.type]) {

@@ -32,6 +32,10 @@ const fromCategory = function(category) {
 }
 
 const canCraft = function(store, type) {
+    if (!isAvailable(store, type)) {
+        return false;
+    }
+
     const requires = item(type).requires;
 
     if (requires.energy && requires.energy > store.state.energy.energy) {
@@ -41,6 +45,20 @@ const canCraft = function(store, type) {
     if (requires.resources) {
         for (let type in requires.resources) {
             if (!store.state.inventory[type] || requires.resources[type] > store.state.inventory[type]) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+const isAvailable = function(store, type) {
+    const requires = item(type).requires;
+
+    if (requires.research) {
+        for (let type in requires.research) {
+            if (!store.state.research[type] || requires.research[type] > store.state.research[type]) {
                 return false;
             }
         }
@@ -85,6 +103,13 @@ const craft = function(store, type) {
                 amount: 1
             });
             break;
+
+        case 'research':
+            store.commit('RESEARCH_ADD', {
+                type: type,
+                amount: 1
+            });
+            break;
     }
 
 }
@@ -95,6 +120,7 @@ export {
     indexedItems,
     item,
     fromCategory,
+    isAvailable,
     canCraft,
     craft
 };

@@ -8,7 +8,7 @@
             </ul>
         </div>
         <div>
-            <div class="card-block" v-for="item in fromCategory(category)">
+            <div class="card-block" v-for="item in items">
                 <h3 class="card-title float-xs-left">
                     <img :src="item.icon" class="icon" /> {{ item.label }}
                 </h3>
@@ -53,7 +53,7 @@
 <script>
     import { mapActions }   from 'vuex';
     import * as text        from '../js/helpers/text';
-    import { fromCategory, canCraft, item } from '../js/crafting';
+    import { fromCategory, canCraft, isAvailable, item } from '../js/crafting';
 
     export default {
 
@@ -66,12 +66,17 @@
             }
         },
 
+        computed: {
+            items() {
+                return fromCategory(this.category).filter(item => isAvailable(this.$store, item.type));
+            }
+        },
+
         methods: {
             ...mapActions([
                 'craft'
             ]),
             ...text,
-            fromCategory,
 
             canCraft(type) {
                 return canCraft(this.$store, type);

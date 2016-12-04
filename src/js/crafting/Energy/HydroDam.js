@@ -10,6 +10,9 @@ const HydroDam = {
         resources: {
             iron: 50,
             copper: 10
+        },
+        research: {
+            water: 1
         }
     },
     generate: {

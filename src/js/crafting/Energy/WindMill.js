@@ -10,6 +10,9 @@ const WindMill = {
         resources: {
             iron: 10,
             copper: 5
+        },
+        research: {
+            wind: 1
         }
     },
     generate: {
