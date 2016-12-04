@@ -1,13 +1,14 @@
-import Copper  from './Copper';
+import Stone   from './Stone';
 import Iron    from './Iron';
+import Copper  from './Copper';
 import Silicon from './Silicon';
 
 const indexedItems = {
-    Copper, Iron, Silicon
+    Stone, Iron, Copper, Silicon
 };
 
 const items = [
-    Copper, Iron, Silicon
+    Stone, Iron, Copper, Silicon
 ];
 
 export default items;

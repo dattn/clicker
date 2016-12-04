@@ -8,6 +8,7 @@ const HydroDam = {
     requires: {
         energy: 500,
         resources: {
+            stone: 100,
             iron: 50,
             copper: 10
         },
