@@ -43,9 +43,12 @@
 
         computed: {
             ...mapGetters([
-                'capacity',
-                'energy'
+                'capacity'
             ]),
+
+            energy() {
+                return Math.floor(this.$store.getters.energy);
+            },
 
             percentage() {
                 return Math.round((this.energy / this.capacity) * 100);
