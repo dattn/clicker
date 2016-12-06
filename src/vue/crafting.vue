@@ -68,7 +68,15 @@
 
         computed: {
             items() {
-                return fromCategory(this.category).filter(item => isAvailable(this.$store, item.type));
+                return fromCategory(this.category).filter(item => {
+                    if (!isAvailable(this.$store, item.type)) {
+                        return false;
+                    }
+                    if (item.limit && item.limit <= (this.$store.state.items[item.type] || 0)) {
+                        return false;
+                    }
+                    return true;
+                });
             }
         },
 

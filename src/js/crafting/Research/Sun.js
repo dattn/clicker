@@ -5,6 +5,7 @@ const Sun = {
     label: 'Sun',
     category: 'research',
     icon: 'src/icons/sun.svg',
+    limit: 1,
     requires: {
         energy: 90
     }
