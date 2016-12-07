@@ -1,4 +1,4 @@
-import { store } from '../../main';
+import { store } from '../../app';
 import { has } from '../../crafting';
 
 const WindMill = {

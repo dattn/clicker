@@ -1,18 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import store from './store/store';
-
-const Main = require('../vue/main.vue');
-
-new Vue({
-    el: '#Main',
-
-    store,
-
-    render: function (createElement) {
-        return createElement(Main);
-    }
-});
+import AppVue from '../vue/app.vue';
 
 // start virtual time
 store.dispatch('startTime');
@@ -26,3 +15,13 @@ store.dispatch('startBatteryCharge');
 export {
     store
 }
+
+new Vue({
+    el: 'body',
+
+    store,
+
+    render: function (createElement) {
+        return createElement(AppVue);
+    }
+});

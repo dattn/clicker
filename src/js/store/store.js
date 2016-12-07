@@ -15,11 +15,7 @@ var state = savedData? JSON.parse(savedData) : {
 
 const baseItems = {
     items: {
-        battery: 1,
-        stone: 10000,
-        iron: 10000,
-        copper: 10000,
-        silicon: 10000
+        battery: 1
     },
     energy: 0
 };

@@ -1,4 +1,4 @@
-import { store } from '../../main';
+import { store } from '../../app';
 
 const Sun = {
     type: 'sun',

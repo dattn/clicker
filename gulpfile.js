@@ -9,7 +9,7 @@ var babel = require('babelify');
 
 function compile(watch) {
     var bundler = watchify(
-        browserify('./src/js/main.js', {
+        browserify('./src/js/app.js', {
             debug: true
         })
         .transform(babel)
@@ -22,7 +22,7 @@ function compile(watch) {
                 console.error(err);
                 this.emit('end');
             })
-            .pipe(source('main.js'))
+            .pipe(source('app.js'))
             .pipe(buffer())
             .pipe(sourcemaps.init({
                 loadMaps: true
