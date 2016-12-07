@@ -1,4 +1,5 @@
 import { store } from '../../main';
+import { has } from '../../crafting';
 
 const WindMill = {
     type: 'wind-mill',
@@ -18,7 +19,7 @@ const WindMill = {
     },
     generate: {
         get energy() {
-            return (store.state.items[WindMill.type] || 0) * (store.state.windForce / 100);
+            return has(WindMill.type) * (store.state.windForce / 100);
         }
     }
 };

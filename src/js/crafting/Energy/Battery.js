@@ -1,4 +1,5 @@
 import { store } from '../../main';
+import { has } from '../../crafting';
 
 const Battery = {
     type: 'battery',
@@ -17,7 +18,7 @@ const Battery = {
             return -Math.ceil(store.state.energy / 100);
         },
         get capactity() {
-            return (store.state.items[Battery.type] || 0) * 100;
+            return has(Battery.type) * 100;
         }
     }
 };

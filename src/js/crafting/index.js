@@ -94,6 +94,10 @@ const craft = function(store, type) {
     });
 }
 
+const has = function(store, type) {
+    return store.state.items[type] || 0;
+}
+
 export default items;
 export {
     items,

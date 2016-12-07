@@ -1,4 +1,5 @@
 import { store } from '../../main';
+import { has } from '../../crafting';
 
 const SolarPanel = {
     type: 'solar-panel',
@@ -21,7 +22,7 @@ const SolarPanel = {
             if (store.getters.isNight) {
                 return 0;
             }
-            return store.state.items[SolarPanel.type] || 0;
+            return has(SolarPanel.type);
         }
     }
 };

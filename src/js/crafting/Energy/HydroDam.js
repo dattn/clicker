@@ -1,4 +1,5 @@
 import { store } from '../../main';
+import { has } from '../../crafting';
 
 const HydroDam = {
     type: 'hydro-dam',
@@ -18,7 +19,7 @@ const HydroDam = {
     },
     generate: {
         get energy() {
-            return (store.state.items[HydroDam.type] || 0) * 5;
+            return has(HydroDam.type) * 5;
         }
     }
 };
