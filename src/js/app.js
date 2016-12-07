@@ -17,7 +17,7 @@ export {
 }
 
 new Vue({
-    el: 'body',
+    el: '#App',
 
     store,
 
