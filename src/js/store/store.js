@@ -7,12 +7,6 @@ import { gameTime } from '../utils';
 
 Vue.use(Vuex);
 
-/*const savedData = localStorage.getItem('CLICKER');
-var state = savedData? JSON.parse(savedData) : {
-    inventory,
-    energy
-};*/
-
 const baseItems = {
     items: {
         battery: 1
@@ -20,12 +14,13 @@ const baseItems = {
     energy: 0
 };
 
-var state = {
+const savedData = localStorage.getItem('CLICKER');
+var state = savedData? JSON.parse(savedData) : {
     ...baseItems,
     stats: baseItems,
     time: gameTime(55),
-    windForce: 0,
-}
+    windForce: 0
+};
 
 const store = new Vuex.Store({
     state,
