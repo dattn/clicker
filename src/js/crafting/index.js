@@ -106,5 +106,6 @@ export {
     fromCategory,
     isAvailable,
     canCraft,
-    craft
+    craft,
+    has
 };

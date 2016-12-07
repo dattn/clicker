@@ -19,7 +19,7 @@ const HydroDam = {
     },
     generate: {
         get energy() {
-            return has(HydroDam.type) * 5;
+            return has(store, HydroDam.type) * 5;
         }
     }
 };

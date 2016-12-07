@@ -22,7 +22,7 @@ const SolarPanel = {
             if (store.getters.isNight) {
                 return 0;
             }
-            return has(SolarPanel.type);
+            return has(store, SolarPanel.type);
         }
     }
 };
