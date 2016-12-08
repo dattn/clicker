@@ -32,40 +32,29 @@
     @import "../../node_modules/bootstrap/scss/bootstrap.scss";
 
     .component-app {
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-
-    .mainContent {
-        margin-top: 65px;
-    }
-
-    .navbar {
-        transition: background-color 2s linear;
-    }
-
-    .navbar.navbar-dark .navbar-text {
-        color: #eceeef;
-    }
-
-    .energyPlate {
-        display: block;
-        width: 200px;
-        max-width: 100%;
-        margin: 0 auto 1em auto;
-        cursor: pointer;
-        transition: transform 1s ease-out;
-    }
-
-    .noselect {
         -webkit-touch-callout: none;
           -webkit-user-select: none;
            -khtml-user-select: none;
              -moz-user-select: none;
               -ms-user-select: none;
                   user-select: none;
+    }
+
+    .component-app .mainContent {
+        margin-top: 65px;
+    }
+
+    .component-app .navbar.navbar-dark .navbar-text {
+        color: #eceeef;
+    }
+
+    .component-app .energyPlate {
+        display: block;
+        width: 200px;
+        max-width: 100%;
+        margin: 0 auto 1em auto;
+        cursor: pointer;
+        transition: transform 1s ease-out;
     }
 </style>
 
