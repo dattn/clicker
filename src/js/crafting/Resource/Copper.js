@@ -7,7 +7,7 @@ const Copper = {
     icon: 'src/icons/copper.svg',
     requires: {
         get energy() {
-            return Math.floor(20 * Math.pow(1.002, stats(Copper.type)));
+            return Math.floor(20 * Math.sqrt(Math.pow(1.002, stats(Copper.type))));
         }
     }
 };

@@ -7,7 +7,7 @@ const Stone = {
     icon: 'src/icons/stone.svg',
     requires: {
         get energy() {
-            return Math.floor(5 * Math.pow(1.002, stats(Stone.type)));
+            return Math.floor(5 * Math.sqrt(Math.pow(1.002, stats(Stone.type))));
         }
     }
 };

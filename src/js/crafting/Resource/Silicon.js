@@ -7,7 +7,7 @@ const Silicon = {
     icon: 'src/icons/silicon.svg',
     requires: {
         get energy() {
-            return Math.floor(25 * Math.pow(1.002, stats(Silicon.type)));
+            return Math.floor(25 * Math.sqrt(Math.pow(1.002, stats(Silicon.type))));
         }
     }
 };
