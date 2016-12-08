@@ -22,22 +22,14 @@
         height: 100%;
         top: 0px;
         left: 0px;
-        background-color: green;
         transition: background-color 1s linear, width 0.2s linear;
         z-index: -1;
-    }
-
-    .battery .energy.medium {
-        background-color: yellow;
-    }
-
-    .battery .energy.low {
-        background-color: red;
     }
 </style>
 
 <script>
     import { mapGetters } from 'vuex';
+    import { redToGreen } from '../js/colors';
 
     export default {
 
@@ -63,7 +55,10 @@
             },
 
             style() {
-                return 'width: ' + this.percentage + '%';
+                return {
+                    width: this.percentage + '%',
+                    backgroundColor: redToGreen(this.percentage)
+                }
             }
         }
     }
