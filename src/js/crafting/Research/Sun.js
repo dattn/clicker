@@ -1,5 +1,3 @@
-import { store } from '../../app';
-
 const Sun = {
     type: 'sun',
     label: 'Sun',

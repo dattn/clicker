@@ -51,9 +51,8 @@
 </style>
 
 <script>
-    import { mapActions }   from 'vuex';
     import * as text        from '../js/helpers/text';
-    import { fromCategory, canCraft, isAvailable, item } from '../js/crafting';
+    import { fromCategory, craft, canCraft, isAvailable, item } from '../js/crafting';
 
     export default {
 
@@ -69,7 +68,7 @@
         computed: {
             items() {
                 return fromCategory(this.category).filter(item => {
-                    if (!isAvailable(this.$store, item.type)) {
+                    if (!isAvailable(item.type)) {
                         return false;
                     }
                     if (item.limit && item.limit <= (this.$store.state.items[item.type] || 0)) {
@@ -81,14 +80,9 @@
         },
 
         methods: {
-            ...mapActions([
-                'craft'
-            ]),
             ...text,
-
-            canCraft(type) {
-                return canCraft(this.$store, type);
-            },
+            craft,
+            canCraft,
 
             icon(type) {
                 return item(type).icon;

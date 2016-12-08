@@ -1,6 +1,7 @@
 import * as Energy   from './Energy';
 import * as Resource from './Resource';
 import * as Research from './Research';
+import { store } from '../app';
 
 const fromSnakeCase = function(text) {
     var camelCase = text.replace(/(\-\w)/g, m => m[1].toUpperCase());
@@ -31,8 +32,8 @@ const fromCategory = function(category) {
     return items.filter(item => item.category === category);
 }
 
-const canCraft = function(store, type) {
-    if (!isAvailable(store, type)) {
+const canCraft = function(type) {
+    if (!isAvailable(type)) {
         return false;
     }
 
@@ -53,7 +54,7 @@ const canCraft = function(store, type) {
     return true;
 }
 
-const isAvailable = function(store, type) {
+const isAvailable = function(type) {
     const requires = item(type).requires;
 
     if (requires.research) {
@@ -67,8 +68,8 @@ const isAvailable = function(store, type) {
     return true;
 }
 
-const craft = function(store, type) {
-    if (!canCraft(store, type)) {
+const craft = function(type) {
+    if (!canCraft(type)) {
         return false;
     }
     const requires = item(type).requires;
@@ -94,8 +95,12 @@ const craft = function(store, type) {
     });
 }
 
-const has = function(store, type) {
+const has = function(type) {
     return store.state.items[type] || 0;
+}
+
+const stats = function(type) {
+    return store.state.stats.items[type] || 0;
 }
 
 export default items;
@@ -107,5 +112,6 @@ export {
     isAvailable,
     canCraft,
     craft,
-    has
+    has,
+    stats
 };

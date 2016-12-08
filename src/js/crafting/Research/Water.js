@@ -1,5 +1,3 @@
-import { store } from '../../app';
-
 const Water = {
     type: 'water',
     label: 'Water',

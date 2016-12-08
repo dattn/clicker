@@ -1,4 +1,3 @@
-import { store } from '../../app';
 import { has } from '../../crafting';
 
 const HydroDam = {
@@ -19,7 +18,7 @@ const HydroDam = {
     },
     generate: {
         get energy() {
-            return has(store, HydroDam.type) * 5;
+            return has(HydroDam.type) * 5;
         }
     }
 };

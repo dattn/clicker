@@ -18,7 +18,7 @@ const Battery = {
             return -Math.ceil(store.state.energy / 100);
         },
         get capactity() {
-            return has(store, Battery.type) * 100;
+            return has(Battery.type) * 100;
         }
     }
 };

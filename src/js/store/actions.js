@@ -1,9 +1,5 @@
 import { gameTime, windForce } from '../utils';
-import { craft, item } from '../crafting';
-
-export {
-    craft
-}
+import { item } from '../crafting';
 
 var timeHandle;
 export const startTime = ({ commit, state }) => {

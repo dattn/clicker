@@ -19,7 +19,7 @@ const WindMill = {
     },
     generate: {
         get energy() {
-            return has(store, WindMill.type) * (store.state.windForce / 100);
+            return has(WindMill.type) * (store.state.windForce / 100);
         }
     }
 };

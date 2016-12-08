@@ -1,5 +1,3 @@
-import { store } from '../../app';
-
 const Wind = {
     type: 'wind',
     label: 'Wind',

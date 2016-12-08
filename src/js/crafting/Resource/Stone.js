@@ -1,5 +1,4 @@
-import { store } from '../../app';
-import { has } from '../../crafting';
+import { stats } from '../../crafting';
 
 const Stone = {
     type: 'stone',
@@ -8,7 +7,7 @@ const Stone = {
     icon: 'src/icons/stone.svg',
     requires: {
         get energy() {
-            return Math.floor(5 * Math.pow(1.002, has(store, Stone.type)));
+            return Math.floor(5 * Math.pow(1.002, stats(Stone.type)));
         }
     }
 };
