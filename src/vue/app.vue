@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="component-app">
         <nav :class="navClasses">
             <div class="float-xs-right">
                 <div class="navbar-text">
@@ -30,6 +30,13 @@
 
 <style lang="sass">
     @import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+    .component-app {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
 
     .mainContent {
         margin-top: 65px;
