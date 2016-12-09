@@ -46,7 +46,7 @@
             return {
                 category: 'resource',
                 categories: [
-                    'resource', 'energy', 'upgrade', 'research'
+                    'resource', 'energy', 'upgrade', 'research', 'automation'
                 ]
             }
         },

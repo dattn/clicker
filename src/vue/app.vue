@@ -22,6 +22,7 @@
                 </div>
                 <div class="col-md-3">
                     <inventory></inventory>
+                    <robots></robots>
                 </div>
             </div>
         </div>
@@ -65,6 +66,7 @@
     import Crafting from './crafting.vue';
     import Watch from './watch.vue';
     import Energy from './energy.vue';
+    import Robots from './robots.vue';
 
     export default {
 
@@ -79,7 +81,8 @@
             Battery,
             Crafting,
             Watch,
-            Energy
+            Energy,
+            Robots
         },
 
         computed: {
