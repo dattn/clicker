@@ -3,16 +3,18 @@
         <div class="card-header">
             Robots
         </div>
-        <div class="card-block items">
+        <div class="card-block robot-container">
             <img :src="icon" class="icon" v-for="n in robots" />
         </div>
     </div>
 </template>
 
 <style lang="sass">
+    @import "../../node_modules/dragula/dist/dragula";
+
     .component-robots {
 
-        .items {
+        .robot-container {
             line-height: 2em;
             font-size: 2em;
 
@@ -28,10 +30,15 @@
 
 <script>
     import { has, item } from '../js/crafting';
+    import dragula from 'dragula';
 
     const robot = item('robot');
 
     export default {
+
+        mounted() {
+            dragula([...document.querySelectorAll('.robot-container')]);
+        },
 
         computed: {
             isEmpty() {

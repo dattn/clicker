@@ -1,5 +1,5 @@
 <template>
-    <div class="component-crafting-item card-block">
+    <div class="component-crafting-item card-block robot-container">
         <h3 class="card-title float-xs-left">
             <img :src="item.icon" class="icon" /> {{ item.label }}
         </h3>
