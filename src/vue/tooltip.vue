@@ -20,7 +20,6 @@
                 attachment: 'top center',
                 targetAttachment: 'bottom center'
             });
-            console.log(this.$el);
         },
 
         computed: {
