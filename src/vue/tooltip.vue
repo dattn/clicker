@@ -32,6 +32,10 @@
             });
         },
 
+        updated() {
+            this.tether.position();
+        },
+
         beforeDestroy() {
             this.tether.destroy();
         },
