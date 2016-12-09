@@ -105,7 +105,7 @@
 
             iconWrapperStyle() {
                 return {
-                    width: Math.min(1.1, 5 / this.iconCount) + 'em'
+                    width: Math.min(1.1, 7 / this.iconCount) + 'em'
                 }
             }
         },
