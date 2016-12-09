@@ -1,5 +1,5 @@
 <template>
-    <li class="component-energy-item list-group-item" @mouseover="mouseEnter" @mouseleave="mouseLeave">
+    <li class="component-energy-item list-group-item" @pointerenter="mouseEnter" @pointerleave="mouseLeave">
         <div class="energy">{{ energyAll }}</div>
         <div class="icon-container">
             <div class="icon-wrapper" v-for="n in count">
@@ -61,6 +61,7 @@
 <script>
     import { item } from '../../js/crafting';
     import Tooltip from '../tooltip.vue';
+    import Pep from 'pepjs';
 
     const roundNumber = number => Math.round(number * 100) / 100;
 
@@ -100,14 +101,10 @@
 
         methods: {
             mouseEnter() {
-                if (!this.tooltipVisible) {
-                    this.tooltipVisible = true;
-                }
+                this.tooltipVisible = true;
             },
             mouseLeave() {
-                if (this.tooltipVisible) {
-                    this.tooltipVisible = false;
-                }
+                this.tooltipVisible = false;
             }
         }
 
