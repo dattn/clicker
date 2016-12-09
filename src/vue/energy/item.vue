@@ -1,5 +1,5 @@
 <template>
-    <li class="component-energy-item list-group-item" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
+    <li class="component-energy-item list-group-item" @mouseover="mouseEnter" @mouseleave="mouseLeave">
         <div class="energy">{{ energyAll }}</div>
         <div class="icon-container">
             <div class="icon-wrapper" v-for="n in count">
@@ -100,10 +100,14 @@
 
         methods: {
             mouseEnter() {
-                this.tooltipVisible = true;
+                if (!this.tooltipVisible) {
+                    this.tooltipVisible = true;
+                }
             },
             mouseLeave() {
-                this.tooltipVisible = false;
+                if (this.tooltipVisible) {
+                    this.tooltipVisible = false;
+                }
             }
         }
 
