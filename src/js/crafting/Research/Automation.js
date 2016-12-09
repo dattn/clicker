@@ -1,8 +1,8 @@
-const Water = {
-    type: 'water',
-    label: 'Water',
+const Automation = {
+    type: 'automation',
+    label: 'Automation',
     category: 'research',
-    icon: 'src/icons/water.svg',
+    icon: 'src/icons/automation.svg',
     limit: 1,
     requires: {
         energy: 1000,
@@ -13,4 +13,4 @@ const Water = {
     }
 };
 
-export default Water;
+export default Automation;
