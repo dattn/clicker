@@ -16,6 +16,7 @@
     "babelify": "^7.3.0",
     "bootstrap": "^4.0.0-alpha.5",
     "browserify": "^13.1.1",
+    "dragula": "^3.7.2",
     "gulp": "^3.9.1",
     "gulp-browserify": "^0.5.1",
     "gulp-sourcemaps": "^2.2.0",
