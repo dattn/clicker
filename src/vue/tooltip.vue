@@ -20,12 +20,16 @@
         props: [ 'visible' ],
 
         mounted() {
-            new Tether({
+            this.tether = new Tether({
                 element: this.$el,
                 target: this.$el.parentNode,
                 attachment: 'top center',
                 targetAttachment: 'bottom center'
             });
+        },
+
+        beforeDestroy() {
+            this.tether.destroy();
         },
 
         computed: {
