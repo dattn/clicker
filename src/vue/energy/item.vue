@@ -1,23 +1,33 @@
 <template>
     <li class="component-energy-item list-group-item" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
-        <div class="energy">{{ energy }}</div>
+        <div class="energy">{{ energyAll }}</div>
         <div class="icon-container">
             <div class="icon-wrapper" v-for="n in count">
                 <img :src="icon" class="icon" />
             </div>
         </div>
-        <tooltip :visible="tooltipVisible">
-            <div>
-                Charging: {{ energy }}
-            </div>
-            <div>
-                Count: {{ count }}
-            </div>
+        <tooltip class="tooltip-energy-item" :visible="tooltipVisible">
+            <table class="info-table">
+                <tbody>
+                    <tr>
+                        <th>Count:</th>
+                        <td>{{ count }}</td>
+                    </tr>
+                    <tr>
+                        <th>Generates (all):</th>
+                        <td>{{ energyAll }}</td>
+                    </tr>
+                    <tr>
+                        <th>Generates (single):</th>
+                        <td>{{ energySingle }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </tooltip>
     </li>
 </template>
 
-<style>
+<style lang="sass">
     .component-energy-item .energy {
         float: right;
         font-size: 2em;
@@ -39,11 +49,20 @@
     .component-energy-item .icon-wrapper .icon {
         height: 1em;
     }
+
+    .tooltip-energy-item .info-table {
+        border-collapse: collapse;
+        th, td {
+            padding: 0.2em 0.5em;
+        }
+    }
 </style>
 
 <script>
     import { item } from '../../js/crafting';
     import Tooltip from '../tooltip.vue';
+
+    const roundNumber = number => Math.round(number * 100) / 100;
 
     export default {
 
@@ -58,8 +77,16 @@
         },
 
         computed: {
-            energy() {
-                const energy = Math.round(item(this.type).generate.energy * 100) / 100;
+            energyAll() {
+                const energy = roundNumber(item(this.type).generate.energy);
+                if (energy > 0) {
+                    return '+' + energy;
+                }
+                return energy;
+            },
+
+            energySingle() {
+                const energy = roundNumber(item(this.type).generate.energy / this.count);
                 if (energy > 0) {
                     return '+' + energy;
                 }
