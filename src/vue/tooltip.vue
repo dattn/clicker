@@ -33,7 +33,9 @@
         },
 
         updated() {
-            this.tether.position();
+            if (this.visible) {
+                this.tether.position();
+            }
         },
 
         beforeDestroy() {
