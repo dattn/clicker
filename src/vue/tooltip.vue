@@ -6,6 +6,12 @@
     </div>
 </template>
 
+<style lang="sass">
+    .component-tooltip:not(.in) {
+        z-index: -100;
+    }
+</style>
+
 <script>
     import Tether from 'tether';
 
@@ -25,6 +31,7 @@
         computed: {
             classes() {
                 return {
+                    'component-tooltip': true,
                     tooltip: true,
                     'tooltip-bottom': true,
                     in: this.visible

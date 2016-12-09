@@ -22,7 +22,6 @@
     "less": "^2.7.1",
     "moment": "^2.17.1",
     "node-sass": "^3.13.0",
-    "pepjs": "^0.4.2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "vue": "^2.1.4",

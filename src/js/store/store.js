@@ -16,7 +16,7 @@ const baseItems = {
     energy: 0
 };
 
-const savedData = localStorage.getItem('CLICKER');
+const savedData = null; //localStorage.getItem('CLICKER');
 var state = savedData? JSON.parse(savedData) : {
     ...deepClone(baseItems),
     stats: deepClone(baseItems),

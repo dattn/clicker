@@ -1,5 +1,5 @@
 <template>
-    <li class="component-energy-item list-group-item" @pointerenter="mouseEnter" @pointerleave="mouseLeave">
+    <li class="component-energy-item list-group-item" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
         <div class="energy">{{ energyAll }}</div>
         <div class="icon-container">
             <div class="icon-wrapper" v-for="n in count">
@@ -54,6 +54,7 @@
         border-collapse: collapse;
         th, td {
             padding: 0.2em 0.5em;
+            white-space: nowrap;
         }
     }
 </style>
@@ -61,7 +62,6 @@
 <script>
     import { item } from '../../js/crafting';
     import Tooltip from '../tooltip.vue';
-    import Pep from 'pepjs';
 
     const roundNumber = number => Math.round(number * 100) / 100;
 
