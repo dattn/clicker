@@ -11,15 +11,15 @@
                 <tbody>
                     <tr>
                         <th>Count:</th>
-                        <td>{{ count }}</td>
+                        <td class="text-xs-right">{{ count }}</td>
                     </tr>
                     <tr>
                         <th>Generates (all):</th>
-                        <td>{{ energyAll }}</td>
+                        <td class="text-xs-right">{{ energyAll }}</td>
                     </tr>
                     <tr>
                         <th>Generates (single):</th>
-                        <td>{{ energySingle }}</td>
+                        <td class="text-xs-right">{{ energySingle }}</td>
                     </tr>
                 </tbody>
             </table>
