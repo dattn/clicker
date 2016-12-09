@@ -2,7 +2,7 @@
     <li class="component-energy-item list-group-item" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
         <div class="energy">{{ energyAll }}</div>
         <div class="icon-container">
-            <div class="icon-wrapper" v-for="n in count">
+            <div class="icon-wrapper" v-for="n in iconCount" :style="iconWrapperStyle">
                 <img :src="icon" class="icon" />
             </div>
         </div>
@@ -34,20 +34,21 @@
     }
 
     .component-energy-item .icon-container {
-        padding: 0 0.5em 0.5em 0;
-        line-height: 0.5ex;
         font-size: 3em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: "";
+        line-height: 1em;
     }
 
     .component-energy-item .icon-wrapper {
         display: inline-block;
-        height: 0.5em;
-        width: 0.5em;
         overflow: visible;
     }
 
     .component-energy-item .icon-wrapper .icon {
         height: 1em;
+        vertical-align: top;
     }
 
     .tooltip-energy-item .info-table {
@@ -94,8 +95,18 @@
                 return energy;
             },
 
+            iconCount() {
+                return Math.min(this.count, 20);
+            },
+
             icon() {
                 return item(this.type).icon;
+            },
+
+            iconWrapperStyle() {
+                return {
+                    width: Math.min(1.1, 5 / this.iconCount) + 'em'
+                }
             }
         },
 
