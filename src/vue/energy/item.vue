@@ -1,11 +1,19 @@
 <template>
-    <li class="component-energy-item list-group-item">
-        <div class="energy">{{ energy(type) }}</div>
+    <li class="component-energy-item list-group-item" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
+        <div class="energy">{{ energy }}</div>
         <div class="icon-container">
             <div class="icon-wrapper" v-for="n in count">
-                <img :src="item(type).icon" class="icon" />
+                <img :src="icon" class="icon" />
             </div>
         </div>
+        <tooltip :visible="tooltipVisible">
+            <div>
+                Charging: {{ energy }}
+            </div>
+            <div>
+                Count: {{ count }}
+            </div>
+        </tooltip>
     </li>
 </template>
 
@@ -35,20 +43,40 @@
 
 <script>
     import { item } from '../../js/crafting';
+    import Tooltip from '../tooltip.vue';
 
     export default {
 
         props: [ 'type', 'count' ],
 
-        methods: {
-            item,
+        components: { Tooltip },
 
-            energy(type) {
-                const energy = Math.round(item(type).generate.energy * 100) / 100;
+        data() {
+            return {
+                tooltipVisible: false
+            }
+        },
+
+        computed: {
+            energy() {
+                const energy = Math.round(item(this.type).generate.energy * 100) / 100;
                 if (energy > 0) {
                     return '+' + energy;
                 }
                 return energy;
+            },
+
+            icon() {
+                return item(this.type).icon;
+            }
+        },
+
+        methods: {
+            mouseEnter() {
+                this.tooltipVisible = true;
+            },
+            mouseLeave() {
+                this.tooltipVisible = false;
             }
         }
 
