@@ -10,6 +10,10 @@
     .component-tooltip:not(.in) {
         z-index: -100;
     }
+
+    .component-tooltip .tooltip-inner {
+        max-width: none;
+    }
 </style>
 
 <script>
