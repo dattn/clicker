@@ -30,15 +30,10 @@
 
 <script>
     import { has, item } from '../js/crafting';
-    import dragula from 'dragula';
 
     const robot = item('robot');
 
     export default {
-
-        mounted() {
-            dragula([...document.querySelectorAll('.robot-container')]);
-        },
 
         computed: {
             isEmpty() {
