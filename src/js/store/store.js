@@ -4,6 +4,7 @@ import * as mutations from './mutations';
 import * as actions from './actions';
 import * as getters from './getters';
 import { gameTime } from '../utils';
+import deepMerge from 'deepmerge';
 
 Vue.use(Vuex);
 
@@ -16,13 +17,18 @@ const baseItems = {
     energy: 0
 };
 
-const savedData = localStorage.getItem('CLICKER');
-const state = savedData? JSON.parse(savedData) : {
+const defaultState = {
     ...deepClone(baseItems),
+    robots: {},
     stats: deepClone(baseItems),
     time: gameTime(55),
     windForce: 0
 };
+const savedState = JSON.parse(localStorage.getItem('CLICKER') || '{}');
+const state = deepMerge(defaultState, savedState, {
+    arrayMerge: d => d
+});
+
 
 const store = new Vuex.Store({
     state,

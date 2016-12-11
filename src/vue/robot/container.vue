@@ -51,8 +51,24 @@
 
         mounted() {
             drake.containers.push(this.$el);
+            drake.on('drop', (el, target, source) => {
+                if (this.type && source !== target) {
+                    source.appendChild(el);
+                    if (target === this.$el) {
+                        this.$store.commit('ADD_ROBOT', {
+                            type: this.type
+                        });
+                    }
+                    if (source === this.$el) {
+                        this.$store.commit('REMOVE_ROBOT', {
+                            type: this.type
+                        });
+                    }
+                }
+            });
             drake.on('drag', () => this.dragging = true);
             drake.on('dragend', () => this.dragging = false);
+
         },
 
         beforeDestroy() {
@@ -65,9 +81,13 @@
         computed: {
             robots() {
                 if (!this.type) {
-                    return has('robot');
+                    var robots = has('robot');
+                    for (let type in this.$store.state.robots) {
+                        robots -= this.$store.state.robots[type];
+                    }
+                    return robots;
                 }
-                return 0;
+                return this.$store.state.robots[this.type] || 0;
             },
 
             showPlaceholder() {

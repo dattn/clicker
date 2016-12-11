@@ -43,3 +43,21 @@ export const SET_TIME = (state, data) => {
 export const SET_WIND_FORCE = (state, data) => {
     state.windForce = data.force;
 }
+
+export const ADD_ROBOT = (state, data) => {
+    if (state.robots[data.type]) {
+        state.robots[data.type] += 1;
+    } else {
+        state.robots = {
+            ...state.robots,
+            [data.type]: 1
+        };
+    }
+}
+
+export const REMOVE_ROBOT = (state, data) => {
+    if (!state.robots[data.type]) {
+        return;
+    }
+    state.robots[data.type] = Math.max(0, state.robots[data.type] - 1);
+}
