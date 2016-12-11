@@ -3,50 +3,26 @@
         <div class="card-header">
             Robots
         </div>
-        <div class="card-block robot-container">
-            <img :src="icon" class="icon" v-for="n in robots" />
-        </div>
+        <robot-container class="card-block"></robot-container>
     </div>
 </template>
 
-<style lang="sass">
-    @import "../../node_modules/dragula/dist/dragula";
-
-    .component-robots {
-
-        .robot-container {
-            line-height: 2em;
-            font-size: 2em;
-
-            .icon {
-                vertical-align: top;
-                height: 2em;
-                padding: 0 0.1em 0.1em 0;
-            }
-        }
-
-    }
-</style>
-
 <script>
-    import { has, item } from '../js/crafting';
-
-    const robot = item('robot');
+    import { stats } from '../js/crafting';
+    import RobotContainer from './robot/container.vue';
 
     export default {
 
+        components: {
+            RobotContainer
+        },
+
         computed: {
             isEmpty() {
-                return this.robots === 0;
+                return stats('robot') === 0;
             },
 
-            robots() {
-                return has('robot');
-            },
 
-            icon() {
-                return robot.icon;
-            }
         }
 
     }

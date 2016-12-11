@@ -67,12 +67,6 @@
     import Watch from './watch.vue';
     import Energy from './energy.vue';
     import Robots from './robots.vue';
-    import dragula from 'dragula';
-
-    const hasClass = (el, className) => {
-        const classes = ' ' + el.className + ' ';
-        return classes.indexOf(' ' + className + ' ') > -1;
-    }
 
     export default {
 
@@ -80,18 +74,6 @@
             return {
                 angle: 0
             }
-        },
-
-        mounted() {
-            this.drake = dragula({
-                isContainer: function (el) {
-                    return hasClass(el, 'robot-container');
-                }
-            });
-        },
-
-        beforeDestroy() {
-            this.drake.destroy();
         },
 
         components: {

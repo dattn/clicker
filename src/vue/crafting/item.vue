@@ -14,6 +14,7 @@
             </p>
             <button class="btn btn-primary" @click="craft(item.type)" :disabled="!canCraft(item.type)">Craft</button>
         </div>
+        <robot-container :type="item.type"></robot-container>
     </div>
 </template>
 
@@ -37,12 +38,20 @@
     .component-crafting-item  .item-info {
         text-align: right;
     }
+    .component-crafting-item .component-robot-container {
+        clear: both;
+    }
 </style>
 
 <script>
     import { craft, canCraft, item } from '../../js/crafting';
+    import RobotContainer from '../robot/container.vue';
 
     export default {
+
+        components: {
+            RobotContainer
+        },
 
         props: [ 'item' ],
 
