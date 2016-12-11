@@ -83,11 +83,15 @@
         },
 
         mounted() {
-            dragula([], {
+            this.drake = dragula({
                 isContainer: function (el) {
                     return hasClass(el, 'robot-container');
                 }
             });
+        },
+
+        beforeDestroy() {
+            this.drake.destroy();
         },
 
         components: {
