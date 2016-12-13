@@ -2,7 +2,7 @@
     <div>
         <div class="battery">
             <div :class="classes" :style="style"></div>
-            <span>{{ energy }} / {{ capacity }}</span>
+            <span class="info">{{ energy }} / {{ capacity }}</span>
         </div>
     </div>
 </template>
@@ -23,7 +23,11 @@
         top: 0px;
         left: 0px;
         transition: background-color 1s linear, width 0.2s linear;
-        z-index: -1;
+    }
+
+    .battery .info {
+        position: relative;
+        z-index: 1;
     }
 </style>
 
