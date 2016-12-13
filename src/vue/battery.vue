@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="battery">
-            <div :class="classes" :style="style"></div>
+            <div class="energy" :style="energyStyle"></div>
             <span class="info">{{ energy }} / {{ capacity }}</span>
         </div>
     </div>
@@ -15,6 +15,7 @@
         position: relative;
         line-height: 50px;
         text-align: center;
+        background-color: #fff;
     }
 
     .battery .energy {
@@ -33,7 +34,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import { redToGreen } from '../js/colors';
+    import Color from 'color';
 
     export default {
 
@@ -50,18 +51,21 @@
                 return Math.round((this.energy / this.capacity) * 100);
             },
 
-            classes() {
-                return {
-                    energy: true,
-                    low: this.percentage <= 20,
-                    medium: this.percentage > 20 && this.percentage <= 50
-                }
-            },
+            energyStyle() {
+                const green  = Color('#83B23E');
+                const yellow = Color('#E9B718');
+                const red    = Color('#C20E1A');
 
-            style() {
+                var color = red;
+                if (this.percentage <= 50) {
+                    color = yellow.mix(red, this.percentage / 50);
+                } else {
+                    color = green.mix(yellow, (this.percentage - 50) / 50);
+                }
+
                 return {
                     width: this.percentage + '%',
-                    backgroundColor: redToGreen(this.percentage)
+                    backgroundColor: color.string()
                 }
             }
         }
