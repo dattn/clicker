@@ -1,5 +1,5 @@
 <template>
-    <div class="component-app">
+    <div class="component-app" :style="appStyle">
         <nav :class="navClasses">
             <div class="float-xs-right">
                 <div class="navbar-text">
@@ -32,7 +32,14 @@
 <style lang="sass">
     @import "../../node_modules/bootstrap/scss/bootstrap.scss";
 
+    html, body {
+        height: 100%;
+    }
+
     .component-app {
+        overflow: auto;
+        min-height: 100%;
+
         -webkit-touch-callout: none;
           -webkit-user-select: none;
            -khtml-user-select: none;
@@ -67,6 +74,8 @@
     import Watch from './watch.vue';
     import Energy from './energy.vue';
     import Robots from './robots.vue';
+    import Color from 'color';
+    import { dayLight } from '../js/utils';
 
     export default {
 
@@ -106,6 +115,16 @@
 
             windForce() {
                 return this.$store.state.windForce;
+            },
+
+            appStyle() {
+                const dayColor   = Color('#7EC0EE');
+                const nightColor = Color('#001c38');
+                const currentColor = dayColor.mix(nightColor, dayLight(this.$store.state.time));
+
+                return {
+                    backgroundColor: currentColor.string()
+                }
             }
         },
 

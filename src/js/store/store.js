@@ -21,7 +21,7 @@ const defaultState = {
     ...deepClone(baseItems),
     robots: {},
     stats: deepClone(baseItems),
-    time: gameTime(55),
+    time: gameTime(33.3),
     windForce: 0
 };
 const savedState = JSON.parse(localStorage.getItem('CLICKER') || '{}');
