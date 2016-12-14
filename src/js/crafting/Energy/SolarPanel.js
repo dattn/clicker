@@ -1,5 +1,6 @@
 import { store } from '../../app';
 import { has } from '../../crafting';
+import { dayLight } from '../../utils';
 
 const SolarPanel = {
     type: 'solar-panel',
@@ -19,10 +20,7 @@ const SolarPanel = {
     },
     generate: {
         get energy() {
-            if (store.getters.isNight) {
-                return 0;
-            }
-            return has(SolarPanel.type);
+            return has(SolarPanel.type) * dayLight(store.state.time);
         }
     }
 };
