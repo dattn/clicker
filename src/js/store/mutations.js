@@ -61,3 +61,21 @@ export const REMOVE_ROBOT = (state, data) => {
     }
     state.robots[data.type] = Math.max(0, state.robots[data.type] - 1);
 }
+
+export const ROBOT_ADD_CLICK = (state, data) => {
+    if (state.robotClicks[data.type]) {
+        state.robotClicks[data.type] += data.amount;
+    } else {
+        state.robotClicks = {
+            ...state.robotClicks,
+            [data.type]: data.amount
+        };
+    }
+}
+
+export const ROBOT_REMOVE_CLICK = (state, data) => {
+    if (!state.robotClicks[data.type]) {
+        return;
+    }
+    state.robotClicks[data.type] = Math.max(0, state.robotClicks[data.type] - 1);
+}

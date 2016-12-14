@@ -2,8 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import store from './store/store';
 import AppVue from '../vue/app.vue';
-import { gameTime, windForce } from './utils';
-import { item } from './crafting';
+import { gameTime, windForce, shuffle } from './utils';
+import { item, craft } from './crafting';
 import { tick, start } from './loop';
 
 export {
@@ -48,6 +48,28 @@ tick(() => {
     let time = gameTime(33.3);
     if (time !== store.state.time) {
         store.commit('SET_TIME', { time });
+    }
+});
+
+// handle robots
+tick(() => {
+    const types = shuffle(Object.keys(store.state.robots));
+    const robot = item('robot');
+
+    // generate clicks
+    for (var i = 0; i < types.length; i++) {
+        for (var j = 0; j < store.state.robots[types[i]]; j++) {
+            store.commit('ROBOT_ADD_CLICK', {
+                type: types[i],
+                amount: robot.click
+            });
+            if (store.state.robotClicks[types[i]] >= 1) {
+                store.commit('ROBOT_REMOVE_CLICK', {
+                    type: types[i]
+                });
+                craft(types[i]);
+            }
+        }
     }
 });
 
