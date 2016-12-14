@@ -7,7 +7,7 @@ export const startTime = ({ commit, state }) => {
         clearInterval(timeHandle);
     }
     timeHandle = setInterval(() => {
-        let time = gameTime(1);
+        let time = gameTime(33.3);
         if (time !== state.time) {
             commit('SET_TIME', { time });
         }
