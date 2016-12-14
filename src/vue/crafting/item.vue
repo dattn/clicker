@@ -14,7 +14,7 @@
             </p>
             <button class="btn btn-primary" @click="craft(item.type)" :disabled="!canCraft(item.type)">Craft</button>
         </div>
-        <robot-container :type="item.type"></robot-container>
+        <robot-container :type="item.type" v-if="showRobots"></robot-container>
     </div>
 </template>
 
@@ -44,7 +44,7 @@
 </style>
 
 <script>
-    import { craft, canCraft, item } from '../../js/crafting';
+    import { craft, canCraft, item, stats } from '../../js/crafting';
     import RobotContainer from '../robot/container.vue';
 
     export default {
@@ -54,6 +54,12 @@
         },
 
         props: [ 'item' ],
+
+        computed: {
+            showRobots() {
+                return !!stats('robot');
+            }
+        },
 
         methods: {
             craft,

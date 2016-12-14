@@ -3,8 +3,8 @@
         <div class="placeholder" v-if="showPlaceholder">Drop robot here</div>
         <robot v-for="n in robots"></robot>
         <div class="buttons">
-            <button v-if="type" class="btn btn-default" @click="removeRobot">-</button>
-            <button v-if="type" class="btn btn-default" @click="addRobot">+</button>
+            <button v-if="!isStock" class="btn btn-danger" :disabled="!canRemoveRobot" @click="removeRobot">-</button>
+            <button v-if="!isStock" class="btn btn-success" :disabled="!canAddRobot" @click="addRobot">+</button>
         </div>
     </div>
 </template>
@@ -117,6 +117,18 @@
                     robots -= this.$store.state.robots[type];
                 }
                 return robots;
+            },
+
+            isStock() {
+                return !this.type
+            },
+
+            canAddRobot() {
+                return !!this.robotsInStock;
+            },
+
+            canRemoveRobot() {
+                return !!this.robots;
             }
         },
 
