@@ -33,7 +33,13 @@
     import dragula from 'dragula';
     import { has } from '../../js/crafting';
 
-    const drake = dragula();
+    const elIsRobot = el => {
+        return el.classList.contains('component-robot-robot');
+    };
+
+    const drake = dragula({
+        moves: el => elIsRobot(el)
+    });
 
     export default {
 

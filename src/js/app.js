@@ -1,3 +1,7 @@
+// include polyfills
+import classListPolyfill from 'classlist-polyfill';
+
+// include app
 import Vue from 'vue';
 import Vuex from 'vuex';
 import store from './store/store';
