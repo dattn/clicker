@@ -15,7 +15,8 @@ const Robot = {
         research: {
             automation: 1
         }
-    }
+    },
+    click: 0.2
 };
 
 export default Robot;

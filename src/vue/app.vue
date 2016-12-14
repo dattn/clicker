@@ -76,6 +76,7 @@
     import Robots from './robots.vue';
     import Color from 'color';
     import { dayLight } from '../js/utils';
+    import { start } from '../js/loop';
 
     export default {
 

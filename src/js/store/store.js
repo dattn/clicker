@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as mutations from './mutations';
-import * as actions from './actions';
 import * as getters from './getters';
 import { gameTime } from '../utils';
 import deepMerge from 'deepmerge';
@@ -20,6 +19,7 @@ const baseItems = {
 const defaultState = {
     ...deepClone(baseItems),
     robots: {},
+    robotClicks: {},
     stats: deepClone(baseItems),
     time: gameTime(33.3),
     windForce: 0
@@ -33,7 +33,6 @@ const state = deepMerge(defaultState, savedState, {
 const store = new Vuex.Store({
     state,
     mutations,
-    actions,
     getters,
     strict: true
 });
