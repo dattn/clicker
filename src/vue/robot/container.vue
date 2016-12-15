@@ -3,8 +3,8 @@
         <div class="placeholder" v-if="showPlaceholder">Drop robot here</div>
         <robot v-for="n in robots"></robot>
         <div class="buttons">
-            <button v-if="!isStock" class="btn btn-danger" :disabled="!canRemoveRobot" @click="removeRobot">-</button>
-            <button v-if="!isStock" class="btn btn-success" :disabled="!canAddRobot" @click="addRobot">+</button>
+            <button v-if="!isStock" class="btn btn-sm btn-danger" :disabled="!canRemoveRobot" @click="removeRobot">-</button>
+            <button v-if="!isStock" class="btn btn-sm btn-success" :disabled="!canAddRobot" @click="addRobot">+</button>
         </div>
     </div>
 </template>
@@ -28,6 +28,11 @@
 
         .buttons {
             float: right;
+
+            button {
+                line-height: 0.7em;
+                font-size: 1em;
+            }
         }
     }
 
