@@ -15,7 +15,8 @@ function compile(watch) {
         ],
         cache: {},
         packageCache: {},
-        debug: true
+        debug: true,
+        fullPaths: false
     };
     if (watch) {
         props.plugin = [
@@ -58,7 +59,7 @@ function compile(watch) {
 }
 
 function copyAssets(src, dest) {
-    return gulp.src(src + '/**/*.!(js|vue)')
+    return gulp.src(src + '/**/*.!(js|vue|map)')
         .pipe(gulp.dest(dest));
 }
 
@@ -76,8 +77,12 @@ gulp.task('compress', function() {
         .pipe(gulp.dest('./dist/js'));
 });
 
-gulp.task('release', ['build', 'compress'], function() {
+gulp.task('release', ['set-prod', 'build', 'compress'], function() {
     return copyAssets('./build', './dist');
+});
+
+gulp.task('set-prod', function() {
+    return process.env.NODE_ENV = 'production';
 });
 
 gulp.task('default', ['watch']);
