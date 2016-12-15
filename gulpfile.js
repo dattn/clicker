@@ -59,7 +59,7 @@ function compile(watch) {
 }
 
 function copyAssets(src, dest) {
-    return gulp.src(src + '/**/*.!(js|vue|map)')
+    return gulp.src(src + '/**/*.(html|svg)')
         .pipe(gulp.dest(dest));
 }
 
