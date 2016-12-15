@@ -1,5 +1,5 @@
 <template>
-    <div class="component-robot-robot">
+    <div :class="classes">
         <img :src="icon" class="icon" />
     </div>
 </template>
@@ -11,6 +11,11 @@
             vertical-align: top;
             height: 2em;
             padding: 0 0.1em 0.1em 0;
+        }
+
+        &.off .icon {
+            -webkit-filter: grayscale(100%);
+            filter: grayscale(100%);
         }
     }
 </style>
@@ -24,6 +29,13 @@
         computed: {
             icon() {
                 return robot.icon;
+            },
+
+            classes() {
+                return {
+                    'component-robot-robot': true,
+                    off: !this.$store.state.robotsOn
+                }
             }
         }
     }

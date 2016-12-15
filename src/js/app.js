@@ -57,6 +57,10 @@ tick(() => {
 
 // handle robots
 tick(() => {
+    if (!store.state.robotsOn) {
+        return;
+    }
+
     const types = shuffle(Object.keys(store.state.robots));
     const robot = item('robot');
 

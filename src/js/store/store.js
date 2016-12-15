@@ -22,7 +22,8 @@ const defaultState = {
     robotClicks: {},
     stats: deepClone(baseItems),
     time: gameTime(33.3),
-    windForce: 0
+    windForce: 0,
+    robotsOn: true
 };
 const savedState = JSON.parse(localStorage.getItem('CLICKER') || '{}');
 const state = deepMerge(defaultState, savedState, {

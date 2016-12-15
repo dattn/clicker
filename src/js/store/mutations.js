@@ -79,3 +79,11 @@ export const ROBOT_REMOVE_CLICK = (state, data) => {
     }
     state.robotClicks[data.type] = Math.max(0, state.robotClicks[data.type] - 1);
 }
+
+export const TURN_ROBOTS_ON = (state) => {
+    state.robotsOn = true;
+}
+
+export const TURN_ROBOTS_OFF = (state) => {
+    state.robotsOn = false;
+}
