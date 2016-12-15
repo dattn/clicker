@@ -5,7 +5,7 @@ const Battery = {
     type: 'battery',
     label: 'Battery',
     category: 'energy',
-    icon: 'src/icons/battery.svg',
+    icon: 'icons/battery.svg',
     requires: {
         energy: 40,
         resources: {

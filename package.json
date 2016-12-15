@@ -23,6 +23,7 @@
     "gulp": "^3.9.1",
     "gulp-browserify": "^0.5.1",
     "gulp-sourcemaps": "^2.2.0",
+    "gulp-uglify": "^2.0.0",
     "less": "^2.7.1",
     "moment": "^2.17.1",
     "node-sass": "^3.13.0",

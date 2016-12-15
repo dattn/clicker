@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <battery style="margin-bottom: 1em"></battery>
-                    <img class="energyPlate" src="src/icons/energy-plate.svg" @click.stop="generateEnergy" :style="rotate" />
+                    <img class="energyPlate" src="icons/energy-plate.svg" @click.stop="generateEnergy" :style="rotate" />
                     <energy></energy>
                 </div>
                 <div class="col-md-6">

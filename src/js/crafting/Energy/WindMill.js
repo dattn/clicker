@@ -5,7 +5,7 @@ const WindMill = {
     type: 'wind-mill',
     label: 'Wind Mill',
     category: 'energy',
-    icon: 'src/icons/wind-mill.svg',
+    icon: 'icons/wind-mill.svg',
     requires: {
         energy: 60,
         resources: {

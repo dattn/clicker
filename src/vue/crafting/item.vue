@@ -6,7 +6,7 @@
         <div class="float-xs-right item-info">
             <p class="requirements">
                 <span v-if="item.requires.energy" class="requirement">
-                    <img src="src/icons/energy.svg" class="icon" /> x {{ item.requires.energy }}
+                    <img src="icons/energy.svg" class="icon" /> x {{ item.requires.energy }}
                 </span>
                 <span v-for="(amount, type) in item.requires.resources" class="requirement">
                     <img :src="icon(type)" class="icon" /> x {{ amount }}

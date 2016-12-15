@@ -6,7 +6,7 @@ const SolarPanel = {
     type: 'solar-panel',
     label: 'Solar Panel',
     category: 'energy',
-    icon: 'src/icons/solar-panel.svg',
+    icon: 'icons/solar-panel.svg',
     requires: {
         energy: 60,
         resources: {

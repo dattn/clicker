@@ -4,7 +4,7 @@ const HydroDam = {
     type: 'hydro-dam',
     label: 'Hydroelectric Dam',
     category: 'energy',
-    icon: 'src/icons/hydro-dam.svg',
+    icon: 'icons/hydro-dam.svg',
     requires: {
         energy: 500,
         resources: {

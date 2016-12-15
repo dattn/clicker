@@ -5,7 +5,7 @@ const Robot = {
     type: 'robot',
     label: 'Robot',
     category: 'automation',
-    icon: 'src/icons/robot.svg',
+    icon: 'icons/robot.svg',
     requires: {
         energy: 300,
         resources: {

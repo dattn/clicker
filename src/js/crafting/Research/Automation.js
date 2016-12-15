@@ -2,7 +2,7 @@ const Automation = {
     type: 'automation',
     label: 'Automation',
     category: 'research',
-    icon: 'src/icons/automation.svg',
+    icon: 'icons/automation.svg',
     limit: 1,
     requires: {
         energy: 1000,
