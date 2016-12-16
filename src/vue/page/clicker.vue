@@ -37,6 +37,8 @@
              -moz-user-select: none;
               -ms-user-select: none;
                   user-select: none;
+
+        transition: background-color 1s linear;
     }
 
     .component-app .mainContent {

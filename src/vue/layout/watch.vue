@@ -20,6 +20,7 @@
         .component-layout-sun,
         .component-layout-moon {
             width: 100%;
+            transition: opacity 1s linear;
         }
 
         .component-layout-moon {
