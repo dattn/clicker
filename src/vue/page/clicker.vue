@@ -7,6 +7,7 @@
                         <watch></watch>
                         <wind></wind>
                     </div>
+                    <tree></tree>
                     <battery></battery>
                     <img class="energyPlate" src="icons/energy-plate.svg" @click.stop="generateEnergy" :style="rotate" />
                     <energy></energy>
@@ -75,6 +76,11 @@
         .component-battery {
             margin: 0.8em 0;
         }
+
+        .component-layout-tree {
+            width: 50%;
+            margin: -100px auto 0 auto;
+        }
     }
 </style>
 
@@ -87,6 +93,7 @@
     import Color from 'color';
     import Watch from '../layout/watch.vue';
     import Wind from '../layout/wind.vue';
+    import Tree from '../layout/tree.vue';
     import { dayLight } from '../../js/utils';
     import { start } from '../../js/loop';
 
@@ -105,6 +112,7 @@
             Watch,
             Wind,
             Energy,
+            Tree,
             Robots
         },
 
