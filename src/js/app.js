@@ -7,6 +7,7 @@ import Vuex from 'vuex';
 import store from './store/store';
 import AppVue from '../vue/app.vue';
 import PageClickerVue from '../vue/page/clicker.vue';
+import PageScoreVue from '../vue/page/score.vue';
 import { gameTime, windForce, shuffle } from './utils';
 import { item, craft } from './crafting';
 import { tick, start } from './loop';
@@ -23,6 +24,10 @@ const routes = [
     {
         path: '/',
         component: PageClickerVue
+    },
+    {
+        path: '/score',
+        component: PageScoreVue
     }
 ];
 const router = new VueRouter({ routes });

@@ -34,4 +34,11 @@ export const leaveStates = () => {
     io.emit('LEAVE_STATES');
 };
 
-export const stateUpdate = cb => events.on('STATE_UPDATE', cb);
+export const stateUpdate = cb => {
+    events.on('STATE_UPDATE', cb);
+    return {
+        off() {
+            events.removeListener('STATE_UPDATE', cb);
+        }
+    }
+};
