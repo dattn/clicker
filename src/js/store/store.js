@@ -5,6 +5,7 @@ import * as getters from './getters';
 import { gameTime } from '../utils';
 import deepMerge from 'deepmerge';
 import sha1 from 'simple-sha1';
+import { sendState } from '../server/client';
 
 Vue.use(Vuex);
 
@@ -77,3 +78,8 @@ export default store;
 setInterval(save, 60000);
 // add on unload
 window.onunload = save;
+
+// send state to server every 5 seconds
+setInterval(() => {
+    sendState(store.state)
+}, 5000);
