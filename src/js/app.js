@@ -6,23 +6,32 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import store from './store/store';
 import AppVue from '../vue/app.vue';
+import PageClickerVue from '../vue/page/clicker.vue';
 import { gameTime, windForce, shuffle } from './utils';
 import { item, craft } from './crafting';
 import { tick, start } from './loop';
 import ServerClient from './server/client';
+import VueRouter from 'vue-router';
+
+Vue.use(VueRouter);
 
 export {
     store
 }
 
+const routes = [
+    {
+        path: '/',
+        component: PageClickerVue
+    }
+];
+const router = new VueRouter({ routes });
+
 new Vue({
     el: '#App',
-
+    router,
     store,
-
-    render: function (createElement) {
-        return createElement(AppVue);
-    }
+    render: h => h(AppVue)
 });
 
 // update wind force
