@@ -9,6 +9,7 @@ import AppVue from '../vue/app.vue';
 import { gameTime, windForce, shuffle } from './utils';
 import { item, craft } from './crafting';
 import { tick, start } from './loop';
+import SocketIO from 'socket.io-client';
 
 export {
     store
@@ -83,3 +84,6 @@ tick(() => {
 
 // start loop
 start();
+
+// connect to socket server
+const io = new SocketIO('//' + window.location.hostname + ':7777');

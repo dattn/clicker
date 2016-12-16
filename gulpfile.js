@@ -5,8 +5,10 @@ var buffer     = require('vinyl-buffer');
 var browserify = require('browserify');
 var watchify   = require('watchify');
 var vueify     = require('vueify');
-var babel      = require('babelify');
+var babelify   = require('babelify');
 var uglify     = require('gulp-uglify');
+var nodemon    = require('gulp-nodemon');
+var babel      = require('gulp-babel');
 
 function compile(watch) {
     var props = {
@@ -25,7 +27,7 @@ function compile(watch) {
     }
 
     var bundler = browserify(props)
-        .transform(babel)
+        .transform(babelify)
         .transform(vueify);
 
     function rebundle() {
@@ -48,10 +50,10 @@ function compile(watch) {
         rebundle();
     });
 
-    copyAssets('./src', './build');
+    gulp.start('copy-assets-src-build');
     if (watch) {
         gulp.watch('./src/**/*.!(js|vue)', function() {
-            return copyAssets('./src', './build');
+            return gulp.start('copy-assets-src-build');
         });
     }
 
@@ -62,6 +64,19 @@ function copyAssets(src, dest) {
     return gulp.src(src + '/**/*.(html|svg)')
         .pipe(gulp.dest(dest));
 }
+
+gulp.task('copy-assets-src-build', function() {
+    return copyAssets('./src', './build');
+});
+
+gulp.task('copy-assets-build-dist', function() {
+    return copyAssets('./build', './dist');
+});
+
+gulp.task('copy-server', function() {
+    return gulp.src('./build/server/**/*.(html|svg)')
+        .pipe(gulp.dest('./dist/server'));
+});
 
 gulp.task('build', function() {
     return compile(false);
@@ -77,12 +92,56 @@ gulp.task('compress', function() {
         .pipe(gulp.dest('./dist/js'));
 });
 
-gulp.task('release', ['set-prod', 'build', 'compress'], function() {
-    return copyAssets('./build', './dist');
-});
+gulp.task('release', [
+    'set-prod',
+    'build',
+    'compress',
+    'copy-assets-build-dist',
+    'server-build',
+    'copy-server'
+]);
 
 gulp.task('set-prod', function() {
     return process.env.NODE_ENV = 'production';
 });
 
 gulp.task('default', ['watch']);
+
+
+// server tasks
+
+// https://gist.github.com/just-boris/89ee7c1829e87e2db04c
+function wrapPipe(taskFn) {
+    return function(done) {
+        var onSuccess = function() {
+            done();
+        };
+        var onError = function(err) {
+            done(err);
+        };
+        var outStream = taskFn(onSuccess, onError);
+        if (outStream && typeof outStream.on === 'function') {
+            outStream.on('end', onSuccess);
+        }
+    };
+}
+
+gulp.task('server', [ 'server-build', 'server-nodemon' ]);
+
+gulp.task('server-watch', () => {
+    gulp.watch('./src/server/**/*.js', [ 'server-build' ]);
+});
+
+gulp.task('server-build', wrapPipe((success, error) => {
+    return gulp.src('./src/server/**/*.js')
+        .pipe(babel().on('error', error))
+        .pipe(gulp.dest('./build/server'));
+}));
+
+gulp.task('server-nodemon', () => {
+    return nodemon({
+        script: './build/server/index.js',
+        watch: [ './src/server' ],
+        tasks: [ 'server-build' ]
+    });
+});
