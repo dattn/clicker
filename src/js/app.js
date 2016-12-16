@@ -22,10 +22,12 @@ export {
 
 const routes = [
     {
+        name: 'clicker',
         path: '/',
         component: PageClickerVue
     },
     {
+        name: 'score',
         path: '/score',
         component: PageScoreVue
     }

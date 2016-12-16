@@ -1,5 +1,6 @@
 <template>
     <div>
+        <router-link :to="{ name: 'clicker' }" tag="button" class="btn btn-primary">back</router-link>
         <h1>Score</h1>
         <table>
             <tr v-for="(item, index) in states">
