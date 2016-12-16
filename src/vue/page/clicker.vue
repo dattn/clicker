@@ -3,8 +3,11 @@
         <div class="container-fluid mainContent">
             <div class="row">
                 <div class="col-md-3">
-                    <watch></watch>
-                    <battery style="margin-bottom: 1em"></battery>
+                    <div class="clearfix">
+                        <watch></watch>
+                        <wind></wind>
+                    </div>
+                    <battery></battery>
                     <img class="energyPlate" src="icons/energy-plate.svg" @click.stop="generateEnergy" :style="rotate" />
                     <energy></energy>
                 </div>
@@ -61,6 +64,16 @@
     .component-app {
         .component-layout-watch {
             width: 40%;
+            float: left;
+        }
+
+        .component-layout-wind {
+            width: 40%;
+            float: right;
+        }
+
+        .component-battery {
+            margin: 0.8em 0;
         }
     }
 </style>
@@ -73,6 +86,7 @@
     import Robots from '../robots.vue';
     import Color from 'color';
     import Watch from '../layout/watch.vue';
+    import Wind from '../layout/wind.vue';
     import { dayLight } from '../../js/utils';
     import { start } from '../../js/loop';
 
@@ -89,6 +103,7 @@
             Battery,
             Crafting,
             Watch,
+            Wind,
             Energy,
             Robots
         },

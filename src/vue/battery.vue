@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="component-battery">
         <div class="battery">
             <div class="energy" :style="energyStyle"></div>
             <span class="info">{{ energy }} / {{ capacity }}</span>
@@ -8,7 +8,7 @@
 </template>
 
 <style>
-    .battery {
+    .component-battery .battery {
         border: 1px solid #000;
         height: 50px;
         width: 100%;
@@ -18,7 +18,7 @@
         background-color: #fff;
     }
 
-    .battery .energy {
+    .component-battery .battery .energy {
         position: absolute;
         height: 100%;
         top: 0px;
@@ -26,7 +26,7 @@
         transition: background-color 1s linear, width 0.2s linear;
     }
 
-    .battery .info {
+    .component-battery .battery .info {
         position: relative;
         z-index: 1;
     }
