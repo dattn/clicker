@@ -61,7 +61,7 @@ function compile(watch) {
 }
 
 function copyAssets(src, dest) {
-    return gulp.src(src + '/**/*.(html|svg)')
+    return gulp.src(src + '/**/*.@(html|svg)')
         .pipe(gulp.dest(dest));
 }
 
@@ -74,7 +74,7 @@ gulp.task('copy-assets-build-dist', function() {
 });
 
 gulp.task('copy-server', function() {
-    return gulp.src('./build/server/**/*.(html|svg)')
+    return gulp.src('./build/server/**/*.js')
         .pipe(gulp.dest('./dist/server'));
 });
 
