@@ -2,17 +2,27 @@
     <div class="component-app" :style="appStyle">
         <div class="container-fluid mainContent">
             <div class="row">
-                <div class="col-md-3">
-                    <div class="clearfix">
-                        <watch></watch>
-                        <wind></wind>
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-6 tree-column">
+                            <div>
+                                <div class="clearfix">
+                                    <watch></watch>
+                                    <wind></wind>
+                                </div>
+                                <tree></tree>
+                            </div>
+                        </div>
+                        <div class="col-md-6 energy-column">
+                            <div>
+                                <img class="energyPlate" src="icons/energy-plate.svg" @click.stop="generateEnergy" :style="rotate" />
+                                <battery></battery>
+                            </div>
+                        </div>
                     </div>
-                    <tree></tree>
-                    <battery></battery>
-                    <img class="energyPlate" src="icons/energy-plate.svg" @click.stop="generateEnergy" :style="rotate" />
                     <energy></energy>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <crafting></crafting>
                 </div>
                 <div class="col-md-3">
@@ -25,6 +35,8 @@
 </template>
 
 <style lang="sass">
+    $enable-flex: true;
+
     @import "../../../node_modules/bootstrap/scss/bootstrap.scss";
 
     html, body {
@@ -55,9 +67,8 @@
 
     .component-app .energyPlate {
         display: block;
-        width: 200px;
-        max-width: 100%;
-        margin: 0 auto 1em auto;
+        width: 60%;
+        margin: 0 auto;
         cursor: pointer;
         transition: transform 1s ease-out;
     }
@@ -73,20 +84,31 @@
             float: right;
         }
 
-        .component-battery {
-            margin: 0.8em 0;
+        .component-layout-battery {
+            margin: 0.8em 0 0 0;
         }
 
         .component-layout-tree {
-            width: 30%;
+            width: 40%;
             margin: 0 auto;
 
             img {
-                margin-top: -4vw;
+                margin-top: -2vw;
 
                 @include media-breakpoint-down(sm) {
-                    margin-top: -4vw * 4;
+                    margin-top: -2vw * 4;
                 }
+            }
+        }
+
+        .tree-column,
+        .energy-column {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+
+            &> div {
+                width: 100%;
             }
         }
     }
@@ -94,7 +116,7 @@
 
 <script>
     import Inventory from '../inventory.vue';
-    import Battery from '../battery.vue';
+    import Battery from '../layout/battery.vue';
     import Crafting from '../crafting.vue';
     import Energy from '../energy.vue';
     import Robots from '../robots.vue';

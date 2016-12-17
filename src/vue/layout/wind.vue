@@ -24,10 +24,10 @@
             width: 60%;
             top: 60%;
             margin-top: -0.5em;
-            font-size: 1.8vw;
+            font-size: 1.2vw;
 
             @include media-breakpoint-down(sm) {
-                font-size: 1.8vw * 4;
+                font-size: 1.2vw * 4;
             }
         }
     }

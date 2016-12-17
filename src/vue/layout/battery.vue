@@ -1,34 +1,47 @@
 <template>
-    <div class="component-battery">
+    <div class="component-layout-battery">
+        <img src="layout/battery.svg" />
         <div class="battery">
             <div class="energy" :style="energyStyle"></div>
-            <span class="info">{{ energy }} / {{ capacity }}</span>
         </div>
+        <div class="info">{{ energy }} / {{ capacity }}</div>
     </div>
 </template>
 
-<style>
-    .component-battery .battery {
-        border: 1px solid #000;
-        height: 50px;
-        width: 100%;
+<style lang="sass">
+    .component-layout-battery {
         position: relative;
-        line-height: 50px;
-        text-align: center;
-        background-color: #fff;
-    }
 
-    .component-battery .battery .energy {
-        position: absolute;
-        height: 100%;
-        top: 0px;
-        left: 0px;
-        transition: background-color 1s linear, width 0.2s linear;
-    }
+        img {
+            width: 100%;
+        }
 
-    .component-battery .battery .info {
-        position: relative;
-        z-index: 1;
+        .info {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .battery {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+            height: 100%;
+            padding: 2.5% 5.5% 2.5% 2.5%;
+
+            .energy {
+                height: 100%;
+                top: 0px;
+                left: 0px;
+                transition: background-color 1s linear, width 0.2s linear;
+            }
+        }
     }
 </style>
 

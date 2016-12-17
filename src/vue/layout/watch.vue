@@ -33,28 +33,16 @@
             top: 0px;
             height: 100%;
             width: 100%;
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
             display: flex;
-            -webkit-box-align: center;
-            -webkit-align-items: center;
-            -ms-flex-align: center;
             align-items: center;
-            -webkit-box-pack: center;
-            -webkit-justify-content: center;
-            -ms-flex-pack: center;
             justify-content: center;
 
             .content {
-                -webkit-box-flex: 0;
-                -webkit-flex: none;
-                -ms-flex: none;
                 flex: none;
-                font-size: 1.8vw;
+                font-size: 1.2vw;
 
                 @include media-breakpoint-down(sm) {
-                    font-size: 1.8vw * 4;
+                    font-size: 1.2vw * 4;
                 }
             }
         }
