@@ -78,8 +78,16 @@
         }
 
         .component-layout-tree {
-            width: 50%;
-            margin: -100px auto 0 auto;
+            width: 30%;
+            margin: 0 auto;
+
+            img {
+                margin-top: -4vw;
+
+                @include media-breakpoint-down(sm) {
+                    margin-top: -4vw * 4;
+                }
+            }
         }
     }
 </style>
