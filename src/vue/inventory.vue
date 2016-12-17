@@ -1,5 +1,5 @@
 <template>
-    <div class="component-inventory card inventory" v-if="!isEmpty">
+    <div class="component-inventory card inventory">
         <div class="card-header">
             Inventory
         </div>
@@ -35,10 +35,6 @@
 
     export default {
         computed: {
-            isEmpty() {
-                return Object.keys(this.inventory).length === 0;
-            },
-
             inventory() {
                 const items = fromCategory('resource');
                 var inventory = {};
