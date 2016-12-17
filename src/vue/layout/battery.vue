@@ -9,6 +9,9 @@
 </template>
 
 <style lang="sass">
+    @import "../../../node_modules/bootstrap/scss/variables.scss";
+    @import "../../../node_modules/bootstrap/scss/mixins/_breakpoints.scss";
+
     .component-layout-battery {
         position: relative;
 
@@ -25,6 +28,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
+
+            font-size: 1.2vw;
+
+            @include media-breakpoint-down(sm) {
+                font-size: 1.2vw * 4;
+            }
         }
 
         .battery {

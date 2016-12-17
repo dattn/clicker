@@ -55,6 +55,8 @@
                   user-select: none;
 
         transition: background-color 1s linear;
+        background: url(layout/background.svg) center top no-repeat;
+        background-size: 100%;
     }
 
     .component-app .mainContent {
@@ -79,6 +81,10 @@
             float: left;
         }
 
+        .component-energy {
+            margin-top: 2vw;
+        }
+
         .component-layout-wind {
             width: 40%;
             float: right;
@@ -99,6 +105,11 @@
                     margin-top: -2vw * 4;
                 }
             }
+        }
+
+        .component-inventory,
+        .component-crafting {
+            margin-top: 12vw;
         }
 
         .tree-column,

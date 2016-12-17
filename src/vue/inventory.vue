@@ -1,5 +1,5 @@
 <template>
-    <div class="card inventory" v-if="!isEmpty">
+    <div class="component-inventory card inventory" v-if="!isEmpty">
         <div class="card-header">
             Inventory
         </div>

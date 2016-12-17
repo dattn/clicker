@@ -1,5 +1,5 @@
 <template>
-    <ul class="list-group energy-items">
+    <ul class="component-energy list-group energy-items">
         <energy-item v-for="(count, type) in items" :type="type" :count="count"></energy-item>
     </ul>
 </template>

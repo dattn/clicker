@@ -1,5 +1,5 @@
 <template>
-    <div class="card crafting">
+    <div class="component-crafting card crafting">
         <div class="card-header">
             <ul class="nav nav-tabs card-header-tabs float-xs-left">
                 <li class="nav-item" v-for="category in categories">
