@@ -31,7 +31,7 @@
 
             font-size: 1.2vw;
 
-            @include media-breakpoint-down(sm) {
+            @include media-breakpoint-down(md) {
                 font-size: 1.2vw * 4;
             }
         }

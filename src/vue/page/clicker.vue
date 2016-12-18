@@ -2,9 +2,9 @@
     <div class="component-app" :style="appStyle">
         <div class="container-fluid mainContent">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-lg-4">
                     <div class="row">
-                        <div class="col-md-6 tree-column">
+                        <div class="col-lg-6 tree-column">
                             <div>
                                 <div class="clearfix">
                                     <watch></watch>
@@ -13,7 +13,7 @@
                                 <tree></tree>
                             </div>
                         </div>
-                        <div class="col-md-6 energy-column">
+                        <div class="col-lg-6 energy-column">
                             <div>
                                 <img class="energyPlate" src="icons/energy-plate.svg" @click.stop="generateEnergy" :style="rotate" />
                                 <battery></battery>
@@ -22,10 +22,10 @@
                     </div>
                     <energy></energy>
                 </div>
-                <div class="col-md-5">
+                <div class="col-lg-5">
                     <crafting></crafting>
                 </div>
-                <div class="col-md-3">
+                <div class="col-lg-3">
                     <inventory></inventory>
                     <robots></robots>
                 </div>
@@ -57,6 +57,10 @@
         transition: background-color 1s linear;
         background: url(layout/background.svg) center top no-repeat;
         background-size: 100%;
+
+        @include media-breakpoint-down(md) {
+            background-image: none;
+        }
     }
 
     .component-app .mainContent {
@@ -101,7 +105,7 @@
             img {
                 margin-top: -2vw;
 
-                @include media-breakpoint-down(sm) {
+                @include media-breakpoint-down(md) {
                     margin-top: -2vw * 4;
                 }
             }
