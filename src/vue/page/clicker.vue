@@ -3,7 +3,11 @@
         <div class="container-fluid mainContent">
             <div class="row">
                 <div class="col-lg-4">
-                    <div class="row">
+                    <div class="hidden-lg-up">
+                        <battery></battery>
+                        <img class="energyPlate" src="icons/energy-plate.svg" @click.stop="generateEnergy" :style="rotate" />
+                    </div>
+                    <div class="row hidden-md-down">
                         <div class="col-lg-6 tree-column">
                             <div>
                                 <div class="clearfix">
