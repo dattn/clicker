@@ -36,7 +36,6 @@
                 </div>
             </div>
             <div class="col-lg-8 earth-container">
-                <tree></tree>
                 <earth :style="earthStyle" @click.native="goToClicker"></earth>
             </div>
         </div>
@@ -87,12 +86,10 @@
 <script>
     import { joinStates, leaveStates, stateUpdate } from '../../js/server/client';
     import Earth from '../layout/earth.vue';
-    import Tree from '../layout/tree.vue';
 
     export default {
         components: {
-            Earth,
-            Tree
+            Earth
         },
 
         data() {
