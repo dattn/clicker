@@ -3,6 +3,7 @@
         <div class="row">
             <div class="col-lg-4 stats-container">
                 <div>
+                    <input type="text" class="form-control" :value="name" @input="updateName" placeholder="Your Name" />
                     <table class="table table-inverse table-sm">
                         <thead>
                             <tr>
@@ -122,6 +123,9 @@
             },
             stats() {
                 return this.$store.state.stats;
+            },
+            name() {
+                return this.$store.state.name;
             }
         },
 
@@ -129,6 +133,12 @@
             goToClicker() {
                 this.$router.push({
                     name: 'clicker'
+                });
+            },
+
+            updateName(ev) {
+                this.$store.commit('UPDATE_NAME', {
+                    name: ev.target.value
                 });
             }
         }

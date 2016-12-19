@@ -1,16 +1,21 @@
 import SocketIO     from 'socket.io-client';
 import EventEmitter from 'events';
+import { store }    from '../app';
 
 const events = new EventEmitter();
 const io     = new SocketIO('//' + window.location.hostname + ':7777');
 var UUID     = localStorage.getItem('CLICKER-UUID');
 
 io.on('UUID', data => {
-    if (UUID) {
-        return;
+    if (!UUID) {
+        UUID = data.UUID;
+        localStorage.setItem('CLICKER-UUID', UUID);
     }
-    UUID = data.UUID;
-    localStorage.setItem('CLICKER-UUID', UUID);
+    if (!store.state.name) {
+        store.commit('UPDATE_NAME', {
+            name: data.name
+        });
+    }
 });
 
 io.on('STATE_UPDATE', data => {

@@ -91,3 +91,7 @@ export const TURN_ROBOTS_OFF = (state) => {
 export const INCREMENT_CLICK_STATS = (state) => {
     state.stats.clicks++;
 }
+
+export const UPDATE_NAME = (state, data) => {
+    state.name = data.name;
+}

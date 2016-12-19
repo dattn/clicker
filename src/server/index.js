@@ -2,6 +2,7 @@ import config         from './config';
 import http           from 'http';
 import SocketIO       from 'socket.io';
 import TokenGenerator from 'uuid-token-generator';
+import randomName     from './name';
 
 const app     = http.createServer();
 const io      = new SocketIO(app);
@@ -11,7 +12,8 @@ const stateStore = {};
 
 const sendUUID = socket => {
     const UUID = uuidGen.generate();
-    socket.emit('UUID', { UUID });
+    const name = randomName();
+    socket.emit('UUID', { UUID, name });
 };
 
 const sendStates = socket => {
