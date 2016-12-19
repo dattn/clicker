@@ -34,18 +34,25 @@
                             </tr>
                         </tbody>
                     </table>
+                    <table class="table table-inverse table-sm">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Player</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in states">
+                                <th>{{ item.name }}</th>
+                                <td class="text-xs-right">{{ item.stats.clicks }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="col-lg-8 earth-container">
                 <earth :style="earthStyle" @click.native="goToClicker"></earth>
             </div>
         </div>
-        <table>
-            <tr v-for="(item, index) in states">
-                <td>{{ index }}</td>
-                <td>{{ item.energy }}</td>
-            </tr>
-        </table>
     </div>
 </template>
 

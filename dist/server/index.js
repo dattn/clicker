@@ -16,6 +16,10 @@ var _uuidTokenGenerator = require('uuid-token-generator');
 
 var _uuidTokenGenerator2 = _interopRequireDefault(_uuidTokenGenerator);
 
+var _name = require('./name');
+
+var _name2 = _interopRequireDefault(_name);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = _http2.default.createServer();
@@ -26,7 +30,8 @@ var stateStore = {};
 
 var sendUUID = function sendUUID(socket) {
     var UUID = uuidGen.generate();
-    socket.emit('UUID', { UUID: UUID });
+    var name = (0, _name2.default)();
+    socket.emit('UUID', { UUID: UUID, name: name });
 };
 
 var sendStates = function sendStates(socket) {
