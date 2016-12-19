@@ -1,3 +1,5 @@
+import { has } from '../../crafting';
+
 const Lightbulb = {
     type: 'lightbulb',
     label: 'Lightbulb',
@@ -11,7 +13,7 @@ const Lightbulb = {
     },
     generate: {
         get energy() {
-            return -5;
+            return -has(Lightbulb.type) * 5;
         }
     }
 };
