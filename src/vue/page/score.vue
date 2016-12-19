@@ -117,7 +117,7 @@
         computed: {
             earthStyle() {
                 return {
-                    width: '50%'
+                    width: '80%'
                 }
             },
             stats() {

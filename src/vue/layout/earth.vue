@@ -14,10 +14,10 @@
         }
 
         .component-layout-tree {
-            width: 2%;
+            width: 1%;
             position: absolute;
             bottom: 72%;
-            margin-left: -1%;
+            margin-left: -0.5%;
             left: 58%;
         }
     }
