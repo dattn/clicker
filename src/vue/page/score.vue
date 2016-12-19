@@ -6,15 +6,35 @@
                     <p>
                         <button class="btn btn-secondary" @click="goToClicker">Back To Clicker</button>
                     </p>
-                    <table class="table table-inverse">
-                        <tr>
-                            <th>Clicks</th>
-                            <td>{{ clicks }}</td>
-                        </tr>
-                        <tr>
-                            <th>Energy produced</th>
-                            <td>{{ energy }}</td>
-                        </tr>
+                    <table class="table table-inverse table-sm">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Stats</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Clicks</th>
+                                <td class="text-xs-right">{{ stats.clicks }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Energy produced</th>
+                                <td class="text-xs-right">{{ stats.energy }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-inverse table-sm">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Items</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(count, item) in stats.items">
+                                <th scope="row">{{ item }}</th>
+                                <td class="text-xs-right">{{ count }}</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -58,6 +78,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
+
+            &> div {
+                min-width: 60%;
+            }
         }
     }
 </style>
@@ -99,11 +123,8 @@
                     width: '50%'
                 }
             },
-            clicks() {
-                return this.$store.state.stats.clicks;
-            },
-            energy() {
-                return this.$store.state.stats.energy;
+            stats() {
+                return this.$store.state.stats;
             }
         },
 
