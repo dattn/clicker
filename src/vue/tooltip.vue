@@ -39,7 +39,9 @@
         },
 
         beforeDestroy() {
+            var tooltipElement = this.tether.element;
             this.tether.destroy();
+            tooltipElement.parentNode.removeChild(tooltipElement);
         },
 
         computed: {
