@@ -1,8 +1,26 @@
 <template>
-    <div class="component-page-score">
-        <router-link :to="{ name: 'clicker' }" tag="button" class="btn btn-primary">back</router-link>
-        <div class="earth-container">
-            <earth :style="earthStyle"></earth>
+    <div class="component-page-score container-fluid">
+        <div class="row">
+            <div class="col-lg-4 stats-container">
+                <div>
+                    <p>
+                        <button class="btn btn-secondary" @click="goToClicker">Back To Clicker</button>
+                    </p>
+                    <table class="table table-inverse">
+                        <tr>
+                            <th>Clicks</th>
+                            <td>{{ clicks }}</td>
+                        </tr>
+                        <tr>
+                            <th>Energy produced</th>
+                            <td>{{ energy }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-8 earth-container">
+                <earth :style="earthStyle"></earth>
+            </div>
         </div>
         <table>
             <tr v-for="(item, index) in states">
@@ -14,6 +32,8 @@
 </template>
 
 <style lang="sass">
+    $enable-flex: true;
+
     @import "../../../node_modules/bootstrap/scss/bootstrap.scss";
 
     html, body {
@@ -21,15 +41,20 @@
     }
 
     .component-page-score {
-        min-height: 100%;
+        height: 100%;
         background-color: #000000;
 
-        .earth-container {
-            position: absolute;
-            top: 0px;
-            left: 0px;
+        &> .row {
             height: 100%;
-            width: 100%;
+        }
+
+        .earth-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stats-container {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -73,6 +98,20 @@
                 return {
                     width: '50%'
                 }
+            },
+            clicks() {
+                return this.$store.state.stats.clicks;
+            },
+            energy() {
+                return this.$store.state.stats.energy;
+            }
+        },
+
+        methods: {
+            goToClicker() {
+                this.$router.push({
+                    name: 'clicker'
+                });
             }
         }
     }
