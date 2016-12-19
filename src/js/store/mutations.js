@@ -92,7 +92,7 @@ export const INCREMENT_CLICK_STATS = (state) => {
     if (state.stats.clicks) {
         state.stats.clicks++;
     } else {
-        state.stats. = {
+        state.stats = {
             ...state.stats,
             clicks: 1
         };

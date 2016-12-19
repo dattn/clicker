@@ -9,13 +9,13 @@
     .component-layout-counter {
         position: relative;
         img {
+            top: 0px;
             width: 100%;
         }
 
         .component-layout-tree {
             position: absolute;
-            margin-left: 15%;
-            width: 70%;
+            width: 100%;
         }
     }
 </style>

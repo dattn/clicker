@@ -105,6 +105,11 @@
         .component-layout-counter {
             width: 40%;
             margin: 0 auto;
+            margin-top: -2vw;
+
+            @include media-breakpoint-down(md) {
+                margin-top: -2vw * 4;
+            }
 
             img {
                 margin-top: -2vw;
