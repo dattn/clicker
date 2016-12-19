@@ -8,13 +8,13 @@
                         <img class="energyPlate" src="icons/energy-plate.svg" @click.stop="generateEnergy" :style="rotate" />
                     </div>
                     <div class="row hidden-md-down">
-                        <div class="col-lg-6 tree-column">
+                        <div class="col-lg-6 counter-column">
                             <div>
                                 <div class="clearfix">
                                     <watch></watch>
                                     <wind></wind>
                                 </div>
-                                <router-link :to="{ name: 'score' }"><tree></tree></router-link>
+                                <counter @click.native="goToStats"></counter>
                             </div>
                         </div>
                         <div class="col-lg-6 energy-column">
@@ -102,7 +102,7 @@
             margin: 0.8em 0 0 0;
         }
 
-        .component-layout-tree {
+        .component-layout-counter {
             width: 40%;
             margin: 0 auto;
 
@@ -120,7 +120,7 @@
             margin-top: 12vw;
         }
 
-        .tree-column,
+        .counter-column,
         .energy-column {
             display: flex;
             align-items: flex-end;
@@ -142,7 +142,7 @@
     import Color from 'color';
     import Watch from '../layout/watch.vue';
     import Wind from '../layout/wind.vue';
-    import Tree from '../layout/tree.vue';
+    import Counter from '../layout/counter.vue';
     import { dayLight } from '../../js/utils';
     import { start } from '../../js/loop';
     import { store } from '../../js/app';
@@ -174,7 +174,7 @@
             Watch,
             Wind,
             Energy,
-            Tree,
+            Counter,
             Robots
         },
 
@@ -198,6 +198,12 @@
             generateEnergy: function() {
                 this.angle += 90;
                 this.$store.commit('BATTERY_CHARGE', {});
+            },
+
+            goToStats() {
+                this.$router.push({
+                    name: 'score'
+                });
             }
         }
     }

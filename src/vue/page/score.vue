@@ -3,9 +3,6 @@
         <div class="row">
             <div class="col-lg-4 stats-container">
                 <div>
-                    <p>
-                        <button class="btn btn-secondary" @click="goToClicker">Back To Clicker</button>
-                    </p>
                     <table class="table table-inverse table-sm">
                         <thead>
                             <tr>
@@ -39,7 +36,8 @@
                 </div>
             </div>
             <div class="col-lg-8 earth-container">
-                <earth :style="earthStyle"></earth>
+                <tree></tree>
+                <earth :style="earthStyle" @click.native="goToClicker"></earth>
             </div>
         </div>
         <table>
@@ -89,10 +87,12 @@
 <script>
     import { joinStates, leaveStates, stateUpdate } from '../../js/server/client';
     import Earth from '../layout/earth.vue';
+    import Tree from '../layout/tree.vue';
 
     export default {
         components: {
-            Earth
+            Earth,
+            Tree
         },
 
         data() {
