@@ -145,6 +145,11 @@
     import Tree from '../layout/tree.vue';
     import { dayLight } from '../../js/utils';
     import { start } from '../../js/loop';
+    import { store } from '../../js/app';
+
+    const updateClickStats = () => {
+        store.commit('INCREMENT_CLICK_STATS');
+    };
 
     export default {
 
@@ -152,6 +157,14 @@
             return {
                 angle: 0
             }
+        },
+
+        mounted() {
+            this.$el.addEventListener('click', updateClickStats, true);
+        },
+
+        beforeDestroy() {
+            this.$el.removeEventListener('click', updateClickStats, true);
         },
 
         components: {

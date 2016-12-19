@@ -50,6 +50,11 @@ const baseItems = {
     energy: 0
 };
 
+const stats = {
+    ...deepClone(baseItems),
+    clicks: 0
+}
+
 const defaultState = {
     ...deepClone(baseItems),
     robots: {},

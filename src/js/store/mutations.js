@@ -87,3 +87,7 @@ export const TURN_ROBOTS_ON = (state) => {
 export const TURN_ROBOTS_OFF = (state) => {
     state.robotsOn = false;
 }
+
+export const INCREMENT_CLICK_STATS = (state) => {
+    state.stats.clicks++;
+}
