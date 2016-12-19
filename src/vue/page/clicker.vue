@@ -14,7 +14,7 @@
                                     <watch></watch>
                                     <wind></wind>
                                 </div>
-                                <tree></tree>
+                                <router-link :to="{ name: 'score' }"><tree></tree></router-link>
                             </div>
                         </div>
                         <div class="col-lg-6 energy-column">
