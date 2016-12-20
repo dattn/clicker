@@ -8,7 +8,10 @@ const loop = new EventEmitter();
 
 const next = () => {
     const now = Date.now();
-    const nextTick = lastTick + delta;
+    var nextTick = lastTick;
+    while (nextTick < now) {
+        nextTick += delta;
+    }
     setTimeout(() => {
         if (isRunning === false) {
             return;
