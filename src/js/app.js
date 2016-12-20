@@ -1,5 +1,9 @@
 // include polyfills
 import classListPolyfill from 'classlist-polyfill';
+import PromisePolyFill   from 'promise-polyfill';
+if (!window.Promise) {
+    window.Promise = PromisePolyFill;
+}
 
 // include app
 import Vue from 'vue';
