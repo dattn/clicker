@@ -137,7 +137,7 @@
             },
 
             showStar() {
-                return this.lightbulbs.length === this.lightbulbCoords.length;
+                return (this.$store.state.items['lightbulb'] || 0) === this.lightbulbCoords.length + 1;
             }
         }
     }
