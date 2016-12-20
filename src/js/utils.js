@@ -52,3 +52,17 @@ export const shuffle = (arr) => {
 
     return arr;
 }
+
+export const capitalize = function(text) {
+    return text[0].toUpperCase() + text.slice(1);
+}
+
+export const formatTreeSize = (size) => {
+    if (size >= 1000) {
+        return (Math.round(size) / 1000) + ' km';
+    }
+    if (size >= 1) {
+        return (Math.round(size * 1000) / 1000) + ' m';
+    }
+    return Math.round(size * 100) + ' cm';
+}

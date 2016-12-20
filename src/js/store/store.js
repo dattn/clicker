@@ -63,7 +63,8 @@ const defaultState = {
     time: gameTime(33.3),
     windForce: 0,
     robotsOn: true,
-    lightsOn: true
+    lightsOn: true,
+    treeSize: 0.01
 };
 const savedState = load();
 const state = deepMerge(defaultState, savedState, {

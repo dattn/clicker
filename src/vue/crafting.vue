@@ -36,7 +36,7 @@
 </style>
 
 <script>
-    import * as text from '../js/helpers/text';
+    import { capitalize } from '../js/utils';
     import { fromCategory, isAvailable } from '../js/crafting';
     import CraftingItem from './crafting/item.vue';
 
@@ -70,7 +70,7 @@
         },
 
         methods: {
-            ...text,
+            capitalize,
 
             navClasses(category) {
                 return {
