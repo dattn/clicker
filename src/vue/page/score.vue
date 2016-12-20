@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-lg-4 stats-container">
                 <div>
-                    <input type="text" class="form-control" :value="name" @input="updateName" placeholder="Your Name" />
+                    <input type="text" class="form-control" v-once :value="name" @input="updateName" placeholder="Your Name" maxlength="50" />
                     <table class="table table-inverse table-sm">
                         <thead>
                             <tr>
@@ -42,7 +42,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item, index) in states">
-                                <th>{{ item.name }}</th>
+                                <th class="player-name">{{ item.name }}</th>
                                 <td class="text-xs-right">{{ item.stats.clicks }}</td>
                             </tr>
                         </tbody>
@@ -85,7 +85,20 @@
             justify-content: center;
 
             &> div {
+                position: relative;
                 min-width: 60%;
+                max-width: 100%;
+
+                table {
+                    width: 100%;
+                }
+            }
+
+            .player-name {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                max-width: 12em;
             }
         }
     }

@@ -111,5 +111,5 @@ export const INCREMENT_CLICK_STATS = (state) => {
 }
 
 export const UPDATE_NAME = (state, data) => {
-    state.name = data.name;
+    state.name = data.name.slice(0, 50);
 }
