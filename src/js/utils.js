@@ -63,7 +63,7 @@ export const formatTreeSize = (size) => {
         return (Math.round(size) / 1000) + ' km';
     }
     if (size >= 1) {
-        return (Math.round(size * 1000) / 1000) + ' m';
+        return (Math.round(size * 100) / 100) + ' m';
     }
     return Math.round(size * 100) + ' cm';
 }
