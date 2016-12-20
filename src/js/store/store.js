@@ -88,4 +88,4 @@ window.onunload = save;
 // send state to server every 5 seconds
 setInterval(() => {
     sendState(store.state)
-}, 5000);
+}, 1000);
