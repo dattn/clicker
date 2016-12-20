@@ -137,7 +137,7 @@
             },
 
             showStar() {
-                return (this.$store.state.items['lightbulb'] || 0) === this.lightbulbCoords.length + 1;
+                return (this.$store.state.items['lightbulb'] || 0) >= this.lightbulbCoords.length + 1;
             },
 
             bulbStyle() {
