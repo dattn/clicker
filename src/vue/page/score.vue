@@ -49,8 +49,8 @@
                     </table>
                 </div>
             </div>
-            <div class="col-lg-8 earth-container">
-                <earth :style="earthStyle" @click.native="goToClicker"></earth>
+            <div class="col-lg-8 earth-container" ref="earth-container">
+                <earth ref="earth" @click.native="goToClicker"></earth>
             </div>
         </div>
     </div>
@@ -77,6 +77,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
 
         .stats-container {
@@ -137,11 +138,6 @@
         },
 
         computed: {
-            earthStyle() {
-                return {
-                    width: '80%'
-                }
-            },
             stats() {
                 return this.$store.state.stats;
             },
@@ -154,6 +150,15 @@
                     return (b.treeSize || 0) - (a.treeSize || 0);
                 });
             }
+        },
+
+        updated() {
+            const earthHeight = this.$refs['earth'].$el.offsetHeight;
+            const earthContainerHeight = this.$refs['earth-container'].clientHeight - 30;
+            const earthWidth = this.$refs['earth'].$el.offsetWidth;
+            const earthContainerWidth = this.$refs['earth-container'].clientWidth;
+            const zoom = Math.min(1, earthContainerHeight / earthHeight, earthContainerWidth / earthWidth);
+            this.$refs['earth'].$el.style.transform = 'scale(' + zoom + ')';
         },
 
         methods: {

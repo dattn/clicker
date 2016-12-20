@@ -1,7 +1,7 @@
 <template>
     <div class="component-layout-earth">
-        <tree :style="treeStyle"></tree>
-        <img class="earth-image" src="layout/earth.svg" />
+        <tree ref="tree" :style="treeStyle"></tree>
+        <img ref="earth" class="earth-image" src="layout/earth.svg" />
     </div>
 </template>
 
@@ -16,10 +16,7 @@
         .component-layout-tree {
             position: relative;
             left: 58%;
-        }
-
-        .earth-image {
-            margin-top: -28%;
+            margin-bottom: -28%;
         }
     }
 </style>
@@ -27,9 +24,27 @@
 <script>
     import Tree from './tree.vue';
 
+    const updateSizes = (comp) => {
+        comp.$el.style.marginTop = Math.max(0, comp.$refs.earth.offsetHeight - comp.$el.offsetHeight) + 'px';
+        const overflowWidth = comp.$refs.tree.$el.offsetWidth - comp.$el.offsetWidth;
+        if (overflowWidth > 0) {
+            comp.$el.style.paddingLeft = ((overflowWidth / 2) * 0.42) + 'px';
+            comp.$el.style.paddingRight = ((overflowWidth / 2) * 0.58) + 'px';
+        } else {
+            comp.$el.style.paddingLeft = '0px';
+            comp.$el.style.paddingRight = '0px';
+        }
+    }
+
     export default {
         components: {
             Tree
+        },
+        mounted() {
+            updateSizes(this);
+        },
+        updated() {
+            updateSizes(this);
         },
         computed: {
             treeStyle() {
