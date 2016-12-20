@@ -70,7 +70,7 @@ tick(() => {
     // get energy lost by lightbulbs
     const lightbulbEnergy = -item('lightbulb').generate.energy;
     if (lightbulbEnergy > 0) {
-        const deltaEnergy = store.state.energy - energy;
+        const deltaEnergy = store.state.energy + energy;
         var growEnergy = 0;
         if (deltaEnergy > 0) {
             growEnergy = lightbulbEnergy;
