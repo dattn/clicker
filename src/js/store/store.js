@@ -18,7 +18,7 @@ const load = () => {
     }
     var rawData;
     try {
-        rawData = atob(encodedData);
+        rawData = decodeURIComponent(escape(atob(encodedData)));
     } catch(e) {
         return {};
     }
@@ -39,7 +39,7 @@ const load = () => {
 const save = () => {
     const rawJSON = JSON.stringify(store.state);
     const hash    = sha1.sync(rawJSON);
-    const encodedData = btoa(rawJSON + ':' + hash);
+    const encodedData = btoa(unescape(encodeURIComponent(rawJSON + ':' + hash)));
     return localStorage.setItem('CLICKER', encodedData);
 }
 
@@ -81,7 +81,7 @@ const store = new Vuex.Store({
 export default store;
 
 // save every minute
-setInterval(save, 60000);
+setInterval(save, 10000);
 // add on unload
 window.onunload = save;
 
