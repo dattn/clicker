@@ -62,7 +62,8 @@ const defaultState = {
     stats: deepClone(baseItems),
     time: gameTime(33.3),
     windForce: 0,
-    robotsOn: true
+    robotsOn: true,
+    lightsOn: true
 };
 const savedState = load();
 const state = deepMerge(defaultState, savedState, {

@@ -61,7 +61,7 @@
                r="10.056"
                :cy="item.y"
                :cx="item.x"
-               style="fill:#fed05e" />
+               :style="bulbStyle" />
         </svg>
     </div>
 </template>
@@ -138,6 +138,14 @@
 
             showStar() {
                 return (this.$store.state.items['lightbulb'] || 0) === this.lightbulbCoords.length + 1;
+            },
+
+            bulbStyle() {
+                return {
+                    fill: this.$store.state.lightsOn
+                        ? '#fed05e'
+                        : '#c6c7c8'
+                }
             }
         }
     }

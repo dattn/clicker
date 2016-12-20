@@ -88,6 +88,14 @@ export const TURN_ROBOTS_OFF = (state) => {
     state.robotsOn = false;
 }
 
+export const TURN_LIGHTS_ON = (state) => {
+    state.lightsOn = true;
+}
+
+export const TURN_LIGHTS_OFF = (state) => {
+    state.lightsOn = false;
+}
+
 export const INCREMENT_CLICK_STATS = (state) => {
     if (state.stats.clicks) {
         state.stats.clicks++;
