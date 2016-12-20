@@ -81,7 +81,7 @@ const store = new Vuex.Store({
 export default store;
 
 // save every minute
-setInterval(save, 10000);
+setInterval(save, 60000);
 // add on unload
 window.onunload = save;
 
