@@ -15,6 +15,9 @@ export const ITEM_ADD = (state, data) => {
     const amount = data.amount || 1;
     addItem(state, data.type, amount);
     addItem(state.stats, data.type, amount);
+    if (state.items[data.type] > state.stats.items[data.type]) {
+        state.items[data.type] = 0;
+    }
 }
 
 export const ITEM_REMOVE = (state, data) => {
