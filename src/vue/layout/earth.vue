@@ -1,7 +1,7 @@
 <template>
     <div class="component-layout-earth">
         <tree :style="treeStyle"></tree>
-        <img src="layout/earth.svg" />
+        <img class="earth-image" src="layout/earth.svg" />
     </div>
 </template>
 
@@ -14,9 +14,12 @@
         }
 
         .component-layout-tree {
-            position: absolute;
-            bottom: 72%;
+            position: relative;
             left: 58%;
+        }
+
+        .earth-image {
+            margin-top: -28%;
         }
     }
 </style>
@@ -30,7 +33,7 @@
         },
         computed: {
             treeStyle() {
-                const size = Math.max(1, Math.log(this.$store.state.treeSize));
+                const size = Math.max(1, this.$store.state.treeSize);
                 return {
                     width: size + '%',
                     marginLeft: -(size / 2) + '%'
