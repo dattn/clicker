@@ -41,7 +41,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in states">
+                            <tr v-for="(item, index) in statesOrderedByClicks">
                                 <th class="player-name">{{ item.name }}</th>
                                 <td class="text-xs-right">{{ item.stats.clicks }}</td>
                             </tr>
@@ -146,6 +146,12 @@
             },
             name() {
                 return this.$store.state.name;
+            },
+            statesOrderedByClicks() {
+                const states = Object.values(this.states);
+                return states.sort((a, b) => {
+                    return b.stats.clicks - a.stats.clicks;
+                });
             }
         },
 
