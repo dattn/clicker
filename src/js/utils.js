@@ -58,6 +58,7 @@ export const capitalize = function(text) {
 }
 
 export const formatTreeSize = (size) => {
+    size = size || 0;
     if (size >= 1000) {
         return (Math.round(size) / 1000) + ' km';
     }

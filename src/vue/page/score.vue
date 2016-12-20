@@ -41,9 +41,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in statesOrderedByClicks">
+                            <tr v-for="(item, index) in statesOrderedByTreeSize">
                                 <th class="player-name">{{ item.name }}</th>
-                                <td class="text-xs-right">{{ item.stats.clicks }}</td>
+                                <td class="text-xs-right">{{ formatTreeSize(item.treeSize) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -106,6 +106,7 @@
 
 <script>
     import { joinStates, leaveStates, stateUpdate } from '../../js/server/client';
+    import { formatTreeSize } from '../../js/utils';
     import Earth from '../layout/earth.vue';
 
     export default {
@@ -147,10 +148,10 @@
             name() {
                 return this.$store.state.name;
             },
-            statesOrderedByClicks() {
+            statesOrderedByTreeSize() {
                 const states = Object.values(this.states);
                 return states.sort((a, b) => {
-                    return b.stats.clicks - a.stats.clicks;
+                    return b.treeSize - a.treeSize;
                 });
             }
         },
@@ -166,7 +167,9 @@
                 this.$store.commit('UPDATE_NAME', {
                     name: ev.target.value
                 });
-            }
+            },
+
+            formatTreeSize
         }
     }
 </script>
