@@ -119,7 +119,6 @@ export const GROW_TREE = (state, data) => {
         return;
     }
     const treeSize = data.growEnergy / 10000;
-    console.log(treeSize);
     if (state.treeSize) {
         state.treeSize += treeSize;
     } else {

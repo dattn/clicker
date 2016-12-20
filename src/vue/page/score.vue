@@ -151,7 +151,7 @@
             statesOrderedByTreeSize() {
                 const states = Object.values(this.states);
                 return states.sort((a, b) => {
-                    return b.treeSize - a.treeSize;
+                    return (b.treeSize || 0) - (a.treeSize || 0);
                 });
             }
         },
