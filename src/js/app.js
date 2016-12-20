@@ -1,4 +1,5 @@
 // include polyfills
+// TODO: use polyfills from https://github.com/zloirock/core-js
 import classListPolyfill    from 'classlist-polyfill';
 import PromisePolyFill      from 'promise-polyfill';
 import ObjectValuesPolyFill from 'object.values';
@@ -68,7 +69,7 @@ tick(() => {
 
     if (energy < 0) {
         store.commit('BATTERY_DISCHARGE', { amount: -energy });
-    } else {
+    } if (energy > 0) {
         store.commit('BATTERY_CHARGE', { amount: energy });
     }
 });
