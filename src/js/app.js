@@ -53,17 +53,18 @@ tick(() => {
 
 // generate energy
 tick(() => {
-    var energy;
+    var energy = 0;
     for (let type in store.state.items) {
         const generate = item(type).generate;
         if (!generate || !generate.energy) {
             continue;
         }
-        energy = generate.energy;
-        if (energy < 0) {
-            store.commit('BATTERY_DISCHARGE', { amount: -energy });
-            continue;
-        }
+        energy += generate.energy;
+    }
+
+    if (energy < 0) {
+        store.commit('BATTERY_DISCHARGE', { amount: -energy });
+    } else {
         store.commit('BATTERY_CHARGE', { amount: energy });
     }
 });
