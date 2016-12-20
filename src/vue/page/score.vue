@@ -156,8 +156,8 @@
             const earthHeight = this.$refs['earth'].$el.offsetHeight;
             const earthContainerHeight = this.$refs['earth-container'].clientHeight - 30;
             const earthWidth = this.$refs['earth'].$el.offsetWidth;
-            const earthContainerWidth = this.$refs['earth-container'].clientWidth;
-            const zoom = Math.min(1, earthContainerHeight / earthHeight, earthContainerWidth / earthWidth);
+            const earthContainerWidth = this.$refs['earth-container'].clientWidth - 30;
+            const zoom = Math.min(earthContainerHeight / earthHeight, earthContainerWidth / earthWidth);
             this.$refs['earth'].$el.style.transform = 'scale(' + zoom + ')';
         },
 

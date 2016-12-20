@@ -48,7 +48,7 @@
         },
         computed: {
             treeStyle() {
-                const size = Math.max(1, this.$store.state.treeSize);
+                const size = Math.max(1, Math.sqrt(this.$store.state.treeSize * 10));
                 return {
                     width: size + '%',
                     marginLeft: -(size / 2) + '%'
