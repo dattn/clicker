@@ -33,7 +33,7 @@
                 const size = Math.max(1, Math.log(this.$store.state.treeSize));
                 return {
                     width: size + '%',
-                    marginLeft: (size / 2) + '%'
+                    marginLeft: -(size / 2) + '%'
                 }
             }
         }
