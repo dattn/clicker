@@ -1,3 +1,4 @@
+import { store } from '../../app';
 import { has } from '../../crafting';
 
 const Lightbulb = {
@@ -13,6 +14,9 @@ const Lightbulb = {
     },
     generate: {
         get energy() {
+            if (!store.state.lightsOn) {
+                return 0;
+            }
             return -has(Lightbulb.type) * 5;
         }
     }
