@@ -1,8 +1,12 @@
 // include polyfills
-import classListPolyfill from 'classlist-polyfill';
-import PromisePolyFill   from 'promise-polyfill';
+import classListPolyfill    from 'classlist-polyfill';
+import PromisePolyFill      from 'promise-polyfill';
+import ObjectValuesPolyFill from 'object.values';
 if (!window.Promise) {
     window.Promise = PromisePolyFill;
+}
+if (!Object.values) {
+    ObjectValuesPolyFill.shim();
 }
 
 // include app
