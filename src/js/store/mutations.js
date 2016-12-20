@@ -113,3 +113,19 @@ export const INCREMENT_CLICK_STATS = (state) => {
 export const UPDATE_NAME = (state, data) => {
     state.name = data.name.slice(0, 50);
 }
+
+export const GROW_TREE = (state, data) => {
+    if (!data.growEnergy) {
+        return;
+    }
+    const treeSize = data.growEnergy / 10000;
+    console.log(treeSize);
+    if (state.treeSize) {
+        state.treeSize += treeSize;
+    } else {
+        state = {
+            ...state,
+            treeSize
+        };
+    }
+}

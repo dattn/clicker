@@ -67,6 +67,21 @@ tick(() => {
         energy += generate.energy;
     }
 
+    // get energy lost by lightbulbs
+    const lightbulbEnergy = -item('lightbulb').generate.energy;
+    if (lightbulbEnergy > 0) {
+        const deltaEnergy = store.state.energy - energy;
+        var growEnergy = 0;
+        if (deltaEnergy > 0) {
+            growEnergy = lightbulbEnergy;
+        } else if (deltaEnergy + lightbulbEnergy >= 0) {
+            growEnergy = lightbulbEnergy + deltaEnergy;
+        }
+        if (growEnergy) {
+            store.commit('GROW_TREE', { growEnergy });
+        }
+    }
+
     if (energy < 0) {
         store.commit('BATTERY_DISCHARGE', { amount: -energy });
     } if (energy > 0) {
