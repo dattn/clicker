@@ -25,7 +25,7 @@
                         <tbody>
                             <tr>
                                 <td>Tree Size</td>
-                                <td class="text-xs-right">{{ formatTreeSize(stats.treeSize) }}</td>
+                                <td class="text-xs-right">{{ formatTreeSize(playerState.treeSize) }}</td>
                             </tr>
                             <tr>
                                 <td>Energy produced</td>
