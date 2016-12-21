@@ -32,6 +32,7 @@
 
 <script>
     import { item, fromCategory } from '../js/crafting';
+    import { formatNumber } from '../js/utils';
 
     export default {
         computed: {
@@ -40,7 +41,7 @@
                 var inventory = {};
                 for (let i = 0; i < items.length; i++) {
                     if (this.$store.state.items[items[i].type]) {
-                        inventory[items[i].type] = this.$store.state.items[items[i].type];
+                        inventory[items[i].type] = formatNumber(this.$store.state.items[items[i].type]);
                     }
                 }
                 return inventory;

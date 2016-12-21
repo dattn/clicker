@@ -11,7 +11,7 @@
                 <tbody>
                     <tr>
                         <th>Count:</th>
-                        <td class="text-xs-right">{{ count }}</td>
+                        <td class="text-xs-right">{{ formatNumber(count) }}</td>
                     </tr>
                     <tr>
                         <th>Generates (all):</th>
@@ -62,9 +62,8 @@
 
 <script>
     import { item } from '../../js/crafting';
+    import { formatEnergy, formatNumber } from '../../js/utils';
     import Tooltip from '../tooltip.vue';
-
-    const roundNumber = number => Math.round(number * 100) / 100;
 
     export default {
 
@@ -80,19 +79,11 @@
 
         computed: {
             energyAll() {
-                const energy = roundNumber(item(this.type).generate.energy);
-                if (energy > 0) {
-                    return '+' + energy;
-                }
-                return energy;
+                return formatEnergy(item(this.type).generate.energy);
             },
 
             energySingle() {
-                const energy = roundNumber(item(this.type).generate.energy / this.count);
-                if (energy > 0) {
-                    return '+' + energy;
-                }
-                return energy;
+                return formatEnergy(item(this.type).generate.energy / this.count);
             },
 
             iconCount() {
@@ -111,6 +102,7 @@
         },
 
         methods: {
+            formatNumber,
             mouseEnter() {
                 this.tooltipVisible = true;
             },

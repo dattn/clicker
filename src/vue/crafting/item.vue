@@ -6,7 +6,7 @@
         <div class="float-xs-right item-info">
             <p class="requirements">
                 <span v-if="item.requires.energy" class="requirement">
-                    <img src="icons/energy.svg" class="icon" /> x {{ item.requires.energy }}
+                    <img src="icons/energy.svg" class="icon" /> x {{ formatEnergy(item.requires.energy) }}
                 </span>
                 <span v-for="(amount, type) in item.requires.resources" class="requirement">
                     <img :src="icon(type)" class="icon" /> x {{ amount }}
@@ -45,6 +45,7 @@
 
 <script>
     import { craft, canCraft, item, stats } from '../../js/crafting';
+    import { formatEnergy } from '../../js/utils';
     import RobotContainer from '../robot/container.vue';
 
     export default {
@@ -64,6 +65,7 @@
         methods: {
             craft,
             canCraft,
+            formatEnergy,
 
             icon(type) {
                 return item(type).icon;
