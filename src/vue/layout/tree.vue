@@ -55,13 +55,43 @@
              transform="translate(-3419.683,-2082.032)">
             <polygon
                points="3752.102,2082.032 3765.951,2110.106 3796.935,2114.606 3774.515,2136.459 3779.807,2167.315 3752.102,2152.744 3724.398,2167.315 3729.685,2136.459 3707.269,2114.606 3738.253,2110.106 "
-               :style="starStyle" />
+               :style="starStyle"
+               :stroke-width="strokeWidthStar"
+               stroke="#FFFFFF" />
           </g>
-            <circle v-for="(item, index) in lightbulbs"
-               r="10.056"
-               :cy="item.y"
-               :cx="item.x"
-               :style="bulbStyle(index)" />
+          <g v-if="showCord">
+            <path
+               d="m 384.20239,143.78076 c 0,0 -37.90046,16.79733 -79.60717,33.11479 -41.70672,16.31745 -95.03366,36.75235 -95.03366,36.75235"
+               style="fill:none;stroke:#006838;stroke-width:3.27561069"
+               inkscape:connector-curvature="0" />
+            <path
+               d="m 410.71584,240.15709 c 0,0 -56.59982,28.93869 -101.46745,50.77824 -44.86764,21.83956 -165.52558,60.48997 -165.52558,60.48997"
+               style="fill:none;stroke:#006838;stroke-width:3.2519207"
+               inkscape:connector-curvature="0" />
+            <path
+               d="m 482.43891,312.76494 c 0,0 -124.45359,56.50919 -166.61948,71.93628 -42.16592,15.42709 -174.80239,58.89583 -174.80239,58.89583"
+               style="fill:none;stroke:#006838;stroke-width:3.24235559"
+               inkscape:connector-curvature="0" />
+            <path
+               d="m 478.51377,395.75711 c 0,0 -141.19356,61.34891 -181.63261,80.87319 -77.21106,37.27645 -258.455523,70.89404 -258.455523,70.89404"
+               style="fill:none;stroke:#006838;stroke-width:3.27561069"
+               inkscape:connector-curvature="0" />
+            <path
+               d="m 551.2438,467.27351 c 0,0 -133.98067,60.85922 -210.3499,82.8402 -76.36923,21.97935 -146.94226,28.75495 -146.94226,28.75495"
+               style="fill:none;stroke:#006838;stroke-width:3.27561069"
+               inkscape:connector-curvature="0" />
+            <path
+               d="m 616.26963,536.05727 c 0,0 -56.80316,21.85833 -75.91711,26.86487 -19.11394,5.00653 -86.90978,15.62962 -86.90978,15.62962"
+               style="fill:none;stroke:#006838;stroke-width:3.60957623"
+               inkscape:connector-curvature="0" />
+          </g>
+        <circle v-for="(item, index) in lightbulbs"
+           r="10.056"
+           :cy="item.y"
+           :cx="item.x"
+           :style="bulbStyle(index)"
+           :stroke-width="strokeWidth(index)"
+           stroke="#FFFFFF" />
         </svg>
     </div>
 </template>
@@ -126,7 +156,7 @@
                     { x: 256.4019, y: 196.2254 },
                     { x: 303.2231, y: 179.3684 },
                     { x: 348.4117, y: 161.014  },
-                    { x: 384.0453, y: 142.5803 }        
+                    { x: 384.0453, y: 142.5803 }
                 ]
             }
         },
@@ -146,15 +176,30 @@
 
             starStyle() {
                 return this.bulbStyle(this.lightbulbCoords.length);
+            },
+
+            showCord() {
+                return (this.$store.state.items['lightbulb'] || 0) >= 1;
+            },
+
+            strokeWidthStar() {
+                return this.lightOn(this.lightbulbCoords.length)? 2 : 0
             }
         },
 
         methods: {
+            lightOn(index) {
+                return this.$store.state.lightsOn && index <= this.poweredLightBulbs;
+            },
+
             bulbStyle(index) {
-                const lightOn = this.$store.state.lightsOn && index <= this.poweredLightBulbs;
                 return {
-                    fill: lightOn? '#fefc5e' : '#999',
+                    fill: this.lightOn(index)? '#fefc5e' : '#999',
                 }
+            },
+
+            strokeWidth(index) {
+                return this.lightOn(index)? 2 : 0
             }
         }
     }
