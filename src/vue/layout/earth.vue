@@ -40,6 +40,14 @@
         components: {
             Tree
         },
+        props: {
+            state: {
+                type: Object,
+                default: function () {
+                    return this.$store.state;
+                }
+            }
+        },
         mounted() {
             updateSizes(this);
         },
@@ -48,7 +56,7 @@
         },
         computed: {
             treeStyle() {
-                const size = Math.max(1, Math.sqrt(this.$store.state.treeSize * 10));
+                const size = Math.max(1, Math.sqrt(this.state.treeSize * 10));
                 return {
                     width: size + '%',
                     marginLeft: -(size / 2) + '%'

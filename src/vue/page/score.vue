@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div class="col-lg-8 earth-container" ref="earth-container">
-                <earth ref="earth" @click.native="goToClicker"></earth>
+                <earth ref="earth" @click.native="goToClicker" :state="playerState"></earth>
             </div>
         </div>
     </div>
@@ -166,8 +166,14 @@
         },
 
         computed: {
+            playerState() {
+                if (this.selectedPlayer === 'me') {
+                    return this.$store.state;
+                }
+                return this.states[this.selectedPlayer];
+            },
             stats() {
-                return this.$store.state.stats;
+                return this.playerState.stats;
             },
             name() {
                 return this.$store.state.name;

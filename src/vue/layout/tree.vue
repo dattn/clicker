@@ -108,6 +108,15 @@
 
 <script>
     export default {
+        props: {
+            state: {
+                type: Object,
+                default: function () {
+                    return this.$store.state;
+                }
+            }
+        },
+
         data() {
             return {
                 lightbulbCoords: [
@@ -167,11 +176,11 @@
             },
 
             poweredLightBulbs() {
-                return Math.ceil(this.$store.state.lightsPower * Math.min(this.lightbulbCoords.length + 1, this.lightbulbCount));
+                return Math.ceil(this.state.lightsPower * Math.min(this.lightbulbCoords.length + 1, this.lightbulbCount));
             },
 
             lightbulbCount() {
-                return this.$store.state.items['lightbulb'] || 0;
+                return this.state.items['lightbulb'] || 0;
             },
 
             showStar() {
@@ -193,7 +202,7 @@
 
         methods: {
             lightOn(index) {
-                return this.$store.state.lightsOn && index <= this.poweredLightBulbs;
+                return this.state.lightsOn && index <= this.poweredLightBulbs;
             },
 
             bulbStyle(index) {
