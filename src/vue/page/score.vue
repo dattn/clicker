@@ -3,21 +3,37 @@
         <div class="row">
             <div class="col-lg-4 stats-container">
                 <div>
-                    <input type="text" class="form-control" v-once :value="name" @input="updateName" placeholder="Your Name" maxlength="50" />
+                    <div class="card card-inverse" style="background-color: #333; border-color: #333;">
+                        <div class="card-block">
+                            <h3 class="card-title">Your Name</h3>
+                            <p class="card-text">
+                                <input type="text" class="form-control" v-once :value="name" @input="updateName" placeholder="Your Name" maxlength="50" />
+                            </p>
+                        </div>
+                    </div>
                     <table class="table table-inverse table-sm">
                         <thead>
                             <tr>
-                                <th colspan="2">Stats</th>
+                                <th colspan="2">
+                                    <span>Stats</span>
+                                    <select class="form-control" v-model="selectedPlayer">
+                                        <option v-for="player in players" :value="player.uuid">{{player.name}}</option>
+                                    </select>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row">Mouse Clicks</th>
-                                <td class="text-xs-right">{{ formatNumber(stats.clicks) }}</td>
+                                <td>Tree Size</td>
+                                <td class="text-xs-right">{{ formatTreeSize(stats.treeSize) }}</td>
                             </tr>
                             <tr>
-                                <th scope="row">Energy produced</th>
+                                <td>Energy produced</td>
                                 <td class="text-xs-right">{{ formatEnergy(stats.energy) }}</td>
+                            </tr>
+                            <tr>
+                                <td>Mouse Clicks</td>
+                                <td class="text-xs-right">{{ formatNumber(stats.clicks) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -34,7 +50,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="item in highscoreList">
-                                <th class="player-name">{{ item.name }}</th>
+                                <td class="player-name">{{ item.name }}</td>
                                 <td class="text-xs-right">{{ item.score }}</td>
                             </tr>
                         </tbody>
@@ -76,6 +92,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
+
+            th {
+                font-size: 1.5em;
+            }
 
             &> div {
                 position: relative;
@@ -124,7 +144,8 @@
                         key: 'energyProduced',
                         label: 'Energy Produced'
                     }
-                ]
+                ],
+                selectedPlayer: 'me'
             }
         },
 
@@ -150,6 +171,25 @@
             },
             name() {
                 return this.$store.state.name;
+            },
+            players() {
+                var players = [];
+                for (let uuid in this.states) {
+                    players.push({
+                        uuid,
+                        name: this.states[uuid].name
+                    });
+                }
+                return [
+                    {
+                        uuid: 'me',
+                        name: this.$store.state.name
+                    },
+                    ...players
+                        .sort((a, b) => {
+                            return a.name - b.name;
+                        })
+                ];
             },
             highscoreList() {
                 const states = Object.values(this.states);
@@ -196,6 +236,7 @@
         methods: {
             formatNumber,
             formatEnergy,
+            formatTreeSize,
 
             goToClicker() {
                 this.$router.push({
