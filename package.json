@@ -34,6 +34,7 @@
     "less": "^2.7.1",
     "moment": "^2.17.1",
     "node-sass": "^3.13.0",
+    "numeral": "^2.0.3",
     "object.values": "^1.0.4",
     "promise-polyfill": "^6.0.2",
     "simple-sha1": "^2.1.0",

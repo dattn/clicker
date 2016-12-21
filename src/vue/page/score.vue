@@ -37,13 +37,18 @@
                     <table class="table table-inverse table-sm">
                         <thead>
                             <tr>
-                                <th colspan="2">Player</th>
+                                <th colspan="2">
+                                    <span>Highscore</span>
+                                    <select class="form-control" v-model="highscoreType">
+                                        <option v-for="type in highscoreTypes" :value="type.key">{{type.label}}</option>
+                                    </select>
+                                </td>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(item, index) in statesOrderedByTreeSize">
+                            <tr v-for="item in highscoreList">
                                 <th class="player-name">{{ item.name }}</th>
-                                <td class="text-xs-right">{{ formatTreeSize(item.treeSize) }}</td>
+                                <td class="text-xs-right">{{ item.score }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -107,7 +112,7 @@
 
 <script>
     import { joinStates, leaveStates, stateUpdate } from '../../js/server/client';
-    import { formatTreeSize } from '../../js/utils';
+    import { formatTreeSize, formatEnergy, formatNumber } from '../../js/utils';
     import Earth from '../layout/earth.vue';
 
     export default {
@@ -117,7 +122,22 @@
 
         data() {
             return {
-                states: {}
+                states: {},
+                highscoreType: 'treeSize',
+                highscoreTypes: [
+                    {
+                        key: 'treeSize',
+                        label: 'Tree Size'
+                    },
+                    {
+                        key: 'mouseClicks',
+                        label: 'Mouse Clicks'
+                    },
+                    {
+                        key: 'energyProduced',
+                        label: 'Energy Produced'
+                    }
+                ]
             }
         },
 
@@ -144,11 +164,36 @@
             name() {
                 return this.$store.state.name;
             },
-            statesOrderedByTreeSize() {
+            highscoreList() {
                 const states = Object.values(this.states);
-                return states.sort((a, b) => {
-                    return (b.treeSize || 0) - (a.treeSize || 0);
-                });
+                return states
+                    .sort((a, b) => {
+                        if (this.highscoreType === 'treeSize') {
+                            return (b.treeSize || 0) - (a.treeSize || 0);
+                        }
+                        if (this.highscoreType === 'mouseClicks') {
+                            return (b.stats.clicks || 0) - (a.stats.clicks || 0);
+                        }
+                        if (this.highscoreType === 'energyProduced') {
+                            return (b.stats.energy || 0) - (a.stats.energy || 0);
+                        }
+                    })
+                    .slice(0, 10)
+                    .map((state) => {
+                        let player = {
+                            name: state.name
+                        };
+                        if (this.highscoreType === 'treeSize') {
+                            player.score = formatTreeSize(state.treeSize);
+                        }
+                        if (this.highscoreType === 'mouseClicks') {
+                            player.score = formatNumber(state.stats.clicks);
+                        }
+                        if (this.highscoreType === 'energyProduced') {
+                            player.score = formatEnergy(state.stats.energy);
+                        }
+                        return player;
+                    });
             }
         },
 
@@ -172,9 +217,7 @@
                 this.$store.commit('UPDATE_NAME', {
                     name: ev.target.value
                 });
-            },
-
-            formatTreeSize
+            }
         }
     }
 </script>

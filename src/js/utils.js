@@ -1,3 +1,12 @@
+import numeral from 'numeral';
+numeral.register('locale', 'clicker', {
+    delimiters: {
+        thousands: ' ',
+        decimal: ','
+    }
+});
+numeral.locale('clicker');
+
 const realDurationInMs = 24 * 60 * 60 * 1000;
 
 export const gameTime = (durationInMinutes) => {
@@ -60,10 +69,40 @@ export const capitalize = function(text) {
 export const formatTreeSize = (size) => {
     size = size || 0;
     if (size >= 1000) {
-        return (Math.round(size) / 1000) + ' km';
+        return formatNumber(size / 1000, 3) + ' km';
     }
     if (size >= 1) {
-        return (Math.round(size * 100) / 100) + ' m';
+        return formatNumber(size, 2) + ' m';
     }
-    return Math.round(size * 100) + ' cm';
+    return formatNumber(size * 100) + ' cm';
+}
+
+export const formatEnergy = (energy) => {
+    energy = energy || 0;
+    if (energy >= 1000000000000) {
+        return formatNumber(energy / 1000000000000, 3) + ' TW';
+    }
+    if (energy >= 1000000000) {
+        return formatNumber(energy / 1000000000, 3) + ' GW';
+    }
+    if (energy >= 1000000) {
+        return formatNumber(energy / 1000000, 3) + ' MW';
+    }
+    if (energy >= 1000) {
+        return formatNumber(energy / 1000, 3) + ' kW';
+    }
+    return formatNumber(energy) + ' W';
+}
+
+export const formatNumber = (num, decimals) => {
+    num = num || 0;
+    decimals = decimals || 0;
+    var format = '0,0';
+    if (decimals) {
+        format += '.';
+        for (let i=0; i<decimals; i++) {
+            format += '0';
+        }
+    }
+    return numeral(num).format(format);
 }
