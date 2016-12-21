@@ -163,15 +163,19 @@
 
         computed: {
             lightbulbs() {
-                return this.lightbulbCoords.slice(0, this.$store.state.items['lightbulb'] || 0);
+                return this.lightbulbCoords.slice(0, this.lightbulbCount);
             },
 
             poweredLightBulbs() {
-                return Math.ceil(this.$store.state.lightsPower * this.lightbulbCoords.length + 1);
+                return Math.ceil(this.$store.state.lightsPower * Math.min(this.lightbulbCoords.length + 1, this.lightbulbCount));
+            },
+
+            lightbulbCount() {
+                return this.$store.state.items['lightbulb'] || 0;
             },
 
             showStar() {
-                return (this.$store.state.items['lightbulb'] || 0) >= this.lightbulbCoords.length + 1;
+                return this.lightbulbCount >= this.lightbulbCoords.length + 1;
             },
 
             starStyle() {
@@ -179,7 +183,7 @@
             },
 
             showCord() {
-                return (this.$store.state.items['lightbulb'] || 0) >= 1;
+                return this.lightbulbCount >= 1;
             },
 
             strokeWidthStar() {
