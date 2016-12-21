@@ -151,10 +151,9 @@
 
         methods: {
             bulbStyle(index) {
+                const lightOn = this.$store.state.lightsOn && index <= this.poweredLightBulbs;
                 return {
-                    fill: this.$store.state.lightsOn && index <= this.poweredLightBulbs
-                        ? '#fed05e'
-                        : '#c6c7c8'
+                    fill: lightOn? '#fefc5e' : '#999',
                 }
             }
         }
