@@ -80,6 +80,9 @@ tick(() => {
         if (growEnergy) {
             store.commit('GROW_TREE', { growEnergy });
         }
+        store.commit('LIGHTS_POWER', {
+            power: growEnergy / lightbulbEnergy
+        });
     }
 
     if (energy < 0) {

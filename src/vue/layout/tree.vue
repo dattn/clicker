@@ -55,13 +55,13 @@
              transform="translate(-3419.683,-2082.032)">
             <polygon
                points="3752.102,2082.032 3765.951,2110.106 3796.935,2114.606 3774.515,2136.459 3779.807,2167.315 3752.102,2152.744 3724.398,2167.315 3729.685,2136.459 3707.269,2114.606 3738.253,2110.106 "
-               :style="bulbStyle" />
+               :style="starStyle" />
           </g>
-            <circle v-for="item in lightbulbs"
+            <circle v-for="(item, index) in lightbulbs"
                r="10.056"
                :cy="item.y"
                :cx="item.x"
-               :style="bulbStyle" />
+               :style="bulbStyle(index)" />
         </svg>
     </div>
 </template>
@@ -136,13 +136,23 @@
                 return this.lightbulbCoords.slice(0, this.$store.state.items['lightbulb'] || 0);
             },
 
+            poweredLightBulbs() {
+                return Math.ceil(this.$store.state.lightsPower * this.lightbulbCoords.length + 1);
+            },
+
             showStar() {
                 return (this.$store.state.items['lightbulb'] || 0) >= this.lightbulbCoords.length + 1;
             },
 
-            bulbStyle() {
+            starStyle() {
+                return this.bulbStyle(this.lightbulbCoords.length);
+            }
+        },
+
+        methods: {
+            bulbStyle(index) {
                 return {
-                    fill: this.$store.state.lightsOn
+                    fill: this.$store.state.lightsOn && index <= this.poweredLightBulbs
                         ? '#fed05e'
                         : '#c6c7c8'
                 }

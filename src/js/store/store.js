@@ -64,6 +64,7 @@ const defaultState = {
     windForce: 0,
     robotsOn: true,
     lightsOn: true,
+    lightsPower: 0,
     treeSize: 0.01
 };
 const savedState = load();
