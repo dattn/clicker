@@ -1,6 +1,6 @@
 <template>
     <div class="component-layout-earth">
-        <tree ref="tree" :style="treeStyle"></tree>
+        <tree ref="tree" :style="treeStyle" :state="state"></tree>
         <img ref="earth" class="earth-image" src="layout/earth.svg" />
     </div>
 </template>
