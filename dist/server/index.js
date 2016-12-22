@@ -36,6 +36,9 @@ var sendUUID = function sendUUID(socket) {
 
 var sendStates = function sendStates(socket) {
     for (var i in stateStore) {
+        if (i === socket.UUID) {
+            continue;
+        }
         socket.emit('STATE_UPDATE', stateStore[i]);
     }
 };
@@ -49,16 +52,48 @@ var leaveStates = function leaveStates(socket) {
     socket.leave('states');
 };
 
-var updateState = function updateState(data) {
-    if (!data.UUID) {
+var updateState = function updateState(socket, data) {
+    if (!checkUUID(socket, data)) {
         return;
     }
     if (!stateStore[data.UUID]) {
         stateStore[data.UUID] = {};
         stateStore[data.UUID].publicUUID = uuidGen.generate();
+        socket.emit('PUBLIC_UUID', {
+            UUID: stateStore[data.UUID].publicUUID
+        });
     }
     stateStore[data.UUID].state = data.state;
-    io.in('states').emit('STATE_UPDATE', stateStore[data.UUID]);
+    socket.broadcast.in('states').emit('STATE_UPDATE', stateStore[data.UUID]);
+};
+
+var checkUUID = function checkUUID(socket, data) {
+    if (!data.UUID) {
+        return false;
+    }
+    if (socket.UUID && socket.UUID !== data.UUID) {
+        return false;
+    }
+    var socketByUUID = getSocketByUUID(data.UUID);
+    if (socketByUUID && socketByUUID !== socket) {
+        return false;
+    }
+    if (!socket.UUID) {
+        socket.UUID = data.UUID;
+    }
+    return true;
+};
+
+var getSocketByUUID = function getSocketByUUID(UUID) {
+    if (!UUID) {
+        return null;
+    }
+    for (var id in io.sockets.sockets) {
+        if (io.sockets.sockets[id].UUID === UUID) {
+            return io.sockets.sockets[id];
+        }
+    }
+    return null;
 };
 
 app.listen((0, _config2.default)('PORT'));
@@ -66,7 +101,7 @@ app.listen((0, _config2.default)('PORT'));
 io.on('connection', function (socket) {
     sendUUID(socket);
     socket.on('STATE', function (data) {
-        return updateState(data);
+        return updateState(socket, data);
     });
     socket.on('LEAVE_STATES', function () {
         return leaveStates(socket);
