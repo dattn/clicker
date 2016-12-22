@@ -11,10 +11,10 @@
                             </p>
                         </div>
                     </div>
-                    <table class="table table-inverse table-sm">
+                    <table class="table table-inverse table-bordered table-sm">
                         <thead>
                             <tr>
-                                <th colspan="2">
+                                <th :colspan="showCompareScore? 3 : 2">
                                     <span>Stats</span>
                                     <select class="form-control" v-model="selectedPlayer">
                                         <option v-for="player in players" :value="player.uuid">{{player.name}}</option>
@@ -23,21 +23,29 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr v-if="showCompareScore">
+                                <th></th>
+                                <th class="text-xs-right">You</th>
+                                <th class="text-xs-right">Player</th>
+                            </tr>
                             <tr>
                                 <td>Tree Size</td>
+                                <td class="text-xs-right" v-if="showCompareScore">{{ formatTreeSize(myState.treeSize) }}</td>
                                 <td class="text-xs-right">{{ formatTreeSize(playerState.treeSize) }}</td>
                             </tr>
                             <tr>
                                 <td>Energy produced</td>
-                                <td class="text-xs-right">{{ formatEnergy(stats.energy) }}</td>
+                                <td class="text-xs-right" v-if="showCompareScore">{{ formatEnergy(myState.stats.energy) }}</td>
+                                <td class="text-xs-right">{{ formatEnergy(playerState.stats.energy) }}</td>
                             </tr>
                             <tr>
                                 <td>Mouse Clicks</td>
-                                <td class="text-xs-right">{{ formatNumber(stats.clicks) }}</td>
+                                <td class="text-xs-right" v-if="showCompareScore">{{ formatEnergy(myState.stats.clicks) }}</td>
+                                <td class="text-xs-right">{{ formatEnergy(playerState.stats.clicks) }}</td>
                             </tr>
                         </tbody>
                     </table>
-                    <table class="table table-inverse table-sm">
+                    <table class="table table-inverse table-bordered table-sm">
                         <thead>
                             <tr>
                                 <th colspan="2">
@@ -93,8 +101,12 @@
             align-items: center;
             justify-content: center;
 
-            th {
+            thead th {
                 font-size: 1.5em;
+            }
+
+            th, td {
+                padding: 0.3em 0.6em;
             }
 
             &> div {
@@ -171,6 +183,12 @@
                     return this.$store.state;
                 }
                 return this.states[this.selectedPlayer];
+            },
+            myState() {
+                return this.$store.state;
+            },
+            showCompareScore() {
+                return this.selectedPlayer !== 'me';
             },
             stats() {
                 return this.playerState.stats;
