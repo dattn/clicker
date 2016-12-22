@@ -1,6 +1,13 @@
 <template>
     <div class="component-page-score container-fluid">
-        <slider class="component-slider" v-model="bulbColor" @change-color="onChangeBulbColor" v-show="showSlider"></slider>
+        <div class="color-slider" v-show="showSlider" @click="closeSlider">
+            <div class="card card-block" @click.stop="">
+                <h4 class="card-title">Select Color</h4>
+                <p class="card-text">
+                    <slider v-model="bulbColor" @change-color="onChangeBulbColor"></slider>
+                </p>
+            </div>
+        </div>
         <div class="row">
             <div class="col-lg-4 stats-container">
                 <div>
@@ -128,11 +135,16 @@
             }
         }
 
-        .component-slider {
-            z-index: 1;
-            position: fixed;
-            top: 50%;
-            left: 50%;
+        .color-slider {
+            z-index: 999;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            left: 0px;
+            top: 0px;
         }
     }
 </style>
@@ -146,7 +158,7 @@
     export default {
         components: {
             Earth,
-            Slider,
+            Slider
         },
 
         data() {
@@ -279,13 +291,9 @@
             formatTreeSize,
 
             goToClicker() {
-                if (this.showSlider) {
-                    this.showSlider = false;
-                } else {
-                    this.$router.push({
-                        name: 'clicker'
-                    });
-                }
+                this.$router.push({
+                    name: 'clicker'
+                });
             },
 
             onChangeBulbColor (val) {
@@ -308,6 +316,10 @@
                     this.bulbColor = {hex: this.$store.state.lightBulbColors[this.currentBulbIndex]};
                 }
             },
+
+            closeSlider() {
+                this.showSlider = false;
+            }
         }
     }
 </script>
