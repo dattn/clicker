@@ -151,6 +151,7 @@
     import { dayLight } from '../../js/utils';
     import { start } from '../../js/loop';
     import { store } from '../../js/app';
+    import { has } from '../../js/crafting';
 
     const updateClickStats = () => {
         store.commit('INCREMENT_CLICK_STATS');
@@ -202,7 +203,9 @@
         methods: {
             generateEnergy: function() {
                 this.angle += 90;
-                this.$store.commit('BATTERY_CHARGE', {});
+                this.$store.commit('BATTERY_CHARGE', {
+                    amount: Math.pow(2, has('manual-gear'))
+                });
             },
 
             goToStats() {

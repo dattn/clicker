@@ -2,6 +2,7 @@ import * as Energy     from './Energy';
 import * as Resource   from './Resource';
 import * as Research   from './Research';
 import * as Automation from './Automation';
+import * as Upgrade    from './Upgrade';
 import { store } from '../app';
 
 const fromSnakeCase = function(text) {
@@ -13,14 +14,16 @@ const indexedItems = {
     ...Energy.indexedItems,
     ...Resource.indexedItems,
     ...Research.indexedItems,
-    ...Automation.indexedItems
+    ...Automation.indexedItems,
+    ...Upgrade.indexedItems
 };
 
 const items = [
     ...Energy.items,
     ...Resource.items,
     ...Research.items,
-    ...Automation.items
+    ...Automation.items,
+    ...Upgrade.items
 ];
 
 const item = function(type) {
