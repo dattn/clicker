@@ -41,6 +41,7 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "vue": "^2.1.4",
+    "vue-color": "^2.0.3",
     "vue-router": "^2.1.1",
     "vueify": "^9.3.0",
     "vuex": "^2.0.0",
