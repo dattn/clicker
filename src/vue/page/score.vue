@@ -1,5 +1,6 @@
 <template>
     <div class="component-page-score container-fluid">
+        <slider class="component-slider" v-model="bulbColor" @change-color="onChangeBulbColor" v-show="showSlider"></slider>
         <div class="row">
             <div class="col-lg-4 stats-container">
                 <div>
@@ -53,7 +54,7 @@
                                     <select class="form-control" v-model="highscoreType">
                                         <option v-for="type in highscoreTypes" :value="type.key">{{type.label}}</option>
                                     </select>
-                                </td>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,7 +67,7 @@
                 </div>
             </div>
             <div class="col-lg-8 earth-container" ref="earth-container">
-                <earth ref="earth" @click.native="goToClicker" :state="playerState"></earth>
+                <earth ref="earth" @click.native="goToClicker" :state="playerState"  @bulbClickedEvent="bulbClicked(arguments[0])"></earth>
             </div>
         </div>
     </div>
@@ -126,6 +127,13 @@
                 max-width: 12em;
             }
         }
+
+        .component-slider {
+            z-index: 1;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+        }
     }
 </style>
 
@@ -133,14 +141,18 @@
     import { joinStates, leaveStates, stateUpdate } from '../../js/server/client';
     import { formatTreeSize, formatEnergy, formatNumber } from '../../js/utils';
     import Earth from '../layout/earth.vue';
+    import { Slider } from 'vue-color';
 
     export default {
         components: {
-            Earth
+            Earth,
+            Slider,
         },
 
         data() {
             return {
+                currentBulbIndex: 0,
+                bulbColor: {hex: this.$store.state.lightBulbColors[0]},
                 states: {},
                 highscoreType: 'treeSize',
                 highscoreTypes: [
@@ -157,7 +169,8 @@
                         label: 'Energy Produced'
                     }
                 ],
-                selectedPlayer: 'me'
+                selectedPlayer: 'me',
+                showSlider: false
             }
         },
 
@@ -263,16 +276,35 @@
             formatTreeSize,
 
             goToClicker() {
-                this.$router.push({
-                    name: 'clicker'
-                });
+                if (this.showSlider) {
+                    this.showSlider = false;
+                } else {
+                    this.$router.push({
+                        name: 'clicker'
+                    });
+                }
+            },
+
+            onChangeBulbColor (val) {
+                if (this.selectedPlayer === 'me') {
+                   this.$store.commit('UPDATE_BULB_COLOR', { color: val.hex, bulbIndex: this.currentBulbIndex });
+                   this.bulbColor = {hex: this.$store.state.lightBulbColors[this.currentBulbIndex]};
+                }
             },
 
             updateName(ev) {
                 this.$store.commit('UPDATE_NAME', {
                     name: ev.target.value
                 });
-            }
+            },
+
+            bulbClicked(index) {
+                if (this.selectedPlayer === 'me') {
+                    this.showSlider = true;
+                    this.currentBulbIndex = index;
+                    this.bulbColor = {hex: this.$store.state.lightBulbColors[this.currentBulbIndex]};
+                }
+            },
         }
     }
 </script>

@@ -34,6 +34,12 @@ export const BATTERY_CHARGE = (state, data) => {
     state.stats.energy += amount;
 }
 
+export const UPDATE_BULB_COLOR = (state, data) => {
+    const color = data.color || '#fefc5e';
+    const bulbIndex = data.bulbIndex || 0;
+    state.lightBulbColors.splice(bulbIndex, 1, color);
+}
+
 export const BATTERY_DISCHARGE = (state, data) => {
     const amount = data.amount || 1;
     state.energy = Math.max(0, state.energy - amount);

@@ -85,13 +85,13 @@
                style="fill:none;stroke:#006838;stroke-width:3.60957623"
                inkscape:connector-curvature="0" />
           </g>
-        <circle v-for="(item, index) in lightbulbs"
+        <circle @click.stop="bulbClicked(index)" v-for="(item, index) in lightbulbs"
            r="10.056"
            :cy="item.y"
            :cx="item.x"
            :style="bulbStyle(index)"
            :stroke-width="strokeWidth(index)"
-           stroke="#FFFFFF" />
+           stroke="#FFFFFF"/>
         </svg>
     </div>
 </template>
@@ -102,7 +102,12 @@
 
         svg {
             width: 100%;
+
+          circle {
+            cursor: pointer;
+          }
         }
+
     }
 </style>
 
@@ -207,8 +212,12 @@
 
             bulbStyle(index) {
                 return {
-                    fill: this.lightOn(index)? '#fefc5e' : '#999',
+                    fill: this.lightOn(index)? this.state.lightBulbColors[index] : '#999',
                 }
+            },
+
+            bulbClicked(index) {
+                this.$emit('bulbClickedEvent', index);
             },
 
             strokeWidth(index) {

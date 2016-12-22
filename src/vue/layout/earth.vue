@@ -1,6 +1,6 @@
 <template>
     <div class="component-layout-earth">
-        <tree ref="tree" :style="treeStyle" :state="state"></tree>
+        <tree ref="tree" :style="treeStyle" :state="state" v-on:bulbClickedEvent="bulbClicked(arguments[0])"></tree>
         <img ref="earth" class="earth-image" src="layout/earth.svg" />
     </div>
 </template>
@@ -62,6 +62,11 @@
                     marginLeft: -(size / 2) + '%'
                 }
             }
+        },
+        methods: {
+            bulbClicked(index) {
+                this.$emit('bulbClickedEvent', index);
+            },
         }
     }
 </script>
