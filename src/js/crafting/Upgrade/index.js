@@ -1,11 +1,14 @@
-import ManualGear from './ManualGear';
+import ManualGear   from './ManualGear';
+import SolarUpgrade from './SolarUpgrade';
+import WindUpgrade  from './WindUpgrade';
+import DamUpgrade   from './DamUpgrade';
 
 const indexedItems = {
-    ManualGear
+    ManualGear, SolarUpgrade, WindUpgrade, DamUpgrade
 };
 
 const items = [
-    ManualGear
+    ManualGear, SolarUpgrade, WindUpgrade, DamUpgrade
 ];
 
 export default items;

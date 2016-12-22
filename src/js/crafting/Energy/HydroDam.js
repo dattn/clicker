@@ -1,4 +1,5 @@
-import { has } from '../../crafting';
+import { has }    from '../../crafting';
+import DamUpgrade from '../Upgrade/DamUpgrade';
 
 const HydroDam = {
     type: 'hydro-dam',
@@ -18,7 +19,7 @@ const HydroDam = {
     },
     generate: {
         get energy() {
-            return has(HydroDam.type) * 5;
+            return has(HydroDam.type) * 5 * Math.pow(1.25, has(DamUpgrade.type));
         }
     }
 };
