@@ -1,5 +1,3 @@
-import { stats } from '../../crafting';
-
 const BioMass = {
     type: 'bio-mass',
     label: 'Bio Mass',

@@ -1,4 +1,5 @@
-import { stats } from '../../crafting';
+import { stats, has } from '../../crafting';
+import MiningUpgrade from '../Upgrade/MiningUpgrade';
 
 const Silicon = {
     type: 'silicon',
@@ -7,7 +8,7 @@ const Silicon = {
     icon: 'icons/silicon.svg',
     requires: {
         get energy() {
-            return Math.floor(25 * Math.sqrt(Math.pow(1.01, stats(Silicon.type) / 2)));
+            return Math.floor(25 * Math.sqrt(Math.pow(1.01, stats(Silicon.type) / (2 * Math.pow(1.05, has(MiningUpgrade.type))))));
         }
     }
 };
