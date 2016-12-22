@@ -4,12 +4,15 @@ import { store }    from '../app';
 
 const events = new EventEmitter();
 const io     = new SocketIO('//' + window.location.hostname + ':7777');
-var UUID     = localStorage.getItem('CLICKER-UUID');
+const UUID = {
+    private: localStorage.getItem('CLICKER-UUID'),
+    public: localStorage.getItem('CLICKER-PUBLIC-UUID')
+};
 
 io.on('UUID', data => {
-    if (!UUID) {
-        UUID = data.UUID;
-        localStorage.setItem('CLICKER-UUID', UUID);
+    if (!UUID.private) {
+        UUID.private = data.UUID;
+        localStorage.setItem('CLICKER-UUID', UUID.private);
     }
     if (!store.state.name) {
         store.commit('UPDATE_NAME', {
@@ -18,16 +21,22 @@ io.on('UUID', data => {
     }
 });
 
+io.on('PUBLIC_UUID', data => {
+    UUID.public = data.UUID;
+    localStorage.setItem('CLICKER-PUBLIC-UUID', UUID.public);
+});
+
 io.on('STATE_UPDATE', data => {
     events.emit('STATE_UPDATE', data);
 });
 
 export const sendState = state => {
-    if (!UUID) {
+    if (!UUID.private) {
         return;
     }
     io.emit('STATE', {
-        UUID, state
+        UUID: UUID.private,
+        state
     });
 };
 
@@ -40,7 +49,11 @@ export const leaveStates = () => {
 };
 
 export const stateUpdate = cb => {
-    events.on('STATE_UPDATE', cb);
+    events.on('STATE_UPDATE', data => {
+        if (data.publicUUID !== UUID.public) {
+            cb(data);
+        }
+    });
     return {
         off() {
             events.removeListener('STATE_UPDATE', cb);

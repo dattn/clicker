@@ -41,6 +41,9 @@ const updateState = (socket, data) => {
     if (!stateStore[data.UUID]) {
         stateStore[data.UUID] = {};
         stateStore[data.UUID].publicUUID = uuidGen.generate();
+        socket.emit('PUBLIC_UUID', {
+            UUID: stateStore[data.UUID].publicUUID
+        });
     }
     stateStore[data.UUID].state = data.state;
     socket.broadcast.in('states').emit('STATE_UPDATE', stateStore[data.UUID]);
