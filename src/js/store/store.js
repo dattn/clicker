@@ -69,7 +69,7 @@ const defaultState = {
 };
 const savedState = load();
 const state = deepMerge(defaultState, savedState, {
-    arrayMerge: d => d
+    arrayMerge: (d, s) => s
 });
 
 
