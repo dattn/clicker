@@ -39,7 +39,7 @@ const fromCategory = function(category) {
 }
 
 const canCraft = function(type) {
-    if (!isAvailable(type)) {
+    if (!isCraftable(type) || !isAvailable(type)) {
         return false;
     }
 
@@ -72,6 +72,11 @@ const isAvailable = function(type) {
     }
 
     return true;
+}
+
+const isCraftable = function(type) {
+    const itemData = item(type);
+    return !itemData.hasOwnProperty('craftable') || itemData.craftable === true;
 }
 
 const craft = function(type) {
@@ -116,6 +121,7 @@ export {
     item,
     fromCategory,
     isAvailable,
+    isCraftable,
     canCraft,
     craft,
     has,

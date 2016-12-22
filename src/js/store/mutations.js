@@ -138,3 +138,7 @@ export const GROW_TREE = (state, data) => {
 export const LIGHTS_POWER = (state, data) => {
     state.lightsPower = data.power;
 }
+
+export const BIO_MASS_STOCK = (state, data) => {
+    state.bioMassStock = data.amount || 0;
+}

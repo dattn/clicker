@@ -71,13 +71,13 @@ const defaultState = {
     lightsOn: true,
     lightsPower: 0,
     treeSize: 0.01,
+    bioMassStock: 0,
     lightBulbColors: lightBulbColorsArr
 };
 const savedState = load();
 const state = deepMerge(defaultState, savedState, {
     arrayMerge: (d, s) => s
 });
-
 
 const store = new Vuex.Store({
     state,

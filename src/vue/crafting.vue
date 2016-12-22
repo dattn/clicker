@@ -37,7 +37,7 @@
 
 <script>
     import { capitalize } from '../js/utils';
-    import { fromCategory, isAvailable } from '../js/crafting';
+    import { fromCategory, isAvailable, isCraftable } from '../js/crafting';
     import CraftingItem from './crafting/item.vue';
 
     export default {
@@ -58,7 +58,7 @@
         computed: {
             items() {
                 return fromCategory(this.category).filter(item => {
-                    if (!isAvailable(item.type)) {
+                    if (!isCraftable(item.type) || !isAvailable(item.type)) {
                         return false;
                     }
                     if (item.limit && item.limit <= (this.$store.state.items[item.type] || 0)) {

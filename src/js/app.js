@@ -18,7 +18,7 @@ import AppVue from '../vue/app.vue';
 import PageClickerVue from '../vue/page/clicker.vue';
 import PageScoreVue from '../vue/page/score.vue';
 import { gameTime, windForce, shuffle } from './utils';
-import { item, craft } from './crafting';
+import { item, craft, has } from './crafting';
 import { tick, start } from './loop';
 import ServerClient from './server/client';
 import VueRouter from 'vue-router';
@@ -56,15 +56,37 @@ tick(() => {
     store.commit('SET_WIND_FORCE', { force });
 });
 
+// set game time
+tick(() => {
+    let time = gameTime(33.3);
+    if (time !== store.state.time) {
+        store.commit('SET_TIME', { time });
+    }
+});
+
+// generate bio mass
+tick(() => {
+    if (has('bio-gas')) {
+        store.commit('ITEM_ADD', {
+            type: 'bio-mass',
+            amount: 1
+        });
+    }
+});
+
 // generate energy
 tick(() => {
     var energy = 0;
     for (let type in store.state.items) {
         const generate = item(type).generate;
-        if (!generate || !generate.energy) {
+        if (!generate) {
             continue;
         }
-        energy += generate.energy;
+
+        energy += generate.energy || 0;
+        if (generate.consume) {
+            generate.consume();
+        }
     }
 
     // get energy lost by lightbulbs
@@ -89,14 +111,6 @@ tick(() => {
         store.commit('BATTERY_DISCHARGE', { amount: -energy });
     } if (energy > 0) {
         store.commit('BATTERY_CHARGE', { amount: energy });
-    }
-});
-
-// set game time
-tick(() => {
-    let time = gameTime(33.3);
-    if (time !== store.state.time) {
-        store.commit('SET_TIME', { time });
     }
 });
 
