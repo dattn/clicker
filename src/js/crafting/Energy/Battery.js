@@ -1,5 +1,6 @@
 import { store } from '../../app';
 import { has } from '../../crafting';
+import BatteryUpgrade from '../Upgrade/BatteryUpgrade';
 
 const Battery = {
     type: 'battery',
@@ -15,10 +16,10 @@ const Battery = {
     },
     generate: {
         get energy() {
-            return -Math.ceil(store.state.energy / 100);
+            return -Math.ceil(store.state.energy / (100 * Math.pow(1.25, has(BatteryUpgrade.type))));
         },
-        get capactity() {
-            return has(Battery.type) * 100;
+        get capacity() {
+            return has(Battery.type) * 100 * Math.pow(1.25, has(BatteryUpgrade.type));
         }
     }
 };

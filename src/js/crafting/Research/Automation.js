@@ -5,7 +5,7 @@ const Automation = {
     icon: 'icons/automation.svg',
     limit: 1,
     requires: {
-        energy: 1000,
+        energy: 2500,
         research: {
             sun: 1,
             wind: 1

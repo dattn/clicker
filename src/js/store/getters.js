@@ -1,5 +1,8 @@
+import { item } from '../crafting';
+
+const battery = item('battery');
 export const capacity = (state) => {
-    return state.items.battery * 100;
+    return Math.floor(battery.generate.capacity);
 }
 
 export const isNight = (state) => {
