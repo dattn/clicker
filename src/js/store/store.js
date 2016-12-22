@@ -55,6 +55,11 @@ const stats = {
     clicks: 0
 }
 
+var lightBulbColorsArr = [];
+for (var i = 1; i <= 50; i++) {
+    lightBulbColorsArr.push('#fefc5e');
+}
+
 const defaultState = {
     ...deepClone(baseItems),
     robots: {},
@@ -65,7 +70,8 @@ const defaultState = {
     robotsOn: true,
     lightsOn: true,
     lightsPower: 0,
-    treeSize: 0.01
+    treeSize: 0.01,
+    lightBulbColors: lightBulbColorsArr
 };
 const savedState = load();
 const state = deepMerge(defaultState, savedState, {
