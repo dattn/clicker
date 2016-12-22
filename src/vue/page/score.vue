@@ -48,8 +48,8 @@
                             </tr>
                             <tr>
                                 <td>Mouse Clicks</td>
-                                <td class="text-xs-right" v-if="showCompareScore">{{ formatEnergy(myState.stats.clicks) }}</td>
-                                <td class="text-xs-right">{{ formatEnergy(playerState.stats.clicks) }}</td>
+                                <td class="text-xs-right" v-if="showCompareScore">{{ formatNumber(myState.stats.clicks) }}</td>
+                                <td class="text-xs-right">{{ formatNumber(playerState.stats.clicks) }}</td>
                             </tr>
                         </tbody>
                     </table>
