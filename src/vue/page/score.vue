@@ -29,7 +29,7 @@
                                 <th class="text-xs-right">Player</th>
                             </tr>
                             <tr>
-                                <td>Tree Size</td>
+                                <td>Tree Height</td>
                                 <td class="text-xs-right" v-if="showCompareScore">{{ formatTreeSize(myState.treeSize) }}</td>
                                 <td class="text-xs-right">{{ formatTreeSize(playerState.treeSize) }}</td>
                             </tr>
@@ -146,7 +146,7 @@
                 highscoreTypes: [
                     {
                         key: 'treeSize',
-                        label: 'Tree Size'
+                        label: 'Tree Height'
                     },
                     {
                         key: 'mouseClicks',
@@ -216,7 +216,10 @@
                 ];
             },
             highscoreList() {
-                const states = Object.values(this.states);
+                const states = [
+                    ...Object.values(this.states),
+                    this.$store.state
+                ];
                 return states
                     .sort((a, b) => {
                         if (this.highscoreType === 'treeSize') {

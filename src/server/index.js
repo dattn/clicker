@@ -18,6 +18,9 @@ const sendUUID = socket => {
 
 const sendStates = socket => {
     for (let i in stateStore) {
+        if (i === socket.UUID) {
+            continue;
+        }
         socket.emit('STATE_UPDATE', stateStore[i]);
     }
 };
@@ -31,8 +34,8 @@ const leaveStates = socket => {
     socket.leave('states');
 };
 
-const updateState = data => {
-    if (!data.UUID) {
+const updateState = (socket, data) => {
+    if (!checkUUID(socket, data)) {
         return;
     }
     if (!stateStore[data.UUID]) {
@@ -40,14 +43,43 @@ const updateState = data => {
         stateStore[data.UUID].publicUUID = uuidGen.generate();
     }
     stateStore[data.UUID].state = data.state;
-    io.in('states').emit('STATE_UPDATE', stateStore[data.UUID]);
+    socket.broadcast.in('states').emit('STATE_UPDATE', stateStore[data.UUID]);
+};
+
+const checkUUID = (socket, data) => {
+    if (!data.UUID) {
+        return false;
+    }
+    if (socket.UUID && socket.UUID !== data.UUID) {
+        return false;
+    }
+    const socketByUUID = getSocketByUUID(data.UUID);
+    if (socketByUUID && socketByUUID !== socket) {
+        return false;
+    }
+    if (!socket.UUID) {
+        socket.UUID = data.UUID;
+    }
+    return true;
+};
+
+const getSocketByUUID = UUID => {
+    if (!UUID) {
+        return null;
+    }
+    for (let id in io.sockets.sockets) {
+        if (io.sockets.sockets[id].UUID === UUID) {
+            return io.sockets.sockets[id];
+        }
+    }
+    return null;
 };
 
 app.listen(config('PORT'));
 
 io.on('connection', socket => {
     sendUUID(socket);
-    socket.on('STATE', data => updateState(data));
+    socket.on('STATE', data => updateState(socket, data));
     socket.on('LEAVE_STATES', () => leaveStates(socket));
     socket.on('JOIN_STATES', () => joinStates(socket));
 });
