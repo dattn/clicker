@@ -69,29 +69,29 @@ export const capitalize = function(text) {
 export const formatTreeSize = (size) => {
     size = size || 0;
     if (size >= 1000) {
-        return formatNumber(size / 1000, 3) + ' km';
+        return formatNumber(size / 1000, 2) + ' km';
     }
     if (size >= 1) {
         return formatNumber(size, 2) + ' m';
     }
-    return formatNumber(size * 100) + ' cm';
+    return formatNumber(size * 100, 2) + ' cm';
 }
 
 export const formatEnergy = (energy) => {
     energy = energy || 0;
     if (energy >= 1000000000000) {
-        return formatNumber(energy / 1000000000000, 3) + ' TW';
+        return formatNumber(energy / 1000000000000, 2) + ' TW';
     }
     if (energy >= 1000000000) {
-        return formatNumber(energy / 1000000000, 3) + ' GW';
+        return formatNumber(energy / 1000000000, 2) + ' GW';
     }
     if (energy >= 1000000) {
-        return formatNumber(energy / 1000000, 3) + ' MW';
+        return formatNumber(energy / 1000000, 2) + ' MW';
     }
     if (energy >= 1000) {
-        return formatNumber(energy / 1000, 3) + ' kW';
+        return formatNumber(energy / 1000, 2) + ' kW';
     }
-    return formatNumber(energy) + ' W';
+    return formatNumber(energy, 2) + ' W';
 }
 
 export const formatNumber = (num, decimals) => {
@@ -99,10 +99,11 @@ export const formatNumber = (num, decimals) => {
     decimals = decimals || 0;
     var format = '0,0';
     if (decimals) {
-        format += '.';
+        format += '.[';
         for (let i=0; i<decimals; i++) {
             format += '0';
         }
+        format += ']';
     }
     return numeral(num).format(format);
 }
