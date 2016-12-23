@@ -32,6 +32,23 @@
                 <div class="col-lg-3">
                     <inventory></inventory>
                     <robots></robots>
+                    <div class="card">
+                        <div class="card-header">
+                            About
+                        </div>
+                        <div class="card-block">
+                            <p class="card-text">
+                                <span class="font-weight-bold">Programming and Concept:</span> <a target="_blank" href="https://github.com/dattn">Daniel Duton</a><br />
+                                <span class="font-weight-bold">Graphics:</span> Mike Hanff<br />
+                                <span class="font-weight-bold">Contributers:</span> <a target="_blank" href="https://github.com/Kaweechelchen">Thierry Degeling</a>, <a target="_blank" href="https://github.com/m4s0fd1s">Ben Thinnes</a>, <a target="_blank" href="https://github.com/mouratoclaudio">Claudio Mourato</a><br />
+                                <span class="font-weight-bold">Testing:</span> <a target="_blank" href="http://www.ion.lu">ION Crew</a>
+                            </p>
+                            <p class="card-text">
+                                Icons from <span class="font-weight-bold">FlatIcon / Vectors Market</span><br />
+                                <a class="font-italic" target="_blank" href="http://www.flaticon.com/authors/vectors-market">www.flaticon.com</a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
