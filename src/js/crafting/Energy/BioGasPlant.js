@@ -12,7 +12,7 @@ const BioGasPlant = {
         energy: 500,
         resources: {
             stone: 80,
-            iron: 5,
+            iron: 5
         },
         research: {
             'bio-gas': 1
