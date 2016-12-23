@@ -9,6 +9,9 @@ const MoonDust = {
     requires: {
         get energy() {
             return Math.floor(100 * Math.sqrt(Math.pow(1.01, stats(MoonDust.type) / (2 * Math.pow(1.05, has(MiningUpgrade.type))))));
+        },
+        research: {
+            'space-mining': 1
         }
     }
 };
