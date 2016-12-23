@@ -4,13 +4,14 @@ import WindUpgrade    from './WindUpgrade';
 import DamUpgrade     from './DamUpgrade';
 import BatteryUpgrade from './BatteryUpgrade';
 import MiningUpgrade  from './MiningUpgrade';
+import MoonUpgrade    from './MoonUpgrade';
 
 const indexedItems = {
-    ManualGear, SolarUpgrade, WindUpgrade, DamUpgrade, BatteryUpgrade, MiningUpgrade
+    ManualGear, SolarUpgrade, WindUpgrade, DamUpgrade, BatteryUpgrade, MiningUpgrade, MoonUpgrade
 };
 
 const items = [
-    ManualGear, SolarUpgrade, WindUpgrade, DamUpgrade, BatteryUpgrade, MiningUpgrade
+    ManualGear, SolarUpgrade, WindUpgrade, DamUpgrade, BatteryUpgrade, MiningUpgrade, MoonUpgrade
 ];
 
 export default items;
