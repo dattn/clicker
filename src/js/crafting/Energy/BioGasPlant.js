@@ -1,6 +1,7 @@
-import { store } from '../../app';
-import { has }   from '../../crafting';
-import BioMass   from '../Resource/BioMass';
+import { store }  from '../../app';
+import { has }    from '../../crafting';
+import BioMass    from '../Resource/BioMass';
+import BioUpgrade from '../Upgrade/BioUpgrade';
 
 const BioGasPlant = {
     type: 'bio-gas-plant',
@@ -19,10 +20,10 @@ const BioGasPlant = {
     },
     generate: {
         get energy() {
-            return store.state.bioMassStock * 5;
+            return store.state.bioMassStock * 25 * Math.pow(1.5, has(BioUpgrade.type));
         },
         consume() {
-            const bioMassStock = Math.min(has(BioGasPlant.type), has(BioMass.type));
+            const bioMassStock = Math.min(has(BioGasPlant.type) * (0.2 / Math.pow(1.5, has(BioUpgrade.type))), has(BioMass.type));
             store.commit('ITEM_REMOVE', {
                 type: BioMass.type,
                 amount: bioMassStock
