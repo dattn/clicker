@@ -10,7 +10,7 @@ const WindMill = {
     requires: {
         energy: 60,
         resources: {
-            iron: 12,
+            iron: 15,
             stone: 15
         },
         research: {
@@ -19,7 +19,7 @@ const WindMill = {
     },
     generate: {
         get energy() {
-            return has(WindMill.type) * (store.state.windForce / 100) * Math.pow(1.25, has(WindUpgrade.type));
+            return has(WindMill.type) * 1 * (store.state.windForce / 100) * Math.pow(1.25, has(WindUpgrade.type));
         }
     }
 };

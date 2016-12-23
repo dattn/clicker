@@ -13,7 +13,7 @@ const MoonUpgrade = {
             return 10000 * Math.pow(2, has(MoonUpgrade.type))
         },
         research: {
-            sun: 1
+            'space-mining': 1
         }
     }
 };

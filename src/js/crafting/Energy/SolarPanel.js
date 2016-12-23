@@ -12,7 +12,7 @@ const SolarPanel = {
         energy: 60,
         resources: {
             copper: 5,
-            silicon: 10
+            silicon: 13
         },
         research: {
             sun: 1
@@ -20,7 +20,7 @@ const SolarPanel = {
     },
     generate: {
         get energy() {
-            return has(SolarPanel.type) * dayLight(store.state.time) * Math.pow(1.25, has(SolarUpgrade.type));
+            return has(SolarPanel.type) * 1.4 * dayLight(store.state.time) * Math.pow(1.25, has(SolarUpgrade.type));
         }
     }
 };

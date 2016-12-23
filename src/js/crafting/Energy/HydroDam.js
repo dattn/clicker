@@ -9,9 +9,9 @@ const HydroDam = {
     requires: {
         energy: 500,
         resources: {
-            stone: 200,
-            iron: 10,
-            copper: 5
+            stone: 250,
+            iron: 40,
+            copper: 25
         },
         research: {
             water: 1
@@ -19,7 +19,7 @@ const HydroDam = {
     },
     generate: {
         get energy() {
-            return has(HydroDam.type) * 5 * Math.pow(1.25, has(DamUpgrade.type));
+            return has(HydroDam.type) * 4 * Math.pow(1.25, has(DamUpgrade.type));
         }
     }
 };

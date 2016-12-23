@@ -11,8 +11,8 @@ const MoonPanel = {
     requires: {
         energy: 2000,
         resources: {
-            'moon-dust': 40,
-            silicon: 40,
+            'moon-dust': 20,
+            silicon: 20,
             copper: 5
         },
         research: {
