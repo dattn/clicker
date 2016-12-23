@@ -8,7 +8,7 @@ const MoonDust = {
     icon: 'icons/moon.svg',
     requires: {
         get energy() {
-            return Math.floor(100 * Math.sqrt(Math.pow(1.01, stats(MoonDust.type) / (2 * Math.pow(1.05, has(MiningUpgrade.type))))));
+            return Math.floor(100 * Math.sqrt(Math.pow(1.005, stats(MoonDust.type) / (2 * Math.pow(1.1, has(MiningUpgrade.type))))));
         },
         research: {
             'space-mining': 1

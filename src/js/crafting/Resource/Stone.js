@@ -8,7 +8,7 @@ const Stone = {
     icon: 'icons/stone.svg',
     requires: {
         get energy() {
-            return Math.floor(5 * Math.sqrt(Math.pow(1.01, stats(Stone.type) / (2 * Math.pow(1.05, has(MiningUpgrade.type))))));
+            return Math.floor(5 * Math.sqrt(Math.pow(1.005, stats(Stone.type) / (2 * Math.pow(1.1, has(MiningUpgrade.type))))));
         }
     }
 };

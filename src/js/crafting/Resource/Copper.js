@@ -8,7 +8,7 @@ const Copper = {
     icon: 'icons/copper.svg',
     requires: {
         get energy() {
-            return Math.floor(20 * Math.sqrt(Math.pow(1.01, stats(Copper.type) / (2 * Math.pow(1.05, has(MiningUpgrade.type))))));
+            return Math.floor(20 * Math.sqrt(Math.pow(1.005, stats(Copper.type) / (2 * Math.pow(1.1, has(MiningUpgrade.type))))));
         }
     }
 };

@@ -8,7 +8,7 @@ const Silicon = {
     icon: 'icons/silicon.svg',
     requires: {
         get energy() {
-            return Math.floor(25 * Math.sqrt(Math.pow(1.01, stats(Silicon.type) / (2 * Math.pow(1.05, has(MiningUpgrade.type))))));
+            return Math.floor(25 * Math.sqrt(Math.pow(1.005, stats(Silicon.type) / (2 * Math.pow(1.1, has(MiningUpgrade.type))))));
         }
     }
 };
