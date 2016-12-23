@@ -11,9 +11,8 @@ const SolarPanel = {
     requires: {
         energy: 60,
         resources: {
-            iron: 5,
             copper: 5,
-            silicon: 5
+            silicon: 10
         },
         research: {
             sun: 1

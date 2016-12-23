@@ -9,9 +9,9 @@ const HydroDam = {
     requires: {
         energy: 500,
         resources: {
-            stone: 100,
-            iron: 50,
-            copper: 10
+            stone: 200,
+            iron: 10,
+            copper: 5
         },
         research: {
             water: 1

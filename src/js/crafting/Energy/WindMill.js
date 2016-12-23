@@ -10,8 +10,7 @@ const WindMill = {
     requires: {
         energy: 60,
         resources: {
-            stone: 5,
-            iron: 5,
+            iron: 12,
             copper: 5
         },
         research: {
